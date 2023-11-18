@@ -9,18 +9,6 @@
 
 <body>
     
-    <!-- CRIAR LOJA -->
-    <div class="formulario">
-
-        <h1>Informações</h1>
-
-        <label for="nome">Nome:</label>
-        <input id="nome" type="text">
-
-        <button onclick="salvarInformacoes()">Salvar Informações</button>
-
-    </div>
-
     <!-- CRIAR BARRA DE NAVEGAÇÃO -->
     <div class="formulario">
 
@@ -68,12 +56,7 @@
         const db = firebase.firestore();
         const storage = firebase.storage();
         const loja = 'teste';
-
-        async function salvarInformacoes() {
-            const nome = document.getElementById('nome').value;
-            
-        }
-
+        
         async function salvarCores() {
             const principal = document.getElementById('principal').value;
             const background = document.getElementById('background').value;
