@@ -9,7 +9,14 @@
 
 <body>
     
-    
+    <header class="navgation">
+    </header>
+
+    <nav class="links">
+        <ul>
+            <div class="triangulo"></div>
+        </ul>
+    </nav>
 
 </body>
 
@@ -35,11 +42,43 @@
         const storage = firebase.storage();
         const loja = 'teste';
 
+        // BOTAO DO MENU
+        function abrirMenu() {
+            const openMenu = document.getElementById('openMenu');
+            const closeMenu = document.getElementById('closeMenu');
+            openMenu.style.display = "none";
+            closeMenu.style.display = "flex";
+
+            const menu = document.querySelector('.links ul');
+            menu.style.display = "flex";
+            setTimeout(() => {
+                menu.style.opacity = 1;
+            }, 200);
+        }
+
+        function fecharMenu() {
+            const openMenu = document.getElementById('openMenu');
+            const closeMenu = document.getElementById('closeMenu');
+            openMenu.style.display = "flex";
+            closeMenu.style.display = "none";
+
+            const menu = document.querySelector('.links ul');
+            menu.style.opacity = 0;
+            
+            setTimeout(() => {
+                menu.style.display = "none";
+            }, 200);
+        }
+
+
         carregarLoja();
-        function carregarLoja() {
+        async function carregarLoja() {
             const root = document.documentElement;
-            const page = document.body;
-            db.collection(loja)
+            const navgation = document.querySelector('.navgation');
+            const links = document.querySelector('.links ul');
+            
+            
+            await db.collection(loja)
             .doc('navgation')
             .get().then((doc) => {
 
@@ -55,8 +94,9 @@
                     root.style.setProperty('--principal', corPrincipal);
                     storageRef.getDownloadURL().then(function (url) {
                         // Use a URL da imagem, por exemplo, para exibi-la
-                        const navgation = `
-                            <header class="navgation">
+                        navgation.innerHTML = `
+                                <ion-icon onclick="abrirMenu()" class="btn-menu" id="openMenu" name="menu"></ion-icon>
+                                <ion-icon onclick="fecharMenu()" class="btn-menu" id="closeMenu" name="close"></ion-icon>
 
                                 <img src="${url}">
 
@@ -65,24 +105,37 @@
                                     <ion-icon name="search"></ion-icon>
                                 </div>
 
-                                <div class="flex buttons">
-                                    <ion-icon name="location-outline"></ion-icon>
-                                    <ion-icon name="cart-outline"></ion-icon>
-                                </div>
-
                                 <div class="pesquisaMobile">
                                     <input placeholder="O que está buscando?" type="text">
                                     <ion-icon name="search"></ion-icon>
                                 </div>
 
-                            </header>
-                            
-                        `;
-                        page.innerHTML += navgation;    
+                                <div class="flex buttons">
+                                    <ion-icon name="location-outline"></ion-icon>
+                                    <ion-icon name="cart-outline"></ion-icon>
+                                </div>
+                        `;    
                     });
                 }
             });
             
+            // ADICIONAR PAGINAS A NAVGATION
+            await db.collection(loja)
+            .doc('navgation')
+            .collection('paginas')
+            .orderBy('id', 'asc')
+            .get().then((snapshot) => {
+                snapshot.forEach((doc) => {
+                    if (doc.id) {
+                        const pagina = doc.id;
+                        links.innerHTML += `
+                            <li>
+                                <a>${pagina}</a>
+                            </li>    
+                        `;   
+                    }
+                });
+            });
 
         }
 
