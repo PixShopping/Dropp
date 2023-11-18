@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    
+    
+
+</body>
+
+    <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-storage-compat.js"></script>
+    <!-- JAVASCRIPT -->
+    <script>
+        
+        // BANCO DE DADOS
+        const firebaseConfig = {
+            apiKey: "AIzaSyBqbDhvZYwoJng6u2AF-YHTBBCPWiYAnuY",
+            authDomain: "dropp-71540.firebaseapp.com",
+            projectId: "dropp-71540",
+            storageBucket: "dropp-71540.appspot.com",
+            messagingSenderId: "226605796065",
+            appId: "1:226605796065:web:7b6a8652ed1e93d78f45a0"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+        const loja = 'teste';
+
+        carregarLoja();
+        function carregarLoja() {
+            const root = document.documentElement;
+            const page = document.body;
+            db.collection(loja)
+            .doc('navgation')
+            .get().then((doc) => {
+
+                // VERIFICA SE EXISTE NAVGATION
+                if (doc.data()) {
+                    const logo = doc.data().logo;
+                    const corPrincipal = doc.data().principal;
+                    const corBackground = doc.data().background;
+                    const corTexto = doc.data().text;
+                    const storageRef = storage.ref().child(`${loja}/navgation/${logo}`);
+                    root.style.setProperty('--background', corBackground);
+                    root.style.setProperty('--text', corTexto);
+                    root.style.setProperty('--principal', corPrincipal);
+                    storageRef.getDownloadURL().then(function (url) {
+                        // Use a URL da imagem, por exemplo, para exibi-la
+                        const navgation = `
+                            <header class="navgation">
+
+                                <img src="${url}">
+
+                                <div class="flex pesquisa">
+                                    <input placeholder="O que está buscando?" type="text">
+                                    <ion-icon name="search"></ion-icon>
+                                </div>
+
+                                <div class="flex buttons">
+                                    <ion-icon name="location-outline"></ion-icon>
+                                    <ion-icon name="cart-outline"></ion-icon>
+                                </div>
+
+                            </header>
+                        `;
+                        page.innerHTML += navgation;    
+                    });
+                }
+            });
+            
+
+        }
+
+    </script>
+
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+</html>

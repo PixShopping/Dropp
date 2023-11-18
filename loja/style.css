@@ -1,0 +1,88 @@
+/* variaveis */
+
+:root {
+    --principal: ;
+    --text: ;
+    --background: ;
+}
+
+* {
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+    box-sizing: border-box;
+}
+
+body {
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+/* NAVGATION */
+
+.navgation {
+    width: 100vw;
+    height: 100px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    background: var(--background);
+    color: var(--text);
+}
+
+.navgation img {
+    width: auto;
+    height: 105%;
+}
+
+.navgation .pesquisa {
+    width: 70%;
+    height: 42px;
+}
+
+.navgation .pesquisa input {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    padding: 15px;
+    font-size: 15.5px;
+    color: #000;
+    outline: none;
+}
+
+
+.navgation .pesquisa ion-icon {
+    position: absolute;
+    right: 10px;
+    width: 40px;
+    height: 55%;
+    padding: 5px;
+    border-radius: 10px;
+    background: var(--principal);
+    color: var(--text);
+}
+
+.navgation .flex {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+}
+
+.navgation .buttons {
+    width: auto;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0px 15px 0px 0px;
+}
+
+.navgation .buttons ion-icon {
+    font-size: 29px;
+    margin: 0px 7px;
+    cursor: pointer;
+} .navgation .buttons ion-icon:hover {
+    color: var(--principal);
+    transition: all .3s ease-in-out;
+}

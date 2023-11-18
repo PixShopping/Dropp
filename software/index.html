@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Loja</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    
+    <!-- CRIAR LOJA -->
+    <div class="formulario">
+
+        <h1>Informações</h1>
+
+        <label for="nome">Nome:</label>
+        <input id="nome" type="text">
+
+        <button onclick="salvarInformacoes()">Salvar Informações</button>
+
+    </div>
+
+    <!-- CRIAR BARRA DE NAVEGAÇÃO -->
+    <div class="formulario">
+
+        <h1>Cores e Logo</h1>
+
+        <label for="logo">Logo:</label>
+        <input id="logo" type="file">
+
+
+        <label for="principal">Cor Principal:</label>
+        <input id="principal" placeholder="cor" type="text">
+
+        <label for="background">Cor do Background:</label>
+        <input id="background" placeholder="cor" type="text">
+
+        <label for="text">Cor de Texto:</label>
+        <input id="text" placeholder="cor" type="text">
+
+        <button onclick="salvarCores()">Salvar Cores e Logo</button>
+
+    </div>
+
+    <button onclick="irLoja()">Ir para Loja</button>
+
+</body>
+
+    <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-storage-compat.js"></script>
+    <!-- JAVASCRIPT -->
+    <script>
+        
+        // BANCO DE DADOS
+        const firebaseConfig = {
+            apiKey: "AIzaSyBqbDhvZYwoJng6u2AF-YHTBBCPWiYAnuY",
+            authDomain: "dropp-71540.firebaseapp.com",
+            projectId: "dropp-71540",
+            storageBucket: "dropp-71540.appspot.com",
+            messagingSenderId: "226605796065",
+            appId: "1:226605796065:web:7b6a8652ed1e93d78f45a0"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+        const loja = 'teste';
+
+        async function salvarInformacoes() {
+            const nome = document.getElementById('nome').value;
+            
+        }
+
+        async function salvarCores() {
+            const principal = document.getElementById('principal').value;
+            const background = document.getElementById('background').value;
+            const text = document.getElementById('text').value;
+            const logo = document.getElementById('logo');
+            const file = logo.files[0];
+            if (file) {
+                // Crie uma referência para o local de armazenamento da imagem
+                const storageRef = storage.ref(`${loja}/navgation/` + file.name);
+
+                // Faça o upload da imagem para o Firebase Storage
+                await db.collection(loja).doc('navgation').set({
+                    logo: file.name,
+                    principal: principal,
+                    background: background,
+                    text: text
+                }).then((res) => {
+                    storageRef.put(file).then(function (snapshot) {
+                        swal({
+                            title: 'Parabens',
+                            text: 'Loja salva com sucesso!',
+                            buttons: {
+                                confirm: 'Ok',
+                            },
+                        }).then((response) => {
+                            window.location.reload();
+                        })
+                    }).catch(function (error) {
+                        console.error("Erro ao enviar a imagem:", error);
+                    });
+                });
+            } else {
+                swal({
+                    title: 'Aviso',
+                    text: 'Escolha uma Logo',
+                    buttons: {
+                        confirm: 'Ok',
+                    },
+                })
+            }
+        }
+
+        function irLoja() {
+            window.location.href = "../loja/";
+        }
+
+    </script>
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+</html>
