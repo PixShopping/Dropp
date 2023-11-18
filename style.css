@@ -441,6 +441,7 @@ body {
 
 .assine {
     width: 95%;
+    max-width: 480px;
     height: auto;
     display: flex;
     flex-direction: column;
