@@ -171,7 +171,6 @@ body {
 }
 
 .links ul {
-    padding: 12px;
     width: 100%;
     height: auto;
     display: flex;
@@ -180,15 +179,17 @@ body {
     align-items: center;
     user-select: none;
     transition: all .3s linear;
+    box-shadow: 0px -10px 15px var(--background);
 }
 
 .links ul li {
+    padding: 14px 0px;
     list-style: none;
-    margin: 0px 10px;
+    margin: 0px 13px;
 }
 
 .links ul li a {
-    font-size: 13px;
+    font-size: 13.5px;
     font-weight: 800;
     letter-spacing: 0.1px;
     text-transform: uppercase;
@@ -198,9 +199,139 @@ body {
     transition: all .2s ease-in-out;
 }
 
+/* CONTAINER */
+
+.container {
+    width: 100vw;
+    height: auto;
+    padding: 10px 0px 20px 0px;
+    background: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: 0px;
+}
+
+.container .carrossel {
+    width: 98%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    margin: 15px 0px;
+    align-self: center;
+}
+
+.container .carrossel img {
+    width: 95%;
+    height: auto;
+}
+
+/* PRODUTOS */
+
+.container .produtos {
+    width: 95vw;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    margin: 15px 0px 30px 0px;
+    align-self: center;
+    padding: 90px 0px 60px;
+    position: relative;
+}
+
+.container .produtos .detalhe {
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 5px;
+    left: 10px;
+}
+
+.container .produtos .detalhe h1 {
+    font-size: 22px;
+    font-weight: 500;
+    margin: 0px 0px 2px 0px;
+} 
+
+.container .produtos .detalhe div {
+    width: 100%;
+    height: 7px;
+    background: var(--principal);
+    border-radius: 10px;
+}
+
+
+.container .produtos .produto {
+    width: 200px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background: #fff;
+    padding: 20px 15px 15px 15px;
+    cursor: pointer;
+    margin: 0px 10px;
+    border-radius: 10px;
+    position: relative;
+} .container .produtos .produto:hover {
+    box-shadow: 0px 0px 10px var(--principal);
+    margin-top: -20px;
+    transition: all .3s linear;
+}
+
+.container .produtos .produto img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.container .produtos .produto .porcentagem {
+    width: auto;
+    height: auto;
+    padding: 4px 7px;
+    background: var(--principal);
+    color: var(--text);
+    font-size: 14.4px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    text-shadow: 0px 0px 10px #ccc;
+    border-radius: 15px;
+    position: absolute;
+    top: -15px;
+    left: 5px;
+}
+
+.container .produtos .produto h1 {
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+    margin: 10px 0px 0px 0px;
+    text-transform: capitalize;
+}
+
+.container .produtos .produto h2 {
+    font-size: 19.5px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    margin: 10px 0px 0px 0px;
+    color: green;
+}
+
+.container .produtos .produto h2 span{
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    color: red;
+    text-decoration:line-through;
+    margin: 0px 0px 0px 5px;
+}
 
 @media (min-width: 532px) {
-    #openMenu {
+
+    #openMenu, #closeMenu {
         display: none;
     }
 
@@ -210,6 +341,10 @@ body {
 
     .navgation .pesquisaMobile {
         display: none;
+    }
+
+    .container {
+        top: 0px;
     }
     
 }
@@ -248,7 +383,7 @@ body {
 
     .links ul {
         display: none;
-        position: relative;
+        position: absolute;
         background: var(--text);
         top: 0px;
         left: 0px;
@@ -258,11 +393,15 @@ body {
         flex-direction: column;
         align-items: flex-start;
         opacity: 0;
-        padding: 5px;
+        padding: 12px 5px;
     }
 
     .links ul li {
         padding: 8px;
         font-size: 16px;
+    }
+
+    .container {
+        top: 70px;
     }
 }

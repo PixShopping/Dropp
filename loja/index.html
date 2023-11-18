@@ -18,6 +18,23 @@
         </ul>
     </nav>
 
+    <main class="container">
+
+        <section class="carrossel">
+
+        </section>
+
+        <section class="produtos">
+            <div class="detalhe">
+                <h1>Produtos</h1>
+                <div></div>
+            </div>
+
+
+        </section>
+
+    </main>
+
 </body>
 
     <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-app-compat.js"></script>
@@ -76,7 +93,8 @@
             const root = document.documentElement;
             const navgation = document.querySelector('.navgation');
             const links = document.querySelector('.links ul');
-            
+            const carrossel = document.querySelector('.container .carrossel');
+            const produtos = document.querySelector('.produtos');
             
             await db.collection(loja)
             .doc('navgation')
@@ -134,6 +152,50 @@
                             </li>    
                         `;   
                     }
+                });
+            });
+
+            // IMAGEM DA LOJA
+            await db.collection(loja)
+            .doc('container')
+            .collection('carrossel')
+            .onSnapshot((data) => {
+                data.docs.map((val) => {
+                    var imagem = val.data().imagem;
+                    const storageRef = storage.ref().child(`${loja}/container/carrossel/${imagem}`);
+                    storageRef.getDownloadURL().then( function(url) {
+                        carrossel.innerHTML += `
+                            <img src="${url}">
+                        `;
+                    })
+                    
+                });
+            });
+
+            await db.collection(loja)
+            .doc('container')
+            .collection('produtos')
+            .onSnapshot((data) => {
+                data.docs.map((val) => {
+                    const porcentagem = val.data().porcentagem;
+                    const precoNovo = val.data().precoNovo;
+                    const precoAntigo = val.data().precoAntigo;
+                    const imagem = val.data().imagem;
+                    const storageRef = storage.ref().child(`${loja}/container/produtos/${imagem}`);
+                    storageRef.getDownloadURL().then( function(url) {
+                        produtos.innerHTML += `
+                            <div class="produto">
+                                <div class="porcentagem">
+                                    <a>${porcentagem}</a>    
+                                </div>
+                                <img src="${url}">
+                                <h1>${val.id}</h1>
+                                <h2>${precoNovo} <span>${precoAntigo}</span></h2>
+
+                            </div>
+                        `;
+                    })
+                    
                 });
             });
 
