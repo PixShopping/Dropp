@@ -56,7 +56,9 @@
         const db = firebase.firestore();
         const storage = firebase.storage();
         const loja = 'teste';
-        
+
+        console.log(existeNavgation())
+
         async function salvarCores() {
             const principal = document.getElementById('principal').value;
             const background = document.getElementById('background').value;
@@ -64,17 +66,64 @@
             const logo = document.getElementById('logo');
             const file = logo.files[0];
             if (file) {
+
+                const pasta = `${loja}/navgation/`;
+                await deletarFotoDePerfilAntiga(pasta);
                 // Crie uma referência para o local de armazenamento da imagem
                 const storageRef = storage.ref(`${loja}/navgation/` + file.name);
-
+                
                 // Faça o upload da imagem para o Firebase Storage
-                await db.collection(loja).doc('navgation').set({
-                    logo: file.name,
-                    principal: principal,
-                    background: background,
-                    text: text
-                }).then((res) => {
-                    storageRef.put(file).then(function (snapshot) {
+                if (existeNavgation()) {
+                    await db.collection(loja).doc('navgation').update({
+                        logo: file.name,
+                        principal: principal,
+                        background: background,
+                        text: text
+                    }).then((res) => {
+                        storageRef.put(file).then(function (snapshot) {
+                            swal({
+                                title: 'Parabens',
+                                text: 'Loja salva com sucesso!',
+                                buttons: {
+                                    confirm: 'Ok',
+                                },
+                            }).then((response) => {
+                                window.location.reload();
+                            })
+                        }).catch(function (error) {
+                            console.error("Erro ao enviar a imagem:", error);
+                        });
+                    });
+                } else {
+                    await db.collection(loja).doc('navgation').set({
+                        logo: file.name,
+                        principal: principal,
+                        background: background,
+                        text: text
+                    }).then((res) => {
+                        storageRef.put(file).then(function (snapshot) {
+                            swal({
+                                title: 'Parabens',
+                                text: 'Loja salva com sucesso!',
+                                buttons: {
+                                    confirm: 'Ok',
+                                },
+                            }).then((response) => {
+                                window.location.reload();
+                            })
+                        }).catch(function (error) {
+                            console.error("Erro ao enviar a imagem:", error);
+                        });
+                    });
+                }
+                
+            } else {
+                if (existeNavgation()) {
+                    await db.collection(loja).doc('navgation').update({
+                        principal: principal,
+                        background: background,
+                        text: text
+                    }).then((res) => {
                         swal({
                             title: 'Parabens',
                             text: 'Loja salva com sucesso!',
@@ -83,20 +132,75 @@
                             },
                         }).then((response) => {
                             window.location.reload();
-                        })
-                    }).catch(function (error) {
-                        console.error("Erro ao enviar a imagem:", error);
+                        });
                     });
-                });
-            } else {
-                swal({
-                    title: 'Aviso',
-                    text: 'Escolha uma Logo',
-                    buttons: {
-                        confirm: 'Ok',
-                    },
-                })
+                } else {
+                    await db.collection(loja).doc('navgation').set({
+                        principal: principal,
+                        background: background,
+                        text: text
+                    }).then((res) => {
+                        swal({
+                            title: 'Parabens',
+                            text: 'Loja salva com sucesso!',
+                            buttons: {
+                                confirm: 'Ok',
+                            },
+                        }).then((response) => {
+                            window.location.reload();
+                        });
+                    });
+                }
+                
             }
+        }
+        
+        function existeNavgation() {
+            db.collection(loja)
+            .doc('navgation')
+            .get().then((doc) => {
+                if (doc.data()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+        }
+
+
+        // IMAGENS
+        function isImage(fileName) {
+            const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp']; // Add more extensions if needed
+
+            // Get the file extension
+            const fileExtension = fileName.slice(((fileName.lastIndexOf(".") - 1) >>> 0) + 2);
+
+            // Check if the extension is in the list of image extensions
+            return imageExtensions.includes('.' + fileExtension.toLowerCase());
+        }
+
+        function deletarFotoDePerfilAntiga(folderPath) {
+            const storageRef = storage.ref();
+            
+            // Listar todos os arquivos na pasta
+            storageRef.child(folderPath).listAll()
+            .then((result) => {
+                result.items.forEach((item) => {
+                // Verificar se o arquivo é uma imagem com base na extensão
+                if (isImage(item.name)) {
+                    item.delete()
+                    .then(() => {
+                        console.log('Imagem excluída:', item.fullPath);
+                    })
+                    .catch((error) => {
+                        console.error('Erro ao excluir imagem:', error);
+                    });
+                }
+                });
+            })
+            .catch((error) => {
+                console.error('Erro ao listar arquivos:', error);
+            });
         }
 
         function irLoja() {
