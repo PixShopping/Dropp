@@ -14,7 +14,10 @@
 }
 
 body {
-    font-family:Arial, Helvetica, sans-serif;
+    max-width: 100vw;
+    height: auto;
+    overflow-x: hidden;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 /* NAVGATION */
@@ -180,6 +183,7 @@ body {
     user-select: none;
     transition: all .3s linear;
     box-shadow: 0px -10px 15px var(--background);
+    
 }
 
 .links ul li {
@@ -194,6 +198,8 @@ body {
     letter-spacing: 0.1px;
     text-transform: uppercase;
     cursor: pointer;
+    text-decoration: none;
+    color: var(--background);
 } .links ul li a:hover {
     color: var(--principal);
     transition: all .2s ease-in-out;
@@ -234,38 +240,41 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
-    overflow-x: scroll;
+    justify-content: flex-start;
+    overflow-x: auto;
     overflow-y: hidden;
     margin: 15px 0px 30px 0px;
     align-self: center;
-    padding: 90px 0px 60px;
+    padding: 50px 0px 70px;
     position: relative;
+    user-select: none;
 }
 
-.container .produtos .detalhe {
-    width: auto;
+.container .detalhe {
+    width: 100px;
     height: auto;
-    position: absolute;
-    top: 5px;
-    left: 10px;
+    position: relative;
+    top: 20px;
+    left: 3.5%;
 }
 
-.container .produtos .detalhe h1 {
+.container .detalhe h1 {
     font-size: 22px;
     font-weight: 500;
     margin: 0px 0px 2px 0px;
 } 
 
-.container .produtos .detalhe div {
+.container .detalhe div {
     width: 100%;
-    height: 7px;
+    height: 6.5px;
     background: var(--principal);
     border-radius: 10px;
 }
 
 
 .container .produtos .produto {
-    width: 200px;
+    width: 190px;
+    min-width: 190px;
     height: auto;
     display: flex;
     flex-direction: column;
@@ -273,12 +282,12 @@ body {
     background: #fff;
     padding: 20px 15px 15px 15px;
     cursor: pointer;
-    margin: 0px 10px;
+    margin: 0px 12px;
     border-radius: 10px;
     position: relative;
 } .container .produtos .produto:hover {
     box-shadow: 0px 0px 10px var(--principal);
-    margin-top: -20px;
+    margin: -20px 12px 20px 12px;
     transition: all .3s linear;
 }
 
@@ -302,7 +311,13 @@ body {
     position: absolute;
     top: -15px;
     left: 5px;
+    display: flex;
+    align-items: center;
 }
+.container .produtos .produto .porcentagem ion-icon {
+    margin: 0px 2px 0px 0px;
+}
+
 
 .container .produtos .produto h1 {
     font-size: 16px;
@@ -328,6 +343,59 @@ body {
     text-decoration:line-through;
     margin: 0px 0px 0px 5px;
 }
+
+
+/* CONTATO */
+
+.contato {
+    width: 100vw;
+    height: auto;
+    padding: 20px;
+    background: var(--background);
+    color: var(--text);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.contato .linha {
+    width: 100%;
+    border-top: 1.5px solid var(--text);
+    margin: 10px 0px;
+}
+
+.contato .direitos {
+    width: 98%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px;
+    align-self: center;
+    font-size: 17px;
+}
+
+.contato .direitos p {
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+.contato .direitos .flex {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.contato .direitos .flex ion-icon {
+    font-size: 19px;
+    margin: 0px 5px;
+    cursor: pointer;
+} .contato .direitos .flex ion-icon:hover {
+    color: var(--principal);
+    margin: -5px 5px 5px 5px;
+    transition: all .3s ease-in-out;
+}
+
 
 @media (min-width: 532px) {
 

@@ -3,11 +3,262 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criando Loja..</title>
+    <title>Loja</title>
+    <link rel="stylesheet" href="./style.css">
 </head>
+
 <body>
-    <script>
-        window.location.href = "./software/";
-    </script>
+    
+    <header class="navgation">
+    </header>
+
+    <nav class="links">
+        <ul>
+            <div class="triangulo"></div>
+        </ul>
+    </nav>
+
+    <main class="container">
+
+        <section class="carrossel">
+
+        </section>
+
+        <div class="detalhe">
+            <h1>Produtos</h1>
+            <div></div>
+        </div>
+        <section class="produtos">
+            
+
+        </section>
+
+    </main>
+
+    <footer class="contato">
+
+    </footer>
+
 </body>
+
+    <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-storage-compat.js"></script>
+    <!-- JAVASCRIPT -->
+    <script>
+        
+        // BANCO DE DADOS
+        const firebaseConfig = {
+            apiKey: "AIzaSyBqbDhvZYwoJng6u2AF-YHTBBCPWiYAnuY",
+            authDomain: "dropp-71540.firebaseapp.com",
+            projectId: "dropp-71540",
+            storageBucket: "dropp-71540.appspot.com",
+            messagingSenderId: "226605796065",
+            appId: "1:226605796065:web:7b6a8652ed1e93d78f45a0"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+        const loja = 'teste';
+
+        // BOTAO DO MENU
+        function abrirMenu() {
+            const openMenu = document.getElementById('openMenu');
+            const closeMenu = document.getElementById('closeMenu');
+            openMenu.style.display = "none";
+            closeMenu.style.display = "flex";
+
+            const menu = document.querySelector('.links ul');
+            menu.style.display = "flex";
+            setTimeout(() => {
+                menu.style.opacity = 1;
+            }, 200);
+        }
+
+        function fecharMenu() {
+            const openMenu = document.getElementById('openMenu');
+            const closeMenu = document.getElementById('closeMenu');
+            openMenu.style.display = "flex";
+            closeMenu.style.display = "none";
+
+            const menu = document.querySelector('.links ul');
+            menu.style.opacity = 0;
+            
+            setTimeout(() => {
+                menu.style.display = "none";
+            }, 200);
+        }
+
+        
+        carregarLoja();
+        async function carregarLoja() {
+            const root = document.documentElement;
+            const navgation = document.querySelector('.navgation');
+            const links = document.querySelector('.links ul');
+            const carrossel = document.querySelector('.container .carrossel');
+            const produtos = document.querySelector('.produtos');
+            const contato = document.querySelector('.contato');
+            
+            await db.collection(loja)
+            .doc('cores').get().then((doc) => {
+                const corPrincipal = doc.data().principal;
+                const corBackground = doc.data().background;
+                const corTexto = doc.data().text;
+                root.style.setProperty('--background', corBackground);
+                root.style.setProperty('--text', corTexto);
+                root.style.setProperty('--principal', corPrincipal);
+            });
+
+            await db.collection(loja)
+            .doc('navgation')
+            .get().then((doc) => {
+
+                // VERIFICA SE EXISTE NAVGATION
+                if (doc.data()) {
+                    const logo = doc.data().logo;
+                    const storageRef = storage.ref().child(`${loja}/navgation/${logo}`);
+                    storageRef.getDownloadURL().then(function (url) {
+                        // Use a URL da imagem, por exemplo, para exibi-la
+                        navgation.innerHTML = `
+                                <ion-icon onclick="abrirMenu()" class="btn-menu" id="openMenu" name="menu"></ion-icon>
+                                <ion-icon onclick="fecharMenu()" class="btn-menu" id="closeMenu" name="close"></ion-icon>
+
+                                <img src="${url}">
+
+                                <div class="flex pesquisa">
+                                    <input placeholder="O que está buscando?" type="text">
+                                    <ion-icon name="search"></ion-icon>
+                                </div>
+
+                                <div class="pesquisaMobile">
+                                    <input placeholder="O que está buscando?" type="text">
+                                    <ion-icon name="search"></ion-icon>
+                                </div>
+
+                                <div class="flex buttons">
+                                    <ion-icon name="location-outline"></ion-icon>
+                                    <ion-icon name="cart-outline"></ion-icon>
+                                </div>
+                        `;    
+                    });
+                }
+            });
+            
+            // ADICIONAR PAGINAS A NAVGATION
+            await db.collection(loja)
+            .doc('navgation')
+            .collection('paginas')
+            .orderBy('id', 'asc')
+            .get().then((snapshot) => {
+                snapshot.forEach((doc) => {
+                    if (doc.id) {
+                        const pagina = doc.id;
+                        const url = doc.data().pagina;
+                        links.innerHTML += `
+                            <li>
+                                <a href="./${url}">${pagina}</a>
+                            </li>    
+                        `;   
+                    }
+                });
+            });
+
+            // IMAGEM DA LOJA
+            await db.collection(loja)
+            .doc('container')
+            .collection('carrossel')
+            .onSnapshot((data) => {
+                data.docs.map((val) => {
+                    var imagem = val.data().imagem;
+                    const storageRef = storage.ref().child(`${loja}/container/carrossel/${imagem}`);
+                    storageRef.getDownloadURL().then( function(url) {
+                        carrossel.innerHTML += `
+                            <img src="${url}">
+                        `;
+                    })
+                    
+                });
+            });
+
+            await db.collection(loja)
+            .doc('container')
+            .collection('produtos')
+            .onSnapshot((data) => {
+                data.docs.map((val) => {
+                    const porcentagem = val.data().porcentagem;
+                    const precoNovo = val.data().precoNovo;
+                    const precoAntigo = val.data().precoAntigo;
+                    const imagem = val.data().imagem;
+                    const storageRef = storage.ref().child(`${loja}/container/produtos/${imagem}`);
+                    storageRef.getDownloadURL().then( function(url) {
+                        produtos.innerHTML += `
+                            <div class="produto">
+                                <div class="porcentagem">
+                                    <ion-icon name="arrow-down"></ion-icon>
+                                    <a>${porcentagem}</a>    
+                                </div>
+                                <img src="${url}">
+                                <h1>${val.id}</h1>
+                                <h2>${precoNovo} <span>${precoAntigo}</span></h2>
+
+                            </div>
+                        `;
+                    })
+                    
+                });
+            });
+
+            await db.collection(loja)
+            .doc('contato')
+            .get().then((doc) => {
+                const email = doc.data().email;
+                const whatsapp = doc.data().whatsapp;
+                const whatsappURL = doc.data().whatsappURL;
+                const instagram = doc.data().instagram;
+                const instagramURL = doc.data().instagramURL;
+                const facebook = doc.data().facebook;
+                const facebookURL = doc.data().facebookURL;
+                contato.innerHTML = `
+                    <section class="redes">
+                        <h1>Suporte</h1>
+
+                    </section>
+
+                    <div class="linha"></div>
+
+                    <section class="direitos">
+                        
+                        <div class="flex">
+                            <ion-icon onclick="abrirURL('${instagramURL}')" name="logo-instagram"></ion-icon>
+                            <ion-icon onclick="abrirURL('${facebookURL}')" name="logo-facebook"></ion-icon>
+                            <ion-icon onclick="abrirURL('${whatsappURL}')" name="logo-whatsapp"></ion-icon>
+                        </div>
+
+                        <p>© Loja 2023</p>
+
+                        <div class="flex">
+                            <ion-icon name="logo-javascript"></ion-icon>
+                            <ion-icon name="logo-github"></ion-icon>
+                            <ion-icon name="logo-firebase"></ion-icon>
+                        </div>
+                    
+                    </section>
+                `;
+
+            });
+
+        }
+
+        function abrirURL(url) {
+            window.location.href = `${url}`;
+        }
+
+    </script>
+
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 </html>
