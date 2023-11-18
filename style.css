@@ -4,6 +4,7 @@
     --principal: ;
     --text: ;
     --background: ;
+    --preco: 'Courier New', Courier;
 }
 
 * {
@@ -218,6 +219,8 @@ body {
     top: 0px;
 }
 
+
+
 .container .carrossel {
     width: 98%;
     height: auto;
@@ -250,12 +253,49 @@ body {
     user-select: none;
 }
 
+.container .flex {
+    width: 92%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    align-self: center;
+    margin: 15px 0px -5px 0px;
+    user-select: none;
+}
+
+.container .right {
+    display: flex;
+    align-items: center;
+}
+
+.container .right a {
+    font-size: 16px;
+    cursor: pointer;
+    color: var(--principal);
+    position: relative; /* Adicione position: relative; para o pseudo-elemento */
+    transition: color 0.3s ease-in-out;
+} 
+
+.container .right a::before {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2.5px; /* altura da borda */
+    background-color: var(--principal); /* cor da borda */
+    transition: width 0.3s ease-in-out; /* transição da largura */
+}
+
+.container .right a:hover::before {
+    width: 100%; /* largura total durante o hover */
+}
+
 .container .detalhe {
     width: 100px;
     height: auto;
-    position: relative;
-    top: 20px;
-    left: 3.5%;
+    
 }
 
 .container .detalhe h1 {
@@ -270,7 +310,6 @@ body {
     background: var(--principal);
     border-radius: 10px;
 }
-
 
 .container .produtos .produto {
     width: 190px;
@@ -314,10 +353,10 @@ body {
     display: flex;
     align-items: center;
 }
+
 .container .produtos .produto .porcentagem ion-icon {
     margin: 0px 2px 0px 0px;
 }
-
 
 .container .produtos .produto h1 {
     font-size: 16px;
@@ -328,20 +367,22 @@ body {
 }
 
 .container .produtos .produto h2 {
-    font-size: 19.5px;
-    font-weight: 500;
-    letter-spacing: 0.2px;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -1px;
     margin: 10px 0px 0px 0px;
-    color: green;
+    color: var(--verde);
+    font-family: var(--preco);
 }
 
 .container .produtos .produto h2 span{
-    font-size: 17px;
-    font-weight: 500;
-    letter-spacing: 0.2px;
-    color: red;
-    text-decoration:line-through;
-    margin: 0px 0px 0px 5px;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: var(--vermelho);
+    text-decoration: line-through;
+    margin: 0px 0px 0px 2px;
+    font-family: var(--preco);
 }
 
 
@@ -395,6 +436,64 @@ body {
     margin: -5px 5px 5px 5px;
     transition: all .3s ease-in-out;
 }
+
+/* Assine */
+
+.assine {
+    width: 95%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+}
+
+.assine h1 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    margin: 0px 0px 5px 0px;
+}
+
+.assine p {
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    margin: 0px 0px 8px 0px;
+}
+
+.assine input {
+    width: 100%;
+    height: 40px;
+    border-radius: 10px;
+    padding: 0px 15px;
+    font-size: 15.5px;
+    font-weight: 500;
+    outline: none;
+    margin: 5px 0px 15px 0px;
+}
+
+.assine button {
+    width: 100%;
+    height: 45px;
+    border-radius: 10px;
+    padding: 5px 10px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    background: transparent;
+    border: 2px solid var(--text);
+    margin: 5px 0px 15px 0px;
+    cursor: pointer;
+} .assine button:hover {
+    background: var(--text);
+    color: var(--background);
+    transition: all .3s ease-in-out;
+} .assine button:focus {
+    background: var(--text);
+    color: var(--background);
+    transition: all .3s ease-in-out;
+}
+
 
 
 @media (min-width: 532px) {

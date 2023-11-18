@@ -24,10 +24,18 @@
 
         </section>
 
-        <div class="detalhe">
-            <h1>Produtos</h1>
-            <div></div>
+        <div class="flex">
+            <div class="detalhe">
+                <h1>Produtos</h1>
+                <div></div>
+            </div>
+
+            <div class="right">
+                <a>Ver todos</a>
+            </div>
+            
         </div>
+
         <section class="produtos">
             
 
@@ -106,9 +114,13 @@
                 const corPrincipal = doc.data().principal;
                 const corBackground = doc.data().background;
                 const corTexto = doc.data().text;
+                const vermelho = doc.data().vermelho;
+                const verde = doc.data().verde;
                 root.style.setProperty('--background', corBackground);
                 root.style.setProperty('--text', corTexto);
                 root.style.setProperty('--principal', corPrincipal);
+                root.style.setProperty('--verde', verde);
+                root.style.setProperty('--vermelho', vermelho);
             });
 
             await db.collection(loja)
@@ -201,7 +213,7 @@
                                 </div>
                                 <img src="${url}">
                                 <h1>${val.id}</h1>
-                                <h2>${precoNovo} <span>${precoAntigo}</span></h2>
+                                <h2>R$${precoNovo} <span>R$${precoAntigo}</span></h2>
 
                             </div>
                         `;
@@ -220,9 +232,14 @@
                 const instagramURL = doc.data().instagramURL;
                 const facebook = doc.data().facebook;
                 const facebookURL = doc.data().facebookURL;
+                const empresa = doc.data().empresa;
+                const recado = doc.data().recado;
                 contato.innerHTML = `
-                    <section class="redes">
-                        <h1>Suporte</h1>
+                    <section class="assine">
+                        <h1>${empresa}</h1>
+                        <p>${recado}</p>
+                        <input placeholder="Seu E-mail" type="text">
+                        <button>Enviar</button>
 
                     </section>
 
