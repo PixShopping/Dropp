@@ -226,6 +226,7 @@
             .doc('contato')
             .get().then((doc) => {
                 const email = doc.data().email;
+                const telefone = doc.data().telefone;
                 const whatsapp = doc.data().whatsapp;
                 const whatsappURL = doc.data().whatsappURL;
                 const instagram = doc.data().instagram;
@@ -235,13 +236,35 @@
                 const empresa = doc.data().empresa;
                 const recado = doc.data().recado;
                 contato.innerHTML = `
-                    <section class="assine">
-                        <h1>${empresa}</h1>
-                        <p>${recado}</p>
-                        <input placeholder="Seu E-mail" type="text">
-                        <button>Enviar</button>
+                    <article>    
+                        
+                        <section class="assine">
+                            <h1>${empresa}</h1>
+                            <p>${recado}</p>
+                            <input placeholder="Seu E-mail" type="text">
+                            <button>Enviar</button>
+                        </section>
 
-                    </section>
+                        <section class="suporte">
+                            <h1>Suporte ao Cliente</h1>
+                            <li>
+                                <p><strong>Email</strong>: ${email}</p>
+                            </li>
+                            <li>
+                                <p><strong>Whatsapp</strong>: ${whatsapp}</p>
+                            </li>
+                            <li>
+                                <p><strong>Telefone</strong>: ${telefone}</p>
+                            </li>
+                            <li>
+                                <p><strong>Instagram</strong>: ${instagram}</p>
+                            </li>
+                            <li>
+                                <p><strong>Facebook</strong>: ${facebook}</p>
+                            </li>
+                        </section>
+
+                    </article>
 
                     <div class="linha"></div>
 
@@ -253,7 +276,7 @@
                             <ion-icon onclick="abrirURL('${whatsappURL}')" name="logo-whatsapp"></ion-icon>
                         </div>
 
-                        <p>© Loja 2023</p>
+                        <p>© Mvshop 2023</p>
 
                         <div class="flex">
                             <ion-icon name="logo-javascript"></ion-icon>
