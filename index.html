@@ -46,6 +46,11 @@
 
         </section>
 
+        <section id="sobre" class="sobre">
+
+            
+        </section>
+
     </main>
 
     <footer class="contato">
@@ -112,6 +117,7 @@
             const links = document.querySelector('.links ul');
             const carrossel = document.querySelector('.container .carrossel');
             const produtos = document.querySelector('.produtos');
+            const sobre = document.querySelector('.sobre');
             const contato = document.querySelector('.contato');
             const anuncio = document.querySelector('.anuncio');
 
@@ -313,6 +319,32 @@
                 `;
 
             });
+
+            // SOBRE NÓS
+            await db.collection(loja)
+            .doc('container')
+            .collection('sobre')
+            .onSnapshot((data) => {
+                data.docs.map((val) => {
+                    var imagem = val.data().imagem;
+                    const storageRef = storage.ref().child(`${loja}/container/sobre/${imagem}`);
+                    storageRef.getDownloadURL().then( function(url) {
+                        sobre.innerHTML += `
+                            <img src="${url}">
+
+                            <div class="column">
+                                <h1>Sobre a MV Shop</h1>
+                                <p>Uma equipe apaixonada em entregar o melhor para nossos clientes, com compromisso e seriedade. Estamos há mais de 5 anos no mercado.</p>
+                                <button>Saber mais sobre nós</button>
+                            </div>
+                        `;
+                    })
+                    
+                });
+            });
+
+
+
 
         }
 
