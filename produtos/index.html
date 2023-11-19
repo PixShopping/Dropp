@@ -95,6 +95,13 @@
             }, 200);
         }
 
+
+        // Adicionar ao carrinho
+        async function adicionarCarrinho(nome) {
+            await localStorage.setItem(`produto-${nome}`, nome);
+            window.location.href = await "../carrinho/";
+        }
+
         carregarLoja();
         async function carregarLoja() {
             const root = document.documentElement;
@@ -183,6 +190,7 @@
                 });
             });
 
+            // PRODUTOS
             const searchTerm = getParameterByName('search');
             var count = 0;
             const nomePesquisa = document.getElementById('nomePesquisa');
@@ -211,7 +219,7 @@
                             nomePesquisa.innerHTML = `Resultados com "${searchTerm}"`;
                             if (nomeBusca.includes(searchTerm)) {
                                 produtos.innerHTML += `
-                                    <div class="produto">
+                                <div class="produto">
                                         <div class="porcentagem">
                                             <ion-icon name="arrow-down"></ion-icon>
                                             <a>${porcentagem}</a>    
@@ -221,7 +229,7 @@
                                             <h1>${nome}</h1>
                                             <h2>R$${precoNovo} <span>R$${precoAntigo}</span></h2>
                                             <button class="btn-comprar">Comprar</button>
-                                            <button class="btn-addCarrinho">Adicionar ao carrinho</button>
+                                            <button onclick="adicionarCarrinho('${nome}')" class="btn-addCarrinho">Adicionar ao carrinho</button>
                                         </div>
                                         
                                     </div>
@@ -241,7 +249,7 @@
                                         <h1>${nome}</h1>
                                         <h2>R$${precoNovo} <span>R$${precoAntigo}</span></h2>
                                         <button class="btn-comprar">Comprar</button>
-                                        <button class="btn-addCarrinho">Adicionar ao carrinho</button>
+                                        <button onclick="adicionarCarrinho('${nome}')" class="btn-addCarrinho">Adicionar ao carrinho</button>
                                     </div>
                                     
                                 </div>
@@ -254,6 +262,7 @@
                 });
             });
 
+            // CONTATOS
             await db.collection(loja)
             .doc('contato')
             .get().then((doc) => {

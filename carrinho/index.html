@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Mvshop | Rastreio </title>
+    <title> Mvshop | Carrinho </title>
     <link rel="stylesheet" href="./style.css">
     <link rel="shortcut icon" href="https://firebasestorage.googleapis.com/v0/b/dropp-71540.appspot.com/o/teste%2Fnavgation%2Ffavicon.png?alt=media&token=041e70f9-b847-4789-8098-8ce417a2c02c" type="image/x-icon">
 </head>
@@ -25,35 +25,19 @@
 
     <main class="container">
 
-        <!-- Rastreie seu pedido aqui -->
-        <a class="grande">
-            <img src="https://cdn.shopify.com/s/files/1/0572/0725/9170/files/top_1_28afc2e8-41c1-4f19-bf5c-7321658aca9d.webp?v=1687985723">
-        </a>
-        
-        <!-- Melhor Rastreio -->
-        <a href="https://melhorrastreio.com.br" class="pequena cursor">
-            <img class="pequena" src="https://cdn.shopify.com/s/files/1/0572/0725/9170/files/top_2_480x480.webp?v=1687984602">
-        </a>
-        
-        <!-- Em cado de erro ou bug -->
-        <a class="grande">
-            <img src="https://cdn.shopify.com/s/files/1/0572/0725/9170/files/top_3.webp?v=1687985028">
-        </a>
+        <h1>Meu carrinho</h1>
 
-        <!-- Jadlog -->
-        <a href="https://jadlog.com.br/jadlog/home" class="pequena cursor">
-            <img src="https://cdn.shopify.com/s/files/1/0572/0725/9170/files/mid_2_240x240.webp?v=1687955429">
-        </a>
-        
-        <!-- Correios -->
-        <a href="https://rastreamento.correios.com.br/app/index.php" class="pequena cursor">
-            <img src="https://cdn.shopify.com/s/files/1/0572/0725/9170/files/mid_3_240x240.webp?v=1687955437">
-        </a>
+        <section class="carrinho">
 
-        <!-- Identifique o rastreio -->
-        <a class="grande">
-            <img src="https://cdn.shopify.com/s/files/1/0572/0725/9170/files/bot_2_4a318c6e-cdff-4bf8-b561-cbd16eb0b61e.webp?v=1687985986">
-        </a>
+
+
+        </section>
+        
+        <h3 id="totalEconomizado"></h3>
+
+        <button class="btn-comprar">Comprar</button>
+        <button onclick="abrirURL('produtos')" class="btn-addCarrinho">Continuar comprando</button>
+
     </main>
 
     <footer class="contato">
@@ -67,7 +51,8 @@
     <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-storage-compat.js"></script>
     <!-- JAVASCRIPT -->
     <script>
-        
+
+
         // BANCO DE DADOS
         const firebaseConfig = {
             apiKey: "AIzaSyBqbDhvZYwoJng6u2AF-YHTBBCPWiYAnuY",
@@ -112,16 +97,22 @@
             }, 200);
         }
 
+
+        // Remover do carrinho
+        async function removerCarrinho(nome) {
+            await localStorage.removeItem(`produto-${nome}`);
+            await window.location.reload();
+        }
         
         carregarLoja();
         async function carregarLoja() {
             const root = document.documentElement;
             const navgation = document.querySelector('.navgation');
             const links = document.querySelector('.links ul');
-            const carrossel = document.querySelector('.container .carrossel');
-            const produtos = document.querySelector('.produtos');
             const contato = document.querySelector('.contato');
             const anuncio = document.querySelector('.anuncio');
+            const carrinho = document.querySelector('.carrinho');
+            const container = document.querySelector('.container');
 
             await db.collection(loja)
             .doc('navgation')
@@ -203,7 +194,7 @@
                 });
             });
 
-            // CONTATO
+            // CONTATOS
             await db.collection(loja)
             .doc('contato')
             .get().then((doc) => {
@@ -270,10 +261,66 @@
 
             });
 
+            const h1economizado = document.getElementById('totalEconomizado');
+            var totalEconomizado = 0;
+            if (localStorage.length > 0) {
+                for (let i = 0; i < localStorage.length; i++) {
+                    // Obtenha a chave (nome do item)
+                    let chave = localStorage.key(i);
+                    let valor = localStorage.getItem(chave);
+
+                    // PRODUTO : NOME DO PRODUTO
+                    await db.collection(loja)
+                    .doc('container')
+                    .collection('produtos')
+                    .doc(valor).get().then((doc) => {
+                        const nome = doc.id;
+                        const imagem = doc.data().imagem;
+                        const precoNovo = doc.data().precoNovo;
+                        const precoAntigo = doc.data().precoAntigo;
+                        var porcentagem = parseFloat(precoNovo.replace(",", ".")) / parseFloat(precoAntigo.replace(",", "."));
+                        totalEconomizado += parseFloat(precoAntigo.replace(",", ".")) - parseFloat(precoNovo.replace(",", "."));
+                        porcentagem *= 100;
+                        porcentagem = porcentagem.toFixed(2);
+                        porcentagem -= 100 // Arredonda para duas casas decimais
+                        porcentagem = porcentagem.toFixed(2);
+                        porcentagem = Math.abs(porcentagem);
+                        porcentagem = porcentagem + "%";
+                        const storageRef = storage.ref().child(`${loja}/container/produtos/${imagem}`);
+                        storageRef.getDownloadURL().then( function(url) {
+                            carrinho.innerHTML += `
+                                <div class="produto">
+                                    <div class="porcentagem">
+                                        <ion-icon name="arrow-down"></ion-icon>
+                                        <a>${porcentagem}</a>    
+                                    </div>
+                                    <img src="${url}">
+                                    <div class="produtoMobile">
+                                        <h1>${nome}</h1>
+                                        <h2>R$${precoNovo} <span>R$${precoAntigo}</span></h2>
+                                        <button class="btn-comprar" onclick="removerCarrinho('${nome}')">Remover do carrinho</button>
+                                    </div>
+                                    
+                                </div>
+                            `;
+                        });
+                        container.style.display = "flex";
+                    });    
+                    
+                h1economizado.innerHTML = `Total economizado: ${totalEconomizado} Reais`;                
+                }
+            } else {
+                container.style.display = "flex";
+                container.innerHTML = `
+                    <ion-icon class="cart" name="cart-outline"></ion-icon>
+                    <h4>Seu carrinho esta vazio</h4>
+                    <button onclick="abrirURL('produtos')" class="btn-comprar">Ver nossos produtos</button>
+                `;
+            }
         }
 
         function abrirURL(url) {
-            window.location.href = `${url}`;
+            window.location.href = `../${url}`;
         }
 
         /* Metodo de busca */
