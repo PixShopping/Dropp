@@ -34,16 +34,28 @@
         <section class="produtos">
 
 
-
         </section>
 
     </main>
+
+    <article class="content-produto">
+
+
+        <h1>Deu certo</h1>
+
+    </article>
 
     <footer class="contato">
 
     </footer>
 
 </body>
+
+    <script>
+
+        
+        
+    </script>
 
     <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore-compat.js"></script>
@@ -95,6 +107,10 @@
             }, 200);
         }
 
+        // ABRIR PRODUTO
+        function abrirProduto(nome) {
+            window.location.href = `../produtos/?produto=${nome}`;
+        }
 
         // Adicionar ao carrinho
         async function adicionarCarrinho(nome) {
@@ -164,8 +180,8 @@
                                 </div>
 
                                 <div class="flex buttons">
-                                    <ion-icon onclick="abrirURL('../rastreio/')" name="location-outline"></ion-icon>
-                                    <ion-icon onclick="abrirURL('../carrinho/')" name="cart-outline"></ion-icon>
+                                    <ion-icon onclick="abrirURL('rastreio/')" name="location-outline"></ion-icon>
+                                    <ion-icon onclick="abrirURL('carrinho/')" name="cart-outline"></ion-icon>
                                 </div>
                         `;    
                     });
@@ -220,7 +236,7 @@
                             nomePesquisa.innerHTML = `Resultados com "${searchTerm}"`;
                             if (nomeBusca.includes(searchTerm)) {
                                 produtos.innerHTML += `
-                                <div class="produto">
+                                <div onclick="abrirProduto('${nome}')" class="produto">
                                         <div class="porcentagem">
                                             <ion-icon name="arrow-down"></ion-icon>
                                             <a>${porcentagem}</a>    
@@ -240,7 +256,7 @@
                         } else {
                             nomePesquisa.innerHTML = `Resultados`;
                             produtos.innerHTML += `
-                                <div class="produto">
+                                <div onclick="abrirProduto('${nome}')" class="produto">
                                     <div class="porcentagem">
                                         <ion-icon name="arrow-down"></ion-icon>
                                         <a>${porcentagem}</a>    
@@ -266,8 +282,7 @@
                                 <button onclick="abrirURL('index.html')" class="btn-comprar voltar">Voltar para o início</button>
                             `;
                         }
-
-                        container.style.display = "flex";
+ 
                     });
                 });
             });
@@ -367,6 +382,13 @@
             }
         }
         
+        const term = getParameterByName('produto');
+        const container = document.querySelector('.container');
+        const content = document.querySelector('.content-produto');
+        if (term) {
+            container.style.display = "none";
+            content.style.display = "flex";
+        }
 
     </script>
 

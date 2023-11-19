@@ -208,11 +208,21 @@
             .collection('carrossel')
             .onSnapshot((data) => {
                 data.docs.map((val) => {
-                    var imagem = val.data().imagem;
+                    /*const imagem = val.data().imagem;
                     const storageRef = storage.ref().child(`${loja}/container/carrossel/${imagem}`);
                     storageRef.getDownloadURL().then( function(url) {
                         carrossel.innerHTML += `
                             <img src="${url}">
+                        `;
+                    });*/
+                    const video = val.data().video;
+                    const storageRefVideo = storage.ref().child(`${loja}/container/carrossel/${video}`);
+                    storageRefVideo.getDownloadURL().then( function(urlVideo) {
+                        carrossel.innerHTML += `
+                            <video onclick="abrirURL('produtos')" autoplay loop>
+                                <source src="${urlVideo}" type="video/mp4">
+                                Carregando...
+                            </video>
                         `;
                     })
                     

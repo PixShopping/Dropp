@@ -224,18 +224,19 @@ body {
 }
 
 .container .carrossel {
-    width: 100%;
+    width: 100vw;
     height: auto;
     display: flex;
     justify-content: center;
-    margin: 0px 0px 25px 0px;
-    align-self: center;
+    margin: 0px;
 }
 
-.container .carrossel img {
+.container .carrossel video {
     width: 95%;
     height: auto;
+    max-height: 500px;
     margin: 2.5% 0px;
+    cursor: pointer;
 }
 
 /* PRODUTOS */
