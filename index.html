@@ -9,6 +9,10 @@
 
 <body>
     
+    <div class="anuncio">
+
+    </div>
+    
     <header class="navgation">
     </header>
 
@@ -108,7 +112,20 @@
             const carrossel = document.querySelector('.container .carrossel');
             const produtos = document.querySelector('.produtos');
             const contato = document.querySelector('.contato');
-            
+            const anuncio = document.querySelector('.anuncio');
+
+            await db.collection(loja)
+            .doc('navgation')
+            .collection('anuncio').onSnapshot((data) => {
+                data.docs.map((val) => {
+                    const texto = val.data().texto;
+                    anuncio.innerHTML = `
+                        <ion-icon name="bicycle-outline"></ion-icon>
+                        <p>${texto}</p>
+                    `;
+                });
+            });
+
             await db.collection(loja)
             .doc('cores').get().then((doc) => {
                 const corPrincipal = doc.data().principal;
