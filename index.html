@@ -216,9 +216,16 @@
             .collection('produtos')
             .onSnapshot((data) => {
                 data.docs.map((val) => {
-                    const porcentagem = val.data().porcentagem;
+                    //const porcentagem = val.data().porcentagem;
                     const precoNovo = val.data().precoNovo;
                     const precoAntigo = val.data().precoAntigo;
+                    var porcentagem = parseFloat(precoNovo.replace(",", ".")) / parseFloat(precoAntigo.replace(",", "."));
+                    porcentagem *= 100;
+                    porcentagem = porcentagem.toFixed(2);
+                    porcentagem -= 100 // Arredonda para duas casas decimais
+                    porcentagem = porcentagem.toFixed(2);
+                    porcentagem = Math.abs(porcentagem);
+                    porcentagem = porcentagem + "%";
                     const imagem = val.data().imagem;
                     const storageRef = storage.ref().child(`${loja}/container/produtos/${imagem}`);
                     storageRef.getDownloadURL().then( function(url) {
