@@ -94,7 +94,6 @@
             }, 200);
         }
 
-        
         carregarLoja();
         async function carregarLoja() {
             const root = document.documentElement;
@@ -288,8 +287,44 @@
                 `;
 
             });
-
         }
+
+
+        displaySearchResults();
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "))
+        }
+
+// Função para exibir resultados de pesquisa
+var count = 0;
+async function displaySearchResults() {
+    const searchTerm = getParameterByName('search');
+    const nomePesquisa = document.getElementById('nomePesquisa');
+    const resultadoPesquisa = document.getElementById('resultadoPesquisa');
+    nomePesquisa.innerHTML = `Resultados com "${searchTerm}"`;
+    
+    const produtos = await document.querySelector('.produtos');
+    const items = await produtos.getElementsByTagName('div');
+
+    for (let i = 0; i < items.length; i++) {
+        const h1 = await items[i].getElementsByTagName('h1')[0];
+
+        // Verifique se o elemento h1 foi encontrado
+        if (h1) {
+            const text = await h1.textContent.toLowerCase().replace(/\s/g, '');
+            // Use operadores ternários para simplificar a lógica
+            items[i].style.display = text.includes(searchTerm) ? 'flex' : 'none';
+            
+            resultadoPesquisa.innerHTML = count;
+        }
+    }
+}
 
         function abrirURL(url) {
             window.location.href = `${url}`;

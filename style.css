@@ -328,7 +328,6 @@ body {
     border-radius: 10px;
     position: relative;
 } .container .produtos .produto:hover {
-    box-shadow: 0px 0px 10px var(--principal);
     margin: -20px 12px 20px 12px;
     transition: all .3s linear;
 }

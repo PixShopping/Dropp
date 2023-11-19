@@ -157,13 +157,13 @@
                                 <img src="${url}">
 
                                 <div class="flex pesquisa">
-                                    <input placeholder="O que está buscando?" type="text">
-                                    <ion-icon name="search"></ion-icon>
+                                    <input placeholder="O que está buscando?" type="text" id="buscar">
+                                    <ion-icon onclick="pesquisar('buscar')" name="search"></ion-icon>
                                 </div>
 
                                 <div class="pesquisaMobile">
-                                    <input placeholder="O que está buscando?" type="text">
-                                    <ion-icon name="search"></ion-icon>
+                                    <input placeholder="O que está buscando?" type="text" id="buscarMobile">
+                                    <ion-icon onclick="pesquisar('buscarMobile')" name="search"></ion-icon>
                                 </div>
 
                                 <div class="flex buttons">
@@ -316,6 +316,12 @@
 
         function abrirURL(url) {
             window.location.href = `${url}`;
+        }
+
+        /* Metodo de busca */
+        async function pesquisar(id) {
+            const buscar = await document.getElementById(id).value.toLowerCase().replace(/\s/g, '');
+            window.location.href = "./produtos/?search=" + encodeURIComponent(buscar);
         }
 
     </script>
