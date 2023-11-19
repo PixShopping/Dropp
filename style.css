@@ -1,10 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&display=swap');
+
 /* variaveis */
 
 :root {
     --principal: ;
     --text: ;
     --background: ;
-    --preco: 'Courier New', Courier;
+    --preco: 'Poppins', sans-serif;
 }
 
 * {
@@ -367,22 +369,21 @@ body {
 }
 
 .container .produtos .produto h2 {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 800;
-    letter-spacing: -1px;
+    letter-spacing: -0.5px;
     margin: 10px 0px 0px 0px;
     color: var(--verde);
     font-family: var(--preco);
 }
 
 .container .produtos .produto h2 span{
-    font-size: 16px;
-    font-weight: 800;
-    letter-spacing: -1px;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.3px;
     color: var(--vermelho);
     text-decoration: line-through;
-    margin: 0px 0px 0px 2px;
-    font-family: var(--preco);
+    margin: 0px 0px 0px 3px;
 }
 
 
