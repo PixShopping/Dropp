@@ -224,7 +224,12 @@
                                 Carregando...
                             </video>
                         `;
-                    })
+                    });
+                    var videoHTML = document.getElementById("meuVideo");
+                    videoHTML.addEventListener("ended", function() {
+                        videoHTML.currentTime = 0; // Reinicia o vídeo para o início
+                        videoHTML.play(); // Inicia novamente
+                    });
                     
                 });
             });
@@ -375,11 +380,7 @@
             }
         }
         
-        var video = document.getElementById("meuVideo");
-        video.addEventListener("ended", function() {
-            video.currentTime = 0; // Reinicia o vídeo para o início
-            video.play(); // Inicia novamente
-        });
+        
 
     </script>
 
