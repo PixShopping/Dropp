@@ -110,6 +110,7 @@
             const contato = document.querySelector('.contato');
             const anuncio = document.querySelector('.anuncio');
             const produtos = document.querySelector('.produtos');
+            const container = document.querySelector('.container');
             
             await db.collection(loja)
             .doc('navgation')
@@ -258,6 +259,15 @@
                         }
                         
                         resultadoPesquisa.innerHTML = count; 
+                        if (count === 0) {
+                            container.innerHTML = `
+                                <h3>Nenhum resultado com "${searchTerm}" encontrado</h1>
+                                <img src="https://firebasestorage.googleapis.com/v0/b/dropp-71540.appspot.com/o/teste%2Fcontainer%2Fsobre%2Fnotfind.png?alt=media&token=9025a2ea-f0f3-4c7b-815f-54d49362ca33">
+                                <button onclick="abrirURL('index.html')" class="btn-comprar voltar">Voltar para o início</button>
+                            `;
+                        }
+
+                        container.style.display = "flex";
                     });
                 });
             });
@@ -341,7 +351,7 @@
         }
 
         function abrirURL(url) {
-            window.location.href = `${url}`;
+            window.location.href = `../${url}`;
         }
 
         /* Metodo de busca */
