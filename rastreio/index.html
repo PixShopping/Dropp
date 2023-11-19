@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Mvshop </title>
+    <title> Mvshop | Rastreio </title>
     <link rel="stylesheet" href="./style.css">
 </head>
 
@@ -24,27 +24,35 @@
 
     <main class="container">
 
-        <section class="carrossel">
+        <!-- Rastreie seu pedido aqui -->
+        <a class="grande">
+            <img src="https://cdn.shopify.com/s/files/1/0572/0725/9170/files/top_1_28afc2e8-41c1-4f19-bf5c-7321658aca9d.webp?v=1687985723">
+        </a>
+        
+        <!-- Melhor Rastreio -->
+        <a href="https://melhorrastreio.com.br" class="pequena cursor">
+            <img class="pequena" src="https://cdn.shopify.com/s/files/1/0572/0725/9170/files/top_2_480x480.webp?v=1687984602">
+        </a>
+        
+        <!-- Em cado de erro ou bug -->
+        <a class="grande">
+            <img src="https://cdn.shopify.com/s/files/1/0572/0725/9170/files/top_3.webp?v=1687985028">
+        </a>
 
-        </section>
+        <!-- Jadlog -->
+        <a href="https://jadlog.com.br/jadlog/home" class="pequena cursor">
+            <img src="https://cdn.shopify.com/s/files/1/0572/0725/9170/files/mid_2_240x240.webp?v=1687955429">
+        </a>
+        
+        <!-- Correios -->
+        <a href="https://rastreamento.correios.com.br/app/index.php" class="pequena cursor">
+            <img src="https://cdn.shopify.com/s/files/1/0572/0725/9170/files/mid_3_240x240.webp?v=1687955437">
+        </a>
 
-        <div class="flex">
-            <div class="detalhe">
-                <h1>Produtos</h1>
-                <div></div>
-            </div>
-
-            <div class="right">
-                <a>Ver todos</a>
-            </div>
-            
-        </div>
-
-        <section class="produtos">
-            
-
-        </section>
-
+        <!-- Identifique o rastreio -->
+        <a class="grande">
+            <img src="https://cdn.shopify.com/s/files/1/0572/0725/9170/files/bot_2_4a318c6e-cdff-4bf8-b561-cbd16eb0b61e.webp?v=1687985986">
+        </a>
     </main>
 
     <footer class="contato">
@@ -187,7 +195,7 @@
                         const url = doc.data().pagina;
                         links.innerHTML += `
                             <li>
-                                <a href="./${url}">${pagina}</a>
+                                <a href="../${url}">${pagina}</a>
                             </li>    
                         `;   
                     }
