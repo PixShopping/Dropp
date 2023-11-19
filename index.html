@@ -219,7 +219,7 @@
                     const storageRefVideo = storage.ref().child(`${loja}/container/carrossel/${video}`);
                     storageRefVideo.getDownloadURL().then( function(urlVideo) {
                         carrossel.innerHTML += `
-                            <video onclick="abrirURL('produtos')" autoplay loop>
+                            <video id="meuVideo" onclick="abrirURL('produtos')" autoplay loop>
                                 <source src="${urlVideo}" type="video/mp4">
                                 Carregando...
                             </video>
@@ -375,6 +375,11 @@
             }
         }
         
+        var video = document.getElementById("meuVideo");
+        video.addEventListener("ended", function() {
+            video.currentTime = 0; // Reinicia o vídeo para o início
+            video.play(); // Inicia novamente
+        });
 
     </script>
 

@@ -597,7 +597,7 @@ body {
 }
 
 
-@media (min-width: 552px) {
+@media (min-width: 632px) {
 
     #openMenu, #closeMenu {
         display: none;
@@ -618,7 +618,7 @@ body {
 }
 
 /* MOBILE */
-@media (max-width: 550px) {
+@media (max-width: 630px) {
     
     #openMenu {
         display: flex;
