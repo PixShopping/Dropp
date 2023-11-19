@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Mvshop </title>
     <link rel="stylesheet" href="./style.css">
+    <link rel="shortcut icon" href="https://firebasestorage.googleapis.com/v0/b/dropp-71540.appspot.com/o/teste%2Fnavgation%2Ffavicon.png?alt=media&token=041e70f9-b847-4789-8098-8ce417a2c02c" type="image/x-icon">
 </head>
 
 <body>
@@ -150,6 +151,7 @@
                     const storageRef = storage.ref().child(`${loja}/navgation/${logo}`);
                     storageRef.getDownloadURL().then(function (url) {
                         // Use a URL da imagem, por exemplo, para exibi-la
+                        console.log(url)
                         navgation.innerHTML = `
                                 <ion-icon onclick="abrirMenu()" class="btn-menu" id="openMenu" name="menu"></ion-icon>
                                 <ion-icon onclick="fecharMenu()" class="btn-menu" id="closeMenu" name="close"></ion-icon>
