@@ -310,12 +310,12 @@
                 h1economizado.innerHTML = `Total economizado: ${totalEconomizado} Reais`;                
                 }
             } else {
-                container.style.display = "flex";
                 container.innerHTML = `
                     <ion-icon class="cart" name="cart-outline"></ion-icon>
                     <h4>Seu carrinho esta vazio</h4>
                     <button onclick="abrirURL('produtos')" class="btn-comprar">Ver nossos produtos</button>
                 `;
+                container.style.display = "flex";
             }
         }
 
