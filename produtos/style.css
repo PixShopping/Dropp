@@ -215,26 +215,36 @@ body {
 .container {
     width: 100vw;
     height: auto;
-    padding: 0px;
+    padding: 30px 0px 80px 0px;
     background: #f0f0f0;
     display: flex;
     flex-direction: column;
+    align-items: center;
     position: relative;
     top: 0px;
 }
 
-.container .carrossel {
+.container .flex {
     width: 100%;
-    height: auto;
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    margin: 0px 0px 25px 0px;
-    align-self: center;
+    padding: 0px 5vw;
 }
 
-.container .carrossel img {
-    width: 100%;
-    height: auto;
+.container h1 {
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    align-self: start;
+}
+
+.container h2 {
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0px;
+    align-self: start;
+    margin: 5px 0px 0px 0px;
 }
 
 /* PRODUTOS */
@@ -244,74 +254,15 @@ body {
     max-width: 95vw;
     height: auto;
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
-    overflow-x: scroll;
-    margin: 15px 0px 50px 0px;
+    justify-content: center;
+    margin: 0px;
     align-self: center;
     padding: 50px 0px 70px;
     position: relative;
     user-select: none;
-}
-
-.container .flex {
-    width: 92%;
-    height: auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    align-self: center;
-    margin: 15px 0px -5px 0px;
-    user-select: none;
-}
-
-.container .right {
-    display: flex;
-    align-items: center;
-}
-
-.container .right a {
-    font-size: 16px;
-    cursor: pointer;
-    color: var(--principal);
-    position: relative; /* Adicione position: relative; para o pseudo-elemento */
-    transition: color 0.3s ease-in-out;
-    text-decoration: none;
-} 
-
-.container .right a::before {
-    content: "";
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 2.5px; /* altura da borda */
-    background-color: var(--principal); /* cor da borda */
-    transition: width 0.3s ease-in-out; /* transição da largura */
-}
-
-.container .right a:hover::before {
-    width: 100%; /* largura total durante o hover */
-}
-
-.container .detalhe {
-    width: 100px;
-    height: auto;
-    
-}
-
-.container .detalhe h1 {
-    font-size: 22px;
-    font-weight: 500;
-    margin: 0px 0px 2px 0px;
-} 
-
-.container .detalhe div {
-    width: 100%;
-    height: 6.5px;
-    background: var(--principal);
-    border-radius: 10px;
 }
 
 .container .produtos .produto {
@@ -324,11 +275,10 @@ body {
     background: #fff;
     padding: 20px 15px 15px 15px;
     cursor: pointer;
-    margin: 0px 12px;
+    margin: 13px;
     border-radius: 10px;
     position: relative;
 } .container .produtos .produto:hover {
-    box-shadow: 0px 0px 10px var(--principal);
     margin: -20px 12px 20px 12px;
     transition: all .3s linear;
 }
@@ -337,6 +287,43 @@ body {
     width: 100%;
     height: auto;
     border-radius: 10px;
+}
+
+.container .produtos .produto button { 
+    display: none;
+    cursor: pointer;
+}
+
+.btn-comprar {
+    width: 100%;
+    height: 32.5px;
+    border-radius: 7px;
+    background: var(--principal);
+    margin: 10px 0px 0px 0px;
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 500;
+    border: 2px solid var(--principal);
+} .btn-comprar:hover {
+    background: transparent;
+    color: var(--principal);
+    transition: all .3s linear;
+}
+
+.btn-addCarrinho {
+    width: 100%;
+    height: 32.5px;
+    border-radius: 7px;
+    border: 2px solid var(--principal);
+    background: transparent;
+    margin: 10px 0px 4px 0px;
+    color: var(--principal);
+    font-size: 15px;
+    font-weight: 500;
+} .btn-addCarrinho:hover {
+    background: var(--principal);
+    color: var(--text);
+    transition: all .3s linear;
 }
 
 .container .produtos .produto .porcentagem {
@@ -386,7 +373,6 @@ body {
     text-decoration: line-through;
     margin: 0px 0px 0px 3px;
 }
-
 
 /* CONTATO */
 
@@ -640,4 +626,92 @@ body {
     .assine, .suporte {
         margin: 10px 0px;
     }
+
+    /* PRODUTOS */
+
+    .container .produtos {
+        width: 95vw;
+        max-width: 95vw;
+        height: auto;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        margin: 0px;
+        align-self: center;
+        padding: 50px 0px 70px;
+        position: relative;
+        user-select: none;
+    }
+    
+    .container .produtos .produto {
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-direction: row;
+        background: #fff;
+        padding: 15px;
+        cursor: pointer;
+        margin: 13px;
+        border-radius: 10px;
+        position: relative;
+    } .container .produtos .produto:hover {
+        margin: 12px;
+        transition: all .3s linear;
+    }
+
+    .container .produtos .produto .produtoMobile {
+        width: 70%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding: 0px 20px;
+    }
+    
+    .container .produtos .produto img {
+        width: 30%;
+        max-width: 200px;
+        height: auto;
+        border-radius: 8px;
+        margin: 10px 0px 0px 0px;
+    }
+
+    .container .produtos .produto button { 
+        display: block;
+    }
+    
+    .container .produtos .produto .porcentagem {
+        font-size: 14px;
+        font-weight: 600;
+    }
+    
+    .container .produtos .produto h1 {
+        font-size: 16px;
+        font-weight: 400;
+        letter-spacing: 0.2px;
+        margin: 10px 0px 0px 0px;
+        text-transform: capitalize;
+    }
+    
+    .container .produtos .produto h2 {
+        font-size: 16px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        margin: 10px 0px 0px 0px;
+        color: var(--verde);
+        font-family: var(--preco);
+    }
+    
+    .container .produtos .produto h2 span{
+        font-size: 14px;
+        font-weight: 400;
+        letter-spacing: 0.3px;
+        color: var(--vermelho);
+        text-decoration: line-through;
+        margin: 0px 0px 0px 3px;
+    }
+
 }

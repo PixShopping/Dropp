@@ -416,7 +416,7 @@ body {
     letter-spacing: 0.3px;
 }
 
-@media (min-width: 532px) {
+@media (min-width: 552px) {
 
     #openMenu, #closeMenu {
         display: none;
@@ -437,7 +437,7 @@ body {
 }
 
 /* MOBILE */
-@media (max-width: 531px) {
+@media (max-width: 550px) {
     
     #openMenu {
         display: flex;

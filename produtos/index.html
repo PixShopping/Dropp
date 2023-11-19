@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Mvshop </title>
+    <title> Mvshop | Produtos </title>
     <link rel="stylesheet" href="./style.css">
 </head>
 
@@ -24,24 +24,15 @@
 
     <main class="container">
 
-        <section class="carrossel">
-
-        </section>
-
         <div class="flex">
-            <div class="detalhe">
-                <h1>Produtos</h1>
-                <div></div>
-            </div>
+            <h1 id="nomePesquisa">Produtos</h1>
+            <h2><a id="resultadoPesquisa">0</a> Resultados</h2>
 
-            <div class="right">
-                <a href="./produtos/">Ver todos</a>
-            </div>
-            
         </div>
-
+        
         <section class="produtos">
-            
+
+
 
         </section>
 
@@ -109,11 +100,10 @@
             const root = document.documentElement;
             const navgation = document.querySelector('.navgation');
             const links = document.querySelector('.links ul');
-            const carrossel = document.querySelector('.container .carrossel');
-            const produtos = document.querySelector('.produtos');
             const contato = document.querySelector('.contato');
             const anuncio = document.querySelector('.anuncio');
-
+            const produtos = document.querySelector('.produtos');
+            
             await db.collection(loja)
             .doc('navgation')
             .collection('anuncio').onSnapshot((data) => {
@@ -167,8 +157,8 @@
                                 </div>
 
                                 <div class="flex buttons">
-                                    <ion-icon onclick="abrirURL('./rastreio/')" name="location-outline"></ion-icon>
-                                    <ion-icon onclick="abrirURL('./carrinho/')" name="cart-outline"></ion-icon>
+                                    <ion-icon onclick="abrirURL('../rastreio/')" name="location-outline"></ion-icon>
+                                    <ion-icon onclick="abrirURL('../carrinho/')" name="cart-outline"></ion-icon>
                                 </div>
                         `;    
                     });
@@ -187,27 +177,10 @@
                         const url = doc.data().pagina;
                         links.innerHTML += `
                             <li>
-                                <a href="./${url}">${pagina}</a>
+                                <a href="../${url}">${pagina}</a>
                             </li>    
                         `;   
                     }
-                });
-            });
-
-            // IMAGEM DA LOJA
-            await db.collection(loja)
-            .doc('container')
-            .collection('carrossel')
-            .onSnapshot((data) => {
-                data.docs.map((val) => {
-                    var imagem = val.data().imagem;
-                    const storageRef = storage.ref().child(`${loja}/container/carrossel/${imagem}`);
-                    storageRef.getDownloadURL().then( function(url) {
-                        carrossel.innerHTML += `
-                            <img src="${url}">
-                        `;
-                    })
-                    
                 });
             });
 
@@ -236,9 +209,13 @@
                                     <a>${porcentagem}</a>    
                                 </div>
                                 <img src="${url}">
-                                <h1>${val.id}</h1>
-                                <h2>R$${precoNovo} <span>R$${precoAntigo}</span></h2>
-
+                                <div class="produtoMobile">
+                                    <h1>${val.id}</h1>
+                                    <h2>R$${precoNovo} <span>R$${precoAntigo}</span></h2>
+                                    <button class="btn-comprar">Comprar</button>
+                                    <button class="btn-addCarrinho">Adicionar ao carrinho</button>
+                                </div>
+                                
                             </div>
                         `;
                     })
