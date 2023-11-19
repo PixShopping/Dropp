@@ -132,7 +132,6 @@
             await db.collection(loja)
             .doc('navgation')
             .get().then((doc) => {
-
                 // VERIFICA SE EXISTE NAVGATION
                 if (doc.data()) {
                     const logo = doc.data().logo;
@@ -146,13 +145,13 @@
                                 <img src="${url}">
 
                                 <div class="flex pesquisa">
-                                    <input placeholder="O que está buscando?" type="text">
-                                    <ion-icon name="search"></ion-icon>
+                                    <input onkeydown="pressionarEnter(event, 'buscar')" placeholder="O que está buscando?" type="text" id="buscar">
+                                    <ion-icon onclick="pesquisar('buscar')" name="search"></ion-icon>
                                 </div>
 
                                 <div class="pesquisaMobile">
-                                    <input placeholder="O que está buscando?" type="text">
-                                    <ion-icon name="search"></ion-icon>
+                                    <input onkeydown="pressionarEnter(event, 'buscarMobile')" placeholder="O que está buscando?" type="text" id="buscarMobile">
+                                    <ion-icon onclick="pesquisar('buscarMobile')" name="search"></ion-icon>
                                 </div>
 
                                 <div class="flex buttons">
@@ -183,12 +182,22 @@
                 });
             });
 
+            const searchTerm = getParameterByName('search');
+            const nomePesquisa = document.getElementById('nomePesquisa');
+            const resultadoPesquisa = document.getElementById('resultadoPesquisa');
+            var count = 0;
+            const inputBuscar = document.getElementById('buscar');
+            const inputBuscarMobile = document.getElementById('buscarMobile');
+            inputBuscar.value = searchTerm;
+            inputBuscarMobile.value = searchTerm;
             await db.collection(loja)
             .doc('container')
             .collection('produtos')
             .onSnapshot((data) => {
                 data.docs.map((val) => {
                     //const porcentagem = val.data().porcentagem;
+                    const nome = val.id;
+                    const nomeBusca = nome.toLowerCase();
                     const precoNovo = val.data().precoNovo;
                     const precoAntigo = val.data().precoAntigo;
                     var porcentagem = parseFloat(precoNovo.replace(",", ".")) / parseFloat(precoAntigo.replace(",", "."));
@@ -201,24 +210,50 @@
                     const imagem = val.data().imagem;
                     const storageRef = storage.ref().child(`${loja}/container/produtos/${imagem}`);
                     storageRef.getDownloadURL().then( function(url) {
-                        produtos.innerHTML += `
-                            <div class="produto">
-                                <div class="porcentagem">
-                                    <ion-icon name="arrow-down"></ion-icon>
-                                    <a>${porcentagem}</a>    
+                        if (searchTerm) {
+                            nomePesquisa.innerHTML = `Resultados com "${searchTerm}"`;
+                            if (nomeBusca.includes(searchTerm)) {
+                                produtos.innerHTML += `
+                                    <div class="produto">
+                                        <div class="porcentagem">
+                                            <ion-icon name="arrow-down"></ion-icon>
+                                            <a>${porcentagem}</a>    
+                                        </div>
+                                        <img src="${url}">
+                                        <div class="produtoMobile">
+                                            <h1>${nome}</h1>
+                                            <h2>R$${precoNovo} <span>R$${precoAntigo}</span></h2>
+                                            <button class="btn-comprar">Comprar</button>
+                                            <button class="btn-addCarrinho">Adicionar ao carrinho</button>
+                                        </div>
+                                        
+                                    </div>
+                                `;  
+                                count++;
+                            }
+                        } else {
+                            nomePesquisa.innerHTML = `Resultados`;
+                            produtos.innerHTML += `
+                                <div class="produto">
+                                    <div class="porcentagem">
+                                        <ion-icon name="arrow-down"></ion-icon>
+                                        <a>${porcentagem}</a>    
+                                    </div>
+                                    <img src="${url}">
+                                    <div class="produtoMobile">
+                                        <h1>${nome}</h1>
+                                        <h2>R$${precoNovo} <span>R$${precoAntigo}</span></h2>
+                                        <button class="btn-comprar">Comprar</button>
+                                        <button class="btn-addCarrinho">Adicionar ao carrinho</button>
+                                    </div>
+                                    
                                 </div>
-                                <img src="${url}">
-                                <div class="produtoMobile">
-                                    <h1>${val.id}</h1>
-                                    <h2>R$${precoNovo} <span>R$${precoAntigo}</span></h2>
-                                    <button class="btn-comprar">Comprar</button>
-                                    <button class="btn-addCarrinho">Adicionar ao carrinho</button>
-                                </div>
-                                
-                            </div>
-                        `;
-                    })
-                    
+                            `;
+                            count++;
+                        }
+                        
+                        resultadoPesquisa.innerHTML = count; 
+                    });
                 });
             });
 
@@ -286,49 +321,36 @@
                     </section>
                 `;
 
-            });
-        }
-
-
-        displaySearchResults();
+            })
+        }  
+        
         function getParameterByName(name, url) {
             if (!url) url = window.location.href;
             name = name.replace(/[\[\]]/g, "\\$&");
             var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-                results = regex.exec(url);
+            results = regex.exec(url);
             if (!results) return null;
             if (!results[2]) return '';
             return decodeURIComponent(results[2].replace(/\+/g, " "))
         }
 
-// Função para exibir resultados de pesquisa
-var count = 0;
-async function displaySearchResults() {
-    const searchTerm = getParameterByName('search');
-    const nomePesquisa = document.getElementById('nomePesquisa');
-    const resultadoPesquisa = document.getElementById('resultadoPesquisa');
-    nomePesquisa.innerHTML = `Resultados com "${searchTerm}"`;
-    
-    const produtos = await document.querySelector('.produtos');
-    const items = await produtos.getElementsByTagName('div');
-
-    for (let i = 0; i < items.length; i++) {
-        const h1 = await items[i].getElementsByTagName('h1')[0];
-
-        // Verifique se o elemento h1 foi encontrado
-        if (h1) {
-            const text = await h1.textContent.toLowerCase().replace(/\s/g, '');
-            // Use operadores ternários para simplificar a lógica
-            items[i].style.display = text.includes(searchTerm) ? 'flex' : 'none';
-            
-            resultadoPesquisa.innerHTML = count;
-        }
-    }
-}
-
         function abrirURL(url) {
             window.location.href = `${url}`;
         }
+
+        /* Metodo de busca */
+        async function pesquisar(id) {
+            const buscar = await document.getElementById(id).value.toLowerCase().replace(/\s/g, '');
+            window.location.href = "../produtos/?search=" + encodeURIComponent(buscar);
+        }
+
+        /* Adicionando evento de click do teclado */
+        function pressionarEnter(event, id) {
+            if (event.key === "Enter") {
+                pesquisar(id);
+            }
+        }
+        
 
     </script>
 
