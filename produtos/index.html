@@ -183,13 +183,9 @@
             });
 
             const searchTerm = getParameterByName('search');
+            var count = 0;
             const nomePesquisa = document.getElementById('nomePesquisa');
             const resultadoPesquisa = document.getElementById('resultadoPesquisa');
-            var count = 0;
-            const inputBuscar = document.getElementById('buscar');
-            const inputBuscarMobile = document.getElementById('buscarMobile');
-            inputBuscar.value = searchTerm;
-            inputBuscarMobile.value = searchTerm;
             await db.collection(loja)
             .doc('container')
             .collection('produtos')
