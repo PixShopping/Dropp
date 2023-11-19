@@ -135,7 +135,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0px 15px;
+    margin: 0px 30px 0px 15px;
 }
 
 .navgation .buttons ion-icon {
@@ -675,5 +675,10 @@ body {
 
     .assine, .suporte {
         margin: 10px 0px;
+    }
+
+    .container {
+        top: 70px;
+        padding: 30px 0px 110px 0px;
     }
 }
