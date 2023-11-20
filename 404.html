@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Mvshop 404 </title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./global.css">
+    <link rel="shortcut icon" href="./src/img/favicon.png" type="image/x-icon">
+</head>
+
+<body>
+    
+    <!-- ANUNCIO -->
+    <div class="anuncio">
+        <ion-icon name="bicycle-outline"></ion-icon>
+        <p>Frete grátis em todo o Brasil</p>
+    </div>
+    
+    <!-- NAVGATION -->
+    <header class="navgation">
+        <ion-icon onclick="abrirMenu()" class="btn-menu" id="openMenu" name="menu"></ion-icon>
+        <ion-icon onclick="fecharMenu()" class="btn-menu" id="closeMenu" name="close"></ion-icon>
+
+        <img id="logo" src="./src/img/logo.png">
+
+        <div class="flex pesquisa">
+            <input onkeydown="pressionarEnter(event, 'buscar')" placeholder="O que está buscando?" type="text" id="buscar">
+            <ion-icon onclick="pesquisar('buscar')" name="search"></ion-icon>
+        </div>
+
+        <div class="pesquisaMobile">
+            <input onkeydown="pressionarEnter(event, 'buscarMobile')" placeholder="O que está buscando?" type="text" id="buscarMobile">
+            <ion-icon onclick="pesquisar('buscarMobile')" name="search"></ion-icon>
+        </div>
+
+        <div class="flex buttons">
+            <ion-icon onclick="abrirURL('./rastreio/')" name="location-outline"></ion-icon>
+            <ion-icon onclick="abrirURL('./carrinho/')" name="cart-outline"></ion-icon>
+        </div>
+    </header>
+
+
+    <!-- LINKS -->
+    <nav class="links">
+        <ul>
+            <div class="triangulo"></div>
+            <li>
+                <a href="./index.html">home</a>
+            </li>
+            <li>
+                <a href="./produtos/">produtos</a>
+            </li>
+            <li>
+                <a href="./index.html#sobre">sobre nós</a>
+            </li>
+            <li>
+                <a href="./rastreio/">rastrear pedido</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- CONTAINER -->
+    <main class="container">
+
+        <h1>404</h1>
+
+    </main>
+
+    <!-- CONTATO -->
+    <footer class="contato">
+        <article>    
+                        
+            <section class="assine">
+                <h1>MVshop</h1>
+                <p>Assine já nosso plano VIP para garantir recompensas e cupons para nossa loja.</p>
+                <input placeholder="Seu E-mail" type="text">
+                <button>Enviar</button>
+            </section>
+
+            <section class="suporte">
+                <h1>Suporte ao Cliente</h1>
+                <li>
+                    <p><strong>Email</strong>: mvshop@mvshop.com.br</p>
+                </li>
+                <li>
+                    <p><strong>Whatsapp</strong>: +55 (16) 997569308</p>
+                </li>
+                <li>
+                    <p><strong>Telefone</strong>: (16) 3324-1234</p>
+                </li>
+                <li>
+                    <p><strong>Instagram</strong>: @mvshop</p>
+                </li>
+                <li>
+                    <p><strong>Facebook</strong>: mvshop_</p>
+                </li>
+            </section>
+
+        </article>
+
+        <div class="linha"></div>
+
+        <section class="direitos">
+            
+            <div class="flex">
+                <ion-icon onclick="abrirURL('https://instagram.com/mvshop')" name="logo-instagram"></ion-icon>
+                <ion-icon onclick="abrirURL('https://facebook.com/mvshop_')" name="logo-facebook"></ion-icon>
+                <ion-icon onclick="abrirURL('https://wa.me/5516997569308')" name="logo-whatsapp"></ion-icon>
+            </div>
+
+            <p>© Mvshop 2023</p>
+
+            <div class="flex">
+                <ion-icon name="logo-javascript"></ion-icon>
+                <ion-icon name="logo-firebase"></ion-icon>
+            </div>
+        
+        </section>
+    </footer>
+
+</body>
+
+    <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-storage-compat.js"></script>
+    <!-- JAVASCRIPT -->
+    <script>
+        
+        // BANCO DE DADOS
+        const firebaseConfig = {
+            apiKey: "AIzaSyBqbDhvZYwoJng6u2AF-YHTBBCPWiYAnuY",
+            authDomain: "dropp-71540.firebaseapp.com",
+            projectId: "dropp-71540",
+            storageBucket: "dropp-71540.appspot.com",
+            messagingSenderId: "226605796065",
+            appId: "1:226605796065:web:7b6a8652ed1e93d78f45a0"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+        const loja = 'teste';
+
+        // BOTAO DO MENU
+        function abrirMenu() {
+            const openMenu = document.getElementById('openMenu');
+            const closeMenu = document.getElementById('closeMenu');
+            openMenu.style.display = "none";
+            closeMenu.style.display = "flex";
+
+            const menu = document.querySelector('.links ul');
+            menu.style.display = "flex";
+            setTimeout(() => {
+                menu.style.opacity = 1;
+            }, 200);
+        }
+
+        function fecharMenu() {
+            const openMenu = document.getElementById('openMenu');
+            const closeMenu = document.getElementById('closeMenu');
+            openMenu.style.display = "flex";
+            closeMenu.style.display = "none";
+
+            const menu = document.querySelector('.links ul');
+            menu.style.opacity = 0;
+            
+            setTimeout(() => {
+                menu.style.display = "none";
+            }, 200);
+        }
+
+        
+        carregarLoja();
+        async function carregarLoja() {
+            const root = document.documentElement;
+            const navgation = document.querySelector('.navgation');
+            const links = document.querySelector('.links ul');
+            const carrossel = document.querySelector('.container .carrossel');
+            const produtos = document.querySelector('.produtos');
+            const sobre = document.querySelector('.sobre');
+            const contato = document.querySelector('.contato');
+            const anuncio = document.querySelector('.anuncio');
+
+            // Produtos
+            await db.collection('produtos')
+            .onSnapshot((data) => {
+                data.docs.map((val) => {
+                    const nome = val.id;
+                    const precoNovo = val.data().precoNovo;
+                    const precoAntigo = val.data().precoAntigo;
+                    var porcentagem = parseFloat(precoNovo.replace(",", ".")) / parseFloat(precoAntigo.replace(",", "."));
+                    porcentagem *= 100;
+                    porcentagem = porcentagem.toFixed(2);
+                    porcentagem -= 100 // Arredonda para duas casas decimais
+                    porcentagem = porcentagem.toFixed(2);
+                    porcentagem = Math.abs(porcentagem);
+                    porcentagem = porcentagem + "%";
+                    const imagem = val.data().imagem;
+                    const storageRef = storage.ref().child(`produtos/${nome}/${imagem}`);
+                    storageRef.getDownloadURL().then( function(url) {
+                        produtos.innerHTML += `
+                            <div class="produto">
+                                <div class="porcentagem">
+                                    <ion-icon name="arrow-down"></ion-icon>
+                                    <a>${porcentagem}</a>    
+                                </div>
+                                <img src="${url}">
+                                <h1>${nome}</h1>
+                                <h2>R$${precoNovo} <span>R$${precoAntigo}</span></h2>
+                                <button onclick="abrirProduto('${nome}')" class="btn-comprar">Comprar</button>
+                            </div>
+                        `;
+                    })
+                    
+                });
+            });
+
+        }
+
+        function abrirURL(url) {
+            window.location.href = `${url}`;
+        }
+
+        // ABRIR PRODUTO
+        function abrirProduto(nome) {
+            window.location.href = `./produtos/?produto=${nome}`;
+        }
+
+        /* Metodo de busca */
+        async function pesquisar(id) {
+            const buscar = await document.getElementById(id).value.toLowerCase().replace(/\s/g, '');
+            window.location.href = "./produtos/?search=" + encodeURIComponent(buscar);
+        }
+
+        /* Adicionando evento de click do teclado */
+        function pressionarEnter(event, id) {
+            if (event.key === "Enter") {
+                pesquisar(id);
+            }
+        }
+        
+        
+
+    </script>
+
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+</html>
