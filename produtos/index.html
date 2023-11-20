@@ -76,10 +76,50 @@
     </main>
 
     <article class="content-produto">
+        
+        <section class="left">
+            
+            <div class="imagens">
+                <div class="imagemPrincipal"></div>
+                <div class="imagemSecundaria"></div>
+            </div>
+            
+            <div class="descricao">
 
+            </div>
 
-        <h1>Deu certo</h1>
+        </section>
+        
+        <section class="right">
+            
+            <div class="nome">
 
+            </div>
+            <div class="tamanho">
+                <p>Tamanho:</p>
+                <div class="tamanhosInputs">
+                    
+                </div>
+            </div>
+            <div class="cores">
+                <p>Cor:</p>
+                <div class="coresInputs">
+                    
+                </div>
+            </div>
+            <div class="preco">
+                
+            </div>
+    
+            <div class="botoes">
+                
+            </div>
+            
+
+        </section>
+        
+        
+        
     </article>
 
     <!-- CONTATO -->
@@ -134,13 +174,7 @@
         </section>
     </footer>
 
-</body>
-
-    <script>
-
-        
-        
-    </script>
+    </body>
 
     <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore-compat.js"></script>
@@ -198,8 +232,8 @@
         }
 
         // Adicionar ao carrinho
-        async function adicionarCarrinho(nome) {
-            await localStorage.setItem(`produto-${nome}`, nome);
+        async function adicionarCarrinho(nome, dados) {
+            await localStorage.setItem(nome, dados);
             window.location.href = await "../carrinho/";
         }
 
@@ -218,9 +252,7 @@
             var count = 0;
             const nomePesquisa = document.getElementById('nomePesquisa');
             const resultadoPesquisa = document.getElementById('resultadoPesquisa');
-            await db.collection(loja)
-            .doc('container')
-            .collection('produtos')
+            await db.collection('produtos')
             .onSnapshot((data) => {
                 data.docs.map((val) => {
                     //const porcentagem = val.data().porcentagem;
@@ -236,13 +268,13 @@
                     porcentagem = Math.abs(porcentagem);
                     porcentagem = porcentagem + "%";
                     const imagem = val.data().imagem;
-                    const storageRef = storage.ref().child(`${loja}/container/produtos/${imagem}`);
+                    const storageRef = storage.ref().child(`produtos/${nome}/${imagem}`);
                     storageRef.getDownloadURL().then( function(url) {
                         if (searchTerm) {
                             nomePesquisa.innerHTML = `Resultados com "${searchTerm}"`;
                             if (nomeBusca.includes(searchTerm)) {
                                 produtos.innerHTML += `
-                                <div onclick="abrirProduto('${nome}')" class="produto">
+                                    <div class="produto">
                                         <div class="porcentagem">
                                             <ion-icon name="arrow-down"></ion-icon>
                                             <a>${porcentagem}</a>    
@@ -251,10 +283,12 @@
                                         <div class="produtoMobile">
                                             <h1>${nome}</h1>
                                             <h2>R$${precoNovo} <span>R$${precoAntigo}</span></h2>
-                                            <button class="btn-comprar">Comprar</button>
-                                            <button onclick="adicionarCarrinho('${nome}')" class="btn-addCarrinho">Adicionar ao carrinho</button>
+                                            <button onclick="abrirProduto('${nome}')" class="btn-comprar">Comprar</button>
+                                            <button onclick="adicionarCarrinho('${nome}','${nome}')" class="btn-addCarrinho">Adicionar ao carrinho</button>
                                         </div>
-                                        
+                                        <div class="produtoDesktop">
+                                            <button onclick="abrirProduto('${nome}')" class="btn-comprar">Comprar</button>
+                                        </div>
                                     </div>
                                 `;  
                                 count++;
@@ -262,7 +296,7 @@
                         } else {
                             nomePesquisa.innerHTML = `Resultados`;
                             produtos.innerHTML += `
-                                <div onclick="abrirProduto('${nome}')" class="produto">
+                                <div class="produto">
                                     <div class="porcentagem">
                                         <ion-icon name="arrow-down"></ion-icon>
                                         <a>${porcentagem}</a>    
@@ -271,15 +305,16 @@
                                     <div class="produtoMobile">
                                         <h1>${nome}</h1>
                                         <h2>R$${precoNovo} <span>R$${precoAntigo}</span></h2>
-                                        <button class="btn-comprar">Comprar</button>
-                                        <button onclick="adicionarCarrinho('${nome}')" class="btn-addCarrinho">Adicionar ao carrinho</button>
+                                        <button onclick="abrirProduto('${nome}')" class="btn-comprar">Comprar</button>
+                                        <button onclick="adicionarCarrinho('${nome}','${nome}')" class="btn-addCarrinho">Adicionar ao carrinho</button>
                                     </div>
-                                    
+                                    <div class="produtoDesktop">
+                                        <button onclick="abrirProduto('${nome}')" class="btn-comprar">Comprar</button>
+                                    </div>
                                 </div>
                             `;
                             count++;
                         }
-                        
                         resultadoPesquisa.innerHTML = count; 
                         if (count === 0) {
                             container.innerHTML = `
@@ -321,12 +356,169 @@
             }
         }
         
-        const term = getParameterByName('produto');
+        const termProduto = getParameterByName('produto');
         const container = document.querySelector('.container');
         const content = document.querySelector('.content-produto');
-        if (term) {
+        const divImagemPrincipal = document.querySelector('.imagemPrincipal');
+        const divImagemSecundaria = document.querySelector('.imagemSecundaria');
+        const divDescricao = document.querySelector('.descricao');
+        const divNome = document.querySelector('.nome');
+        const divTamanho = document.querySelector('.tamanhosInputs');
+        const divCores = document.querySelector('.coresInputs');
+        const divPreco = document.querySelector('.preco');
+        const divBotoes = document.querySelector('.botoes');
+        
+        
+        if (termProduto) {
             container.style.display = "none";
             content.style.display = "flex";
+            lerProduto(termProduto);
+        }
+
+        function selecionarImagem(url) {
+            const imagemSelecionada = document.getElementById('imagemSelecionada');
+            imagemSelecionada.src = url;
+        }
+
+
+        async function lerProduto(produto) {
+
+            // IMAGENS
+            await db.collection('produtos')
+            .doc(produto)
+            .collection('imagens')
+            .orderBy('id', 'asc')
+            .onSnapshot((data) => {
+                divImagemPrincipal.innerHTML += `
+                    <img id="imagemSelecionada" src="">
+                `;
+                data.docs.map((val) => {
+                    const imagem = val.id;
+                    const storageRef = storage.ref().child(`produtos/${produto}/${imagem}`);
+                    storageRef.getDownloadURL().then( function(url) {
+                        divImagemSecundaria.innerHTML += `
+                            <img onclick="selecionarImagem('${url}')" src="${url}">
+                        `;
+                        const imagemSelecionada = document.getElementById('imagemSelecionada');
+                        imagemSelecionada.src = url;
+                    });
+                });
+            });
+
+            // DESCRICÃO
+            await db.collection('produtos')
+            .doc(produto)
+            .get().then((val) => {
+                const descricao = val.data().descricao;
+                divDescricao.innerHTML += `
+                    <h1>Descrição</h1> 
+                    <p>${descricao}</p>
+                `;
+            });
+            
+            // NOME E AVALIAÇÕES
+            await db.collection('produtos')
+            .doc(produto)
+            .get().then((val) => {
+                const nome = val.id;
+                const precoNovo = val.data().precoNovo;
+                const precoAntigo = val.data().precoAntigo;
+                var porcentagem = parseFloat(precoNovo.replace(",", ".")) / parseFloat(precoAntigo.replace(",", "."));
+                porcentagem *= 100;
+                porcentagem = porcentagem.toFixed(2);
+                porcentagem -= 100 // Arredonda para duas casas decimais
+                porcentagem = porcentagem.toFixed(2);
+                porcentagem = Math.abs(porcentagem);
+                porcentagem = porcentagem + "%";
+                const imagem = val.data().imagem;
+                const storageRef = storage.ref().child(`produtos/${nome}/${imagem}`);
+                storageRef.getDownloadURL().then( function(url) {
+                    divNome.innerHTML += `
+                        <div class="flex">
+                            <h1>${nome}</h1>
+                            <ion-icon class="verificado" name="checkmark-circle"></ion-icon>
+                        </div>
+                        <div class="flex">
+                            <ion-icon class="estrela" name="star"></ion-icon>
+                            <ion-icon class="estrela" name="star"></ion-icon>
+                            <ion-icon class="estrela" name="star"></ion-icon>
+                            <ion-icon class="estrela" name="star"></ion-icon>
+                            <ion-icon class="estrela" name="star"></ion-icon>
+                            <h2 id="avaliacoes">0 Avaliações</h2>
+                        </div>
+                    `;
+                });
+            });
+
+            // TAMANHO
+            await db.collection('produtos')
+            .doc(produto)
+            .collection('tamanhos')
+            .orderBy('id', 'asc')
+            .onSnapshot((data) => {
+                data.docs.map((val) => {
+                    const tamanho = val.id;
+                    divTamanho.innerHTML += `
+                        <div class="bloco">    
+                            <input id="${tamanho}" type="radio" name="tamanhos">
+                            <div>${tamanho}</div>    
+                        </div>
+                    `;
+                }); 
+            });
+
+            // CORES
+            await db.collection('produtos')
+            .doc(produto)
+            .collection('cores')
+            .orderBy('id', 'asc')
+            .onSnapshot((data) => {
+                data.docs.map((val) => {
+                    const cor = val.id;
+                    divCores.innerHTML += `
+                        <div class="bloco">    
+                            <input id="${cor}" type="radio" name="cores">
+                            <div>${cor}</div>    
+                        </div>
+                    `;
+                });
+            });
+
+            // PREÇO
+            await db.collection('produtos')
+            .doc(produto)
+            .get().then((val) => {
+                const precoNovo = val.data().precoNovo;
+                const precoAntigo = val.data().precoAntigo;
+                /*var porcentagem = parseFloat(precoNovo.replace(",", ".")) / parseFloat(precoAntigo.replace(",", "."));
+                porcentagem *= 100;
+                porcentagem = porcentagem.toFixed(2);
+                porcentagem -= 100 // Arredonda para duas casas decimais
+                porcentagem = porcentagem.toFixed(2);
+                porcentagem = Math.abs(porcentagem);
+                porcentagem = porcentagem + "%";
+                */
+                var desconto = parseFloat(precoAntigo.replace(",", ".")) - parseFloat(precoNovo.replace(",", "."));
+                desconto = desconto.toFixed(0);
+                divPreco.innerHTML += `
+                    <h1>Preço:</h1> 
+                    <h2>
+                        <span>De R$ ${precoAntigo}</span>
+                        R$ ${precoNovo}
+                        <div class="desconto">
+                            <p>R$ ${desconto},00 de desconto</p>
+                        </div>
+                    </h2>
+                    
+                `;
+            });
+
+
+            divBotoes.innerHTML = await  `
+                <button class="btn-comprar">Comprar</button>
+                <button onclick="adicionarCarrinho('${produto}', '${produto}')" class="btn-addCarrinho">Adicionar ao carrinho</button>
+            `;
+
         }
 
     </script>

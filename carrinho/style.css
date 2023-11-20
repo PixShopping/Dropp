@@ -453,14 +453,15 @@ body {
 }
 
 .container button {
-    width: 90%;
+    width: 85%;
     max-width: 400px;
+    font-size: 16px;
 }
 
 /* se o carrinho estive vazio */
 
 .container h4 {
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 400;
     letter-spacing: 0.2px;
     text-transform: capitalize;
@@ -469,7 +470,7 @@ body {
 }
 
 .container .cart {
-    font-size: 100px;
+    font-size: 90px;
 }
 
 .container .carrinho .produto .porcentagem {

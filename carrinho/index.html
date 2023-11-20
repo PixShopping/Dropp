@@ -185,7 +185,7 @@
 
         // Remover do carrinho
         async function removerCarrinho(nome) {
-            await localStorage.removeItem(`produto-${nome}`);
+            await localStorage.removeItem(nome);
             await window.location.reload();
         }
         
@@ -205,9 +205,7 @@
                     let valor = localStorage.getItem(chave);
 
                     // PRODUTO : NOME DO PRODUTO
-                    await db.collection(loja)
-                    .doc('container')
-                    .collection('produtos')
+                    await db.collection('produtos')
                     .doc(valor).get().then((doc) => {
                         const nome = doc.id;
                         const imagem = doc.data().imagem;
@@ -221,7 +219,7 @@
                         porcentagem = porcentagem.toFixed(2);
                         porcentagem = Math.abs(porcentagem);
                         porcentagem = porcentagem + "%";
-                        const storageRef = storage.ref().child(`${loja}/container/produtos/${imagem}`);
+                        const storageRef = storage.ref().child(`produtos/${nome}/${imagem}`);
                         storageRef.getDownloadURL().then( function(url) {
                             carrinho.innerHTML += `
                                 <div class="produto">

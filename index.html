@@ -215,12 +215,10 @@
             const anuncio = document.querySelector('.anuncio');
 
             // Produtos
-            await db.collection(loja)
-            .doc('container')
-            .collection('produtos')
+            await db.collection('produtos')
             .onSnapshot((data) => {
                 data.docs.map((val) => {
-                    //const porcentagem = val.data().porcentagem;
+                    const nome = val.id;
                     const precoNovo = val.data().precoNovo;
                     const precoAntigo = val.data().precoAntigo;
                     var porcentagem = parseFloat(precoNovo.replace(",", ".")) / parseFloat(precoAntigo.replace(",", "."));
@@ -231,7 +229,7 @@
                     porcentagem = Math.abs(porcentagem);
                     porcentagem = porcentagem + "%";
                     const imagem = val.data().imagem;
-                    const storageRef = storage.ref().child(`${loja}/container/produtos/${imagem}`);
+                    const storageRef = storage.ref().child(`produtos/${nome}/${imagem}`);
                     storageRef.getDownloadURL().then( function(url) {
                         produtos.innerHTML += `
                             <div class="produto">
@@ -240,8 +238,9 @@
                                     <a>${porcentagem}</a>    
                                 </div>
                                 <img src="${url}">
-                                <h1>${val.id}</h1>
+                                <h1>${nome}</h1>
                                 <h2>R$${precoNovo} <span>R$${precoAntigo}</span></h2>
+                                <button onclick="abrirProduto('${nome}')" class="btn-comprar">Comprar</button>
                             </div>
                         `;
                     })
@@ -253,6 +252,11 @@
 
         function abrirURL(url) {
             window.location.href = `${url}`;
+        }
+
+        // ABRIR PRODUTO
+        function abrirProduto(nome) {
+            window.location.href = `./produtos/?produto=${nome}`;
         }
 
         /* Metodo de busca */
