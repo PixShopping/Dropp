@@ -1,11 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&display=swap');
-
 /* variaveis */
 
 :root {
-    --principal: ;
-    --text: ;
-    --background: ;
+    --principal: #e1c6b5;
+    --text: #ffffff;
+    --background: #2e3548;
+    --verde: #15ba35;
+    --vermelho: #ee0000;
     --preco: 'Poppins', sans-serif;
 }
 
@@ -25,183 +25,192 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-/* CONTAINER */
 
-.container {
+/* NAVGATION */
+
+.navgation {
     width: 100vw;
-    height: auto;
-    padding: 0px;
-    background: #f0f0f0;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    top: 0px;
-}
-
-.container .carrossel {
-    width: 100vw;
-    height: auto;
-    display: flex;
-    justify-content: center;
-    margin: 0px;
-}
-
-.container .carrossel img {
-    width: 95%;
-    height: auto;
-    max-height: 500px;
-    margin: 2.5% 0px;
-    cursor: pointer;
-}
-
-/* PRODUTOS */
-
-.container .produtos {
-    width: 95vw;
-    max-width: 95vw;
-    height: auto;
+    height: 100px;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
-    overflow-x: scroll;
-    margin: 15px 0px 30px 0px;
-    align-self: center;
-    padding: 50px 0px;
-    position: relative;
-    user-select: none;
-}
-
-.container .flex {
-    width: 92%;
-    height: auto;
-    display: flex;
-    align-items: center;
     justify-content: space-between;
-    align-self: center;
-    margin: 15px 0px -5px 0px;
-    user-select: none;
+    background: var(--background);
+    color: var(--text);
+    position: relative;
 }
 
-.container .right {
-    display: flex;
+.navgation img {
+    width: 210.6px;
+    height: 51.84px;
+    margin: 0px 5px;
+}
+
+.navgation .pesquisa {
+    width: 65%;
+    height: 42px;
+    position: relative;
+}
+
+.navgation .pesquisa input {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    padding: 15px;
+    font-size: 15.5px;
+    color: #000;
+    outline: none;
+}
+
+
+.navgation .pesquisa ion-icon {
+    position: absolute;
+    right: 10px;
+    width: 35px;
+    height: 20px;
+    padding: 5px;
+    border-radius: 10px;
+    background: var(--principal);
+    color: var(--text);
+    border: 2px solid var(--principal);
+    cursor: pointer;
+} .navgation .pesquisa ion-icon:hover {
+    background: transparent;
+    color: var(--principal);
+    transition: all .3s ease-in-out;
+}
+
+
+/* PESQUISA MOBILE */
+
+.navgation .pesquisaMobile {
+    position: absolute;
+    bottom: -70px;
+    left: 0px;
+    width: 100vw;
+    height: 72px;
+    background: var(--background);
+    color: var(--text);
+    align-items: center;
+    padding: 20px 20px 25px 20px;
+    display: none;
     align-items: center;
 }
 
-.container .right a {
-    font-size: 16px;
-    cursor: pointer;
-    color: var(--principal);
-    position: relative; /* Adicione position: relative; para o pseudo-elemento */
-    transition: color 0.3s ease-in-out;
-    text-decoration: none;
-} 
+.navgation .pesquisaMobile input {
+    width: 100%;
+    height: 42px;
+    border-radius: 8px;
+    padding: 15px;
+    font-size: 15.5px;
+    color: #000;
+    outline: none;
+}
 
-.container .right a::before {
-    content: "";
+.navgation .pesquisaMobile ion-icon {
     position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 2.5px; /* altura da borda */
-    background-color: var(--principal); /* cor da borda */
-    transition: width 0.3s ease-in-out; /* transição da largura */
+    right: 28px;
+    width: 33px;
+    height: 20px;
+    padding: 5px;
+    border-radius: 10px;
+    background: var(--principal);
+    color: var(--text);
+    border: 2px solid var(--principal);
+    cursor: pointer;
+}  .navgation .pesquisaMobile ion-icon:hover {
+    background: transparent;
+    color: var(--principal);
+    transition: all .3s ease-in-out;
 }
 
-.container .right a:hover::before {
-    width: 100%; /* largura total durante o hover */
+.navgation .flex {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
-.container .detalhe {
-    width: 100px;
+.navgation .buttons {
+    width: auto;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0px 30px 0px 15px;
+}
+
+.navgation .buttons ion-icon {
+    font-size: 29px;
+    margin: 0px 7px;
+    cursor: pointer;
+} .navgation .buttons ion-icon:hover {
+    color: var(--principal);
+    transition: all .3s ease-in-out;
+}
+
+/* MENU */
+
+#openMenu {
+    display: none;
+}
+
+#closeMenu {
+    display: none;
+}
+
+.btn-menu {
+    /*display: none;*/
+    position: absolute;
+    left: 20px;
+    font-size: 35px;
+    cursor: pointer;
+} .btn-menu:hover {
+    color: var(--principal);
+    transition: all .3s ease-in-out;
+}
+
+/* LINKS */
+.links {
+    width: 100vw;
     height: auto;
+    color: var(--background);
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.links ul {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    transition: all .3s linear;
+    box-shadow: 0px -10px 15px var(--background);
     
 }
 
-.container .detalhe h1 {
-    font-size: 22px;
-    font-weight: 500;
-    margin: 0px 0px 2px 0px;
-} 
-
-.container .detalhe div {
-    width: 100%;
-    height: 6.5px;
-    background: var(--principal);
-    border-radius: 10px;
+.links ul li {
+    padding: 14px 0px;
+    list-style: none;
+    margin: 0px 13px;
 }
 
-.container .produtos .produto {
-    width: 190px;
-    min-width: 190px;
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    background: #fff;
-    padding: 20px 15px 15px 15px;
-    cursor: pointer;
-    margin: 0px 12px;
-    border-radius: 10px;
-    position: relative;
-} .container .produtos .produto:hover {
-    margin: -20px 12px 20px 12px;
-    transition: all .3s linear;
-}
-
-.container .produtos .produto img {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-}
-
-.container .produtos .produto .porcentagem {
-    width: auto;
-    height: auto;
-    padding: 4px 7px;
-    background: var(--principal);
-    color: var(--text);
-    font-size: 14.4px;
-    font-weight: 700;
-    letter-spacing: 0.2px;
-    text-shadow: 0px 0px 10px #ccc;
-    border-radius: 15px;
-    position: absolute;
-    top: -15px;
-    left: 5px;
-    display: flex;
-    align-items: center;
-}
-
-.container .produtos .produto .porcentagem ion-icon {
-    margin: 0px 2px 0px 0px;
-}
-
-.container .produtos .produto h1 {
-    font-size: 16px;
-    font-weight: 400;
-    letter-spacing: 0.2px;
-    margin: 10px 0px 0px 0px;
-    text-transform: capitalize;
-}
-
-.container .produtos .produto h2 {
-    font-size: 16px;
+.links ul li a {
+    font-size: 13.5px;
     font-weight: 800;
-    letter-spacing: -0.5px;
-    margin: 10px 0px 0px 0px;
-    color: var(--verde);
-    font-family: var(--preco);
+    letter-spacing: 0.1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--background);
+} .links ul li a:hover {
+    color: var(--principal);
+    transition: all .2s ease-in-out;
 }
 
-.container .produtos .produto h2 span{
-    font-size: 14px;
-    font-weight: 400;
-    letter-spacing: 0.3px;
-    color: var(--vermelho);
-    text-decoration: line-through;
-    margin: 0px 0px 0px 3px;
-}
 
 
 /* CONTATO */
@@ -433,9 +442,6 @@ body {
     transition: all .3s ease-in-out;
     
 }
-
-
-
 
 
 @media (min-width: 632px) {

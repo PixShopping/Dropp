@@ -5,21 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Mvshop | Rastreio </title>
     <link rel="stylesheet" href="./style.css">
-    <link rel="shortcut icon" href="https://firebasestorage.googleapis.com/v0/b/dropp-71540.appspot.com/o/teste%2Fnavgation%2Ffavicon.png?alt=media&token=041e70f9-b847-4789-8098-8ce417a2c02c" type="image/x-icon">
+    <link rel="stylesheet" href="../global.css">
+    <link rel="shortcut icon" href="../src/img/favicon.png" type="image/x-icon">
 </head>
 
 <body>
     
+    <!-- ANUNCIO -->
     <div class="anuncio">
-
+        <ion-icon name="bicycle-outline"></ion-icon>
+        <p>Frete grátis em todo o Brasil</p>
     </div>
     
+    <!-- NAVGATION -->
     <header class="navgation">
+        <ion-icon onclick="abrirMenu()" class="btn-menu" id="openMenu" name="menu"></ion-icon>
+        <ion-icon onclick="fecharMenu()" class="btn-menu" id="closeMenu" name="close"></ion-icon>
+
+        <img id="logo" src="../src/img/logo.png">
+
+        <div class="flex pesquisa">
+            <input onkeydown="pressionarEnter(event, 'buscar')" placeholder="O que está buscando?" type="text" id="buscar">
+            <ion-icon onclick="pesquisar('buscar')" name="search"></ion-icon>
+        </div>
+
+        <div class="pesquisaMobile">
+            <input onkeydown="pressionarEnter(event, 'buscarMobile')" placeholder="O que está buscando?" type="text" id="buscarMobile">
+            <ion-icon onclick="pesquisar('buscarMobile')" name="search"></ion-icon>
+        </div>
+
+        <div class="flex buttons">
+            <ion-icon onclick="abrirURL('rastreio/')" name="location-outline"></ion-icon>
+            <ion-icon onclick="abrirURL('carrinho/')" name="cart-outline"></ion-icon>
+        </div>
     </header>
 
+
+    <!-- LINKS -->
     <nav class="links">
         <ul>
             <div class="triangulo"></div>
+            <li>
+                <a href="../index.html">home</a>
+            </li>
+            <li>
+                <a href="../produtos/">produtos</a>
+            </li>
+            <li>
+                <a href="../index.html#sobre">sobre nós</a>
+            </li>
+            <li>
+                <a href="../rastreio/">rastrear pedido</a>
+            </li>
         </ul>
     </nav>
 
@@ -56,8 +93,56 @@
         </a>
     </main>
 
+    <!-- CONTATO -->
     <footer class="contato">
+        <article>    
+                        
+            <section class="assine">
+                <h1>MVshop</h1>
+                <p>Assine já nosso plano VIP para garantir recompensas e cupons para nossa loja.</p>
+                <input placeholder="Seu E-mail" type="text">
+                <button>Enviar</button>
+            </section>
 
+            <section class="suporte">
+                <h1>Suporte ao Cliente</h1>
+                <li>
+                    <p><strong>Email</strong>: mvshop@mvshop.com.br</p>
+                </li>
+                <li>
+                    <p><strong>Whatsapp</strong>: +55 (16) 997569308</p>
+                </li>
+                <li>
+                    <p><strong>Telefone</strong>: (16) 3324-1234</p>
+                </li>
+                <li>
+                    <p><strong>Instagram</strong>: @mvshop</p>
+                </li>
+                <li>
+                    <p><strong>Facebook</strong>: mvshop_</p>
+                </li>
+            </section>
+
+        </article>
+
+        <div class="linha"></div>
+
+        <section class="direitos">
+            
+            <div class="flex">
+                <ion-icon onclick="abrirURL('https://instagram.com/mvshop')" name="logo-instagram"></ion-icon>
+                <ion-icon onclick="abrirURL('https://facebook.com/mvshop_')" name="logo-facebook"></ion-icon>
+                <ion-icon onclick="abrirURL('https://wa.me/5516997569308')" name="logo-whatsapp"></ion-icon>
+            </div>
+
+            <p>© Mvshop 2023</p>
+
+            <div class="flex">
+                <ion-icon name="logo-javascript"></ion-icon>
+                <ion-icon name="logo-firebase"></ion-icon>
+            </div>
+        
+        </section>
     </footer>
 
 </body>
@@ -112,168 +197,9 @@
             }, 200);
         }
 
-        
-        carregarLoja();
-        async function carregarLoja() {
-            const root = document.documentElement;
-            const navgation = document.querySelector('.navgation');
-            const links = document.querySelector('.links ul');
-            const carrossel = document.querySelector('.container .carrossel');
-            const produtos = document.querySelector('.produtos');
-            const contato = document.querySelector('.contato');
-            const anuncio = document.querySelector('.anuncio');
-
-            await db.collection(loja)
-            .doc('navgation')
-            .collection('anuncio').onSnapshot((data) => {
-                data.docs.map((val) => {
-                    const texto = val.data().texto;
-                    anuncio.innerHTML = `
-                        <ion-icon name="bicycle-outline"></ion-icon>
-                        <p>${texto}</p>
-                    `;
-                });
-            });
-
-            await db.collection(loja)
-            .doc('cores').get().then((doc) => {
-                const corPrincipal = doc.data().principal;
-                const corBackground = doc.data().background;
-                const corTexto = doc.data().text;
-                const vermelho = doc.data().vermelho;
-                const verde = doc.data().verde;
-                root.style.setProperty('--background', corBackground);
-                root.style.setProperty('--text', corTexto);
-                root.style.setProperty('--principal', corPrincipal);
-                root.style.setProperty('--verde', verde);
-                root.style.setProperty('--vermelho', vermelho);
-            });
-
-            await db.collection(loja)
-            .doc('navgation')
-            .get().then((doc) => {
-
-                // VERIFICA SE EXISTE NAVGATION
-                if (doc.data()) {
-                    const logo = doc.data().logo;
-                    const storageRef = storage.ref().child(`${loja}/navgation/${logo}`);
-                    storageRef.getDownloadURL().then(function (url) {
-                        // Use a URL da imagem, por exemplo, para exibi-la
-                        navgation.innerHTML = `
-                                <ion-icon onclick="abrirMenu()" class="btn-menu" id="openMenu" name="menu"></ion-icon>
-                                <ion-icon onclick="fecharMenu()" class="btn-menu" id="closeMenu" name="close"></ion-icon>
-
-                                <img src="${url}">
-
-                                <div class="flex pesquisa">
-                                    <input onkeydown="pressionarEnter(event, 'buscar')" placeholder="O que está buscando?" type="text" id="buscar">
-                                    <ion-icon onclick="pesquisar('buscar')" name="search"></ion-icon>
-                                </div>
-
-                                <div class="pesquisaMobile">
-                                    <input onkeydown="pressionarEnter(event, 'buscarMobile')" placeholder="O que está buscando?" type="text" id="buscarMobile">
-                                    <ion-icon onclick="pesquisar('buscarMobile')" name="search"></ion-icon>
-                                </div>
-
-                                <div class="flex buttons">
-                                    <ion-icon onclick="abrirURL('../rastreio/')" name="location-outline"></ion-icon>
-                                    <ion-icon onclick="abrirURL('../carrinho/')" name="cart-outline"></ion-icon>
-                                </div>
-                        `;    
-                    });
-                }
-            });
-            
-            // ADICIONAR PAGINAS A NAVGATION
-            await db.collection(loja)
-            .doc('navgation')
-            .collection('paginas')
-            .orderBy('id', 'asc')
-            .get().then((snapshot) => {
-                snapshot.forEach((doc) => {
-                    if (doc.id) {
-                        const pagina = doc.id;
-                        const url = doc.data().pagina;
-                        links.innerHTML += `
-                            <li>
-                                <a href="../${url}">${pagina}</a>
-                            </li>    
-                        `;   
-                    }
-                });
-            });
-
-            // CONTATO
-            await db.collection(loja)
-            .doc('contato')
-            .get().then((doc) => {
-                const email = doc.data().email;
-                const telefone = doc.data().telefone;
-                const whatsapp = doc.data().whatsapp;
-                const whatsappURL = doc.data().whatsappURL;
-                const instagram = doc.data().instagram;
-                const instagramURL = doc.data().instagramURL;
-                const facebook = doc.data().facebook;
-                const facebookURL = doc.data().facebookURL;
-                const empresa = doc.data().empresa;
-                const recado = doc.data().recado;
-                contato.innerHTML = `
-                    <article>    
-                        
-                        <section class="assine">
-                            <h1>${empresa}</h1>
-                            <p>${recado}</p>
-                            <input placeholder="Seu E-mail" type="text">
-                            <button>Enviar</button>
-                        </section>
-
-                        <section class="suporte">
-                            <h1>Suporte ao Cliente</h1>
-                            <li>
-                                <p><strong>Email</strong>: ${email}</p>
-                            </li>
-                            <li>
-                                <p><strong>Whatsapp</strong>: ${whatsapp}</p>
-                            </li>
-                            <li>
-                                <p><strong>Telefone</strong>: ${telefone}</p>
-                            </li>
-                            <li>
-                                <p><strong>Instagram</strong>: ${instagram}</p>
-                            </li>
-                            <li>
-                                <p><strong>Facebook</strong>: ${facebook}</p>
-                            </li>
-                        </section>
-
-                    </article>
-
-                    <div class="linha"></div>
-
-                    <section class="direitos">
-                        
-                        <div class="flex">
-                            <ion-icon onclick="abrirURL('${instagramURL}')" name="logo-instagram"></ion-icon>
-                            <ion-icon onclick="abrirURL('${facebookURL}')" name="logo-facebook"></ion-icon>
-                            <ion-icon onclick="abrirURL('${whatsappURL}')" name="logo-whatsapp"></ion-icon>
-                        </div>
-
-                        <p>© Mvshop 2023</p>
-
-                        <div class="flex">
-                            <ion-icon name="logo-javascript"></ion-icon>
-                            <ion-icon name="logo-firebase"></ion-icon>
-                        </div>
-                    
-                    </section>
-                `;
-
-            });
-
-        }
 
         function abrirURL(url) {
-            window.location.href = `${url}`;
+            window.location.href = `../${url}`;
         }
 
         /* Metodo de busca */
