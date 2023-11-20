@@ -233,8 +233,14 @@
 
         // Adicionar ao carrinho
         async function adicionarCarrinho(nome, dados) {
-            await localStorage.setItem(nome, dados);
-            window.location.href = await "../carrinho/";
+            const email = localStorage.getItem('email');
+            const senha = localStorage.getItem('senha');
+            if (email && senha) {
+                await localStorage.setItem(nome, dados);
+                window.location.href = await "../carrinho/";
+            } else {
+                window.location.href = await "../carrinho/";
+            }   
         }
 
         carregarLoja();

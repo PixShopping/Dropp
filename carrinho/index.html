@@ -19,6 +19,7 @@
     
     <!-- NAVGATION -->
     <header class="navgation">
+
         <ion-icon onclick="abrirMenu()" class="btn-menu" id="openMenu" name="menu"></ion-icon>
         <ion-icon onclick="fecharMenu()" class="btn-menu" id="closeMenu" name="close"></ion-icon>
 
@@ -38,6 +39,7 @@
             <ion-icon onclick="abrirURL('rastreio/')" name="location-outline"></ion-icon>
             <ion-icon onclick="abrirURL('carrinho/')" name="cart-outline"></ion-icon>
         </div>
+
     </header>
 
 
@@ -60,9 +62,58 @@
         </ul>
     </nav>
 
+    <!-- POPUP DE CADASTRO -->
+    <article class="cadastro">
+
+        <div class="navbar">
+            <h1>Se escreva em nossa loja</h1>
+            <ion-icon onclick="fecharPopup('cadastro')" name="close"></ion-icon>
+        </div>
+        
+        <div class="flex">
+
+            <section class="left">
+
+                <img src="../src/img/cadastro.gif">
+    
+            </section>
+    
+            <section class="right">
+    
+                <h1>Olá!</h1>
+                <p>Escreva-se em nossa loja para ter acesso ao seu próprio carrinho, realizar compras e ser o primeiro a saber das nossas novidades, eventos e ofertas especiais em nosso site.</p>
+    
+                <div class="column">
+                    <label id="alertaNome" for="nome">Nome <strong>*</strong></label>
+                    <input placeholder="ex: Murilo Nepomuceno" id="nome" type="text">
+                </div>
+
+                <div class="column">
+                    <label id="alertaEmail" for="email">Email <strong>*</strong></label>
+                    <input placeholder="ex: Murilo123@gmail.com" id="email" type="text">
+                </div>
+                
+                <div class="column">
+                    <label id="alertaSenha" for="senha">Senha <strong>*</strong></label>
+                    <input placeholder="ex: Senha123#" id="senha" type="text">
+                    <ion-icon style="display: none;" id="esconder" onclick="mostrarSenha()" name="eye-off"></ion-icon>
+                    <ion-icon id="mostrar" onclick="esconderSenha()" name="eye"></ion-icon>
+                </div>
+
+                <button onclick="cadastrar()" class="btn-comprar">Escrever-se</button>
+                <p class="a-logar">Ja possui conta? <a onclick="">Logar</a></p>
+
+            </section>
+
+        </div>
+        
+
+        
+    </article>
+
     <main class="container">
 
-        <h1>Meu carrinho</h1>
+        <h1 id="logado">Meu carrinho</h1>
 
         <section class="carrinho">
 
@@ -74,6 +125,8 @@
 
         <button class="btn-comprar">Comprar</button>
         <button onclick="abrirURL('produtos')" class="btn-addCarrinho">Continuar comprando</button>
+
+        
 
     </main>
 
@@ -129,6 +182,8 @@
         </section>
     </footer>
 
+    <div class="fosco"></div>
+
 </body>
 
     <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-app-compat.js"></script>
@@ -153,6 +208,22 @@
         const db = firebase.firestore();
         const storage = firebase.storage();
         const loja = 'teste';
+
+        // VERIFICAR SE ESTA LOGADO
+        const logado = document.getElementById('logado');
+        const email = localStorage.getItem('email');
+        const senha = localStorage.getItem('senha');
+        const popupCadastro = document.querySelector('.cadastro');
+        const container = document.querySelector('.container');
+        if (!email && !senha) {
+            popupCadastro.style.display = "flex";
+            container.style.display = "none";
+            setTimeout(() => {
+                popupCadastro.style.opacity = "1";
+            }, 500);
+        } else {
+            logado.innerHTML = `Carrinho de ${email}`;
+        }
 
         // BOTAO DO MENU
         function abrirMenu() {
@@ -182,6 +253,35 @@
             }, 200);
         }
 
+        async function fecharPopup(classe) {
+            const div = document.querySelector(`.${classe}`);
+            container.style.display = "flex";
+            div.style.opacity = "0";
+            setTimeout(() => {
+                div.style.display = "none";
+            }, 500);
+        }
+
+        /* Mostrar Senha */
+        function mostrarSenha() {
+            const senha = document.getElementById('senha');
+            senha.type = 'text';    
+            const mostrar = document.getElementById('mostrar');
+            const esconder = document.getElementById('esconder');
+            mostrar.style.display = "flex";
+            esconder.style.display = "none";
+        }
+
+
+        /* Esconder Senha */
+        function esconderSenha() {
+            const senha = document.getElementById('senha');
+            senha.type = 'password';
+            const mostrar = document.getElementById('mostrar');
+            const esconder = document.getElementById('esconder');
+            mostrar.style.display = "none";
+            esconder.style.display = "flex";
+        }
 
         // Remover do carrinho
         async function removerCarrinho(nome) {
@@ -198,59 +298,131 @@
 
             const h1economizado = document.getElementById('totalEconomizado');
             var totalEconomizado = 0;
-            if (localStorage.length > 0) {
+            if (localStorage.length > 2) {
                 for (let i = 0; i < localStorage.length; i++) {
                     // Obtenha a chave (nome do item)
                     let chave = localStorage.key(i);
                     let valor = localStorage.getItem(chave);
 
                     // PRODUTO : NOME DO PRODUTO
-                    await db.collection('produtos')
-                    .doc(valor).get().then((doc) => {
-                        const nome = doc.id;
-                        const imagem = doc.data().imagem;
-                        const precoNovo = doc.data().precoNovo;
-                        const precoAntigo = doc.data().precoAntigo;
-                        var porcentagem = parseFloat(precoNovo.replace(",", ".")) / parseFloat(precoAntigo.replace(",", "."));
-                        totalEconomizado += parseFloat(precoAntigo.replace(",", ".")) - parseFloat(precoNovo.replace(",", "."));
-                        porcentagem *= 100;
-                        porcentagem = porcentagem.toFixed(2);
-                        porcentagem -= 100 // Arredonda para duas casas decimais
-                        porcentagem = porcentagem.toFixed(2);
-                        porcentagem = Math.abs(porcentagem);
-                        porcentagem = porcentagem + "%";
-                        const storageRef = storage.ref().child(`produtos/${nome}/${imagem}`);
-                        storageRef.getDownloadURL().then( function(url) {
-                            carrinho.innerHTML += `
-                                <div class="produto">
-                                    <div class="porcentagem">
-                                        <ion-icon name="arrow-down"></ion-icon>
-                                        <a>${porcentagem}</a>    
+                    if (valor !== "email" || valor !== "senha") {
+                        await db.collection('produtos')
+                        .doc(valor).get().then((doc) => {
+                            const nome = doc.id;
+                            const imagem = doc.data().imagem;
+                            const precoNovo = doc.data().precoNovo;
+                            const precoAntigo = doc.data().precoAntigo;
+                            var porcentagem = parseFloat(precoNovo.replace(",", ".")) / parseFloat(precoAntigo.replace(",", "."));
+                            totalEconomizado += parseFloat(precoAntigo.replace(",", ".")) - parseFloat(precoNovo.replace(",", "."));
+                            porcentagem *= 100;
+                            porcentagem = porcentagem.toFixed(2);
+                            porcentagem -= 100 // Arredonda para duas casas decimais
+                            porcentagem = porcentagem.toFixed(2);
+                            porcentagem = Math.abs(porcentagem);
+                            porcentagem = porcentagem + "%";
+                            const storageRef = storage.ref().child(`produtos/${nome}/${imagem}`);
+                            storageRef.getDownloadURL().then( function(url) {
+                                carrinho.innerHTML += `
+                                    <div class="produto">
+                                        <div class="porcentagem">
+                                            <ion-icon name="arrow-down"></ion-icon>
+                                            <a>${porcentagem}</a>    
+                                        </div>
+                                        <img src="${url}">
+                                        <div class="produtoMobile">
+                                            <h1>${nome}</h1>
+                                            <h2>R$${precoNovo} <span>R$${precoAntigo}</span></h2>
+                                            <button class="btn-comprar" onclick="removerCarrinho('${nome}')">Remover do carrinho</button>
+                                        </div>
+                                        
                                     </div>
-                                    <img src="${url}">
-                                    <div class="produtoMobile">
-                                        <h1>${nome}</h1>
-                                        <h2>R$${precoNovo} <span>R$${precoAntigo}</span></h2>
-                                        <button class="btn-comprar" onclick="removerCarrinho('${nome}')">Remover do carrinho</button>
-                                    </div>
-                                    
-                                </div>
-                            `;
-                        });
-                    });    
-                    totalEconomizado = totalEconomizado.toFixed(2);
-                    h1economizado.innerHTML = `Total economizado: ${totalEconomizado} Reais`;                
+                                `;
+                            });
+                        });    
+                        totalEconomizado = totalEconomizado.toFixed(2);
+                        h1economizado.innerHTML = `Total economizado: ${totalEconomizado} Reais`;                
+                    }
                 }
-                container.style.display = "flex";
             } else {
-                container.innerHTML = `
-                    <ion-icon class="cart" name="cart-outline"></ion-icon>
-                    <h4>Seu carrinho esta vazio</h4>
-                    <button onclick="abrirURL('produtos')" class="btn-comprar">Ver nossos produtos</button>
-                `;
-                container.style.display = "flex";
+                if (email && senha) {
+                    container.innerHTML = `
+                        <h1>Carrinho de ${email}</h1>
+                        <ion-icon class="cart" name="cart-outline"></ion-icon>
+                        <h4>Seu carrinho esta vazio</h4>
+                        <button onclick="abrirURL('produtos')" class="btn-comprar">Ver nossos produtos</button>
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <ion-icon class="cart" name="cart-outline"></ion-icon>
+                        <h4>Seu carrinho esta vazio</h4>
+                        <button onclick="abrirURL('produtos')" class="btn-comprar">Ver nossos produtos</button>
+                    `;
+                }
+                
             }
         }
+        
+        // CADASTRAR
+        async function cadastrar() {
+            const nome = document.getElementById('nome').value;
+            const alertaNome = document.getElementById('alertaNome');
+            const email = document.getElementById('email').value;
+            const alertaEmail = document.getElementById('alertaEmail');
+            const senha = document.getElementById('senha').value;
+            const alertaSenha = document.getElementById('alertaSenha');
+            const cadastro = document.querySelector('.cadastro .flex');
+            const h1 = document.querySelector('.cadastro .navbar h1');
+            if (nome) {
+                alertaNome.innerHTML = `Nome`;
+                if (validarEmail(email)) {
+                    alertaEmail.innerHTML = `Email`;
+                    if (senha) {
+                        alertaSenha.innerHTML = `Senha`;
+                        await db.collection('usuarios')
+                        .doc(email).set({
+                            nome: nome,
+                            email: email,
+                            senha: senha
+                        }).then((response) => {
+                            localStorage.setItem('email', email);
+                            localStorage.setItem('senha', senha);
+                            cadastro.style.flexDirection = "column";
+                            cadastro.style.alignItems = "center";
+                            cadastro.innerHTML = `
+                                <img style="margin: 0px 0px 0px -60px;" src="../src/img/cartao.gif" type="image/gif">
+                                <h1 class="obrigado">Agora você esta pronto para comprar os melhores produtos do Brasil</h1>
+                            `;
+                            h1.innerHTML = "Obrigado pelo seu cadastro!";
+                            setTimeout(() => {
+                                window.location.href = "../carrinho/";
+                            }, 2500);
+                        });
+                    } else {
+                        alertaSenha.innerHTML = `Senha: <strong>Digite uma senha!</strong>`;
+                    }
+                } else {
+                    alertaEmail.innerHTML = `Email: <strong>Email invalido!</strong>`;
+                }    
+            } else {
+                alertaNome.innerHTML = `Nome: <strong>Digite um nome!</strong>`;
+            }
+        }
+
+        function validarEmail(email) {
+            // Expressão regular para validar o formato do e-mail
+            const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3}$/;
+
+            // Testa se o e-mail corresponde ao padrão
+            if (regex.test(email)) {
+                console.log(`O e-mail ${email} é válido.`);
+                return true;
+            } else {
+                console.log(`O e-mail ${email} é inválido.`);
+                return false;
+            }
+        }
+
+
 
         function abrirURL(url) {
             window.location.href = `../${url}`;
