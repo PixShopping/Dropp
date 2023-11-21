@@ -198,6 +198,15 @@
         const storage = firebase.storage();
         const loja = 'teste';
 
+        const botoes = document.querySelector('.buttons');
+        const email = localStorage.getItem('email');
+        const senha = localStorage.getItem('senha');
+        if (email && senha) {
+            botoes.innerHTML += `
+            <ion-icon onclick="sairDaConta()" name="log-out-outline"></ion-icon>
+            `;
+        }
+
         // BOTAO DO MENU
         function abrirMenu() {
             const openMenu = document.getElementById('openMenu');
@@ -520,11 +529,24 @@
             });
 
 
-            divBotoes.innerHTML = await  `
-                <button class="btn-comprar">Comprar</button>
-                <button onclick="adicionarCarrinho('${produto}', '${produto}')" class="btn-addCarrinho">Adicionar ao carrinho</button>
-            `;
+            await db.collection('produtos')
+            .doc(produto).get().then((doc) => {
+                const urlPagamento = doc.data().url;
+                divBotoes.innerHTML = `
+                    <button onclick="pagamento('${urlPagamento}')" class="btn-comprar">Comprar</button>
+                    <button onclick="adicionarCarrinho('${produto}', '${produto}')" class="btn-addCarrinho">Adicionar ao carrinho</button>
+                `;
+            });
 
+        }
+
+        function pagamento(url) {
+            window.location.href = url;
+        }
+
+        async function sairDaConta() {
+            await localStorage.clear();
+            await window.location.reload();
         }
 
     </script>

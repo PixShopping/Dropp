@@ -169,6 +169,15 @@
         const storage = firebase.storage();
         const loja = 'teste';
 
+        const botoes = document.querySelector('.buttons');
+        const email = localStorage.getItem('email');
+        const senha = localStorage.getItem('senha');
+        if (email && senha) {
+            botoes.innerHTML += `
+            <ion-icon onclick="sairDaConta()" name="log-out-outline"></ion-icon>
+            `;
+        }
+
         // BOTAO DO MENU
         function abrirMenu() {
             const openMenu = document.getElementById('openMenu');
@@ -206,6 +215,11 @@
         async function pesquisar(id) {
             const buscar = await document.getElementById(id).value.toLowerCase().replace(/\s/g, '');
             window.location.href = "../produtos/?search=" + encodeURIComponent(buscar);
+        }
+
+        async function sairDaConta() {
+            await localStorage.clear();
+            await window.location.reload();
         }
 
         /* Adicionando evento de click do teclado */
