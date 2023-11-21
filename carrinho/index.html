@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Mvshop | Carrinho </title>
+    <title> MVoutlet | Carrinho </title>
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="../global.css">
     <link rel="shortcut icon" href="../src/img/favicon.png" type="image/x-icon">
@@ -135,7 +135,7 @@
         <article>    
                         
             <section class="assine">
-                <h1>MVshop</h1>
+                <h1>MVoutlet</h1>
                 <p>Assine já nosso plano VIP para garantir recompensas e cupons para nossa loja.</p>
                 <input placeholder="Seu E-mail" type="text">
                 <button>Enviar</button>
@@ -144,7 +144,7 @@
             <section class="suporte">
                 <h1>Suporte ao Cliente</h1>
                 <li>
-                    <p><strong>Email</strong>: mvshop@mvshop.com.br</p>
+                    <p><strong>Email</strong>: MVoutlet@MVoutlet.com.br</p>
                 </li>
                 <li>
                     <p><strong>Whatsapp</strong>: +55 (16) 997569308</p>
@@ -153,10 +153,10 @@
                     <p><strong>Telefone</strong>: (16) 3324-1234</p>
                 </li>
                 <li>
-                    <p><strong>Instagram</strong>: @mvshop</p>
+                    <p><strong>Instagram</strong>: @mvoutlet.br</p>
                 </li>
                 <li>
-                    <p><strong>Facebook</strong>: mvshop_</p>
+                    <p><strong>Facebook</strong>: MVoutlet_</p>
                 </li>
             </section>
 
@@ -167,12 +167,12 @@
         <section class="direitos">
             
             <div class="flex">
-                <ion-icon onclick="abrirURL('https://instagram.com/mvshop')" name="logo-instagram"></ion-icon>
-                <ion-icon onclick="abrirURL('https://facebook.com/mvshop_')" name="logo-facebook"></ion-icon>
+                <ion-icon onclick="abrirURL('https://instagram.com/MVoutlet')" name="logo-instagram"></ion-icon>
+                <ion-icon onclick="abrirURL('https://facebook.com/MVoutlet_')" name="logo-facebook"></ion-icon>
                 <ion-icon onclick="abrirURL('https://wa.me/5516997569308')" name="logo-whatsapp"></ion-icon>
             </div>
 
-            <p>© Mvshop 2023</p>
+            <p>© MVoutlet 2023</p>
 
             <div class="flex">
                 <ion-icon name="logo-javascript"></ion-icon>
@@ -181,8 +181,6 @@
         
         </section>
     </footer>
-
-    <div class="fosco"></div>
 
 </body>
 
@@ -224,9 +222,6 @@
             }, 500);
         } else {
             logado.innerHTML = `Carrinho de ${email}`;
-            botoes.innerHTML += `
-                <ion-icon onclick="sairDaConta()" name="log-out-outline"></ion-icon>
-            `;
         }
 
         // BOTAO DO MENU
@@ -289,13 +284,11 @@
 
         // Remover do carrinho
         async function removerCarrinho(nome) {
-            await localStorage.removeItem(nome);
-            await window.location.reload();
-        }
-
-        async function sairDaConta() {
-            await localStorage.clear();
-            await window.location.reload();
+            await db.collection('usuarios')
+            .doc(email).collection('carrinho')
+            .doc(nome).delete().then((response) => {
+                window.location.reload();
+            })
         }
 
         
@@ -305,70 +298,69 @@
             const carrinho = document.querySelector('.carrinho');
             const container = document.querySelector('.container');
 
-
             const h1economizado = document.getElementById('totalEconomizado');
             var totalEconomizado = 0;
-            if (localStorage.length > 2) {
-                for (let i = 0; i < localStorage.length; i++) {
-                    // Obtenha a chave (nome do item)
-                    let chave = localStorage.key(i);
-                    let valor = localStorage.getItem(chave);
-
-                    // PRODUTO : NOME DO PRODUTO
-                    if (valor !== "email" || valor !== "senha") {
-                        await db.collection('produtos')
-                        .doc(valor).get().then((doc) => {
-                            const nome = doc.id;
-                            const imagem = doc.data().imagem;
-                            const precoNovo = doc.data().precoNovo;
-                            const precoAntigo = doc.data().precoAntigo;
-                            var porcentagem = parseFloat(precoNovo.replace(",", ".")) / parseFloat(precoAntigo.replace(",", "."));
-                            totalEconomizado += parseFloat(precoAntigo.replace(",", ".")) - parseFloat(precoNovo.replace(",", "."));
-                            porcentagem *= 100;
-                            porcentagem = porcentagem.toFixed(2);
-                            porcentagem -= 100 // Arredonda para duas casas decimais
-                            porcentagem = porcentagem.toFixed(2);
-                            porcentagem = Math.abs(porcentagem);
-                            porcentagem = porcentagem + "%";
-                            const storageRef = storage.ref().child(`produtos/${nome}/${imagem}`);
-                            storageRef.getDownloadURL().then( function(url) {
-                                carrinho.innerHTML += `
-                                    <div class="produto">
-                                        <div class="porcentagem">
-                                            <ion-icon name="arrow-down"></ion-icon>
-                                            <a>${porcentagem}</a>    
+            if (email && senha) {
+                await db.collection('usuarios')
+                .doc(email)
+                .collection('carrinho')
+                .onSnapshot((data) => {
+                    const tamanho = data.size;
+                    if (tamanho > 0) {
+                        data.docs.map((val) => {
+                            const produto = val.id;
+                            db.collection('produtos')
+                            .doc(produto)
+                            .get().then((doc) => {
+                                const imagem = doc.data().imagem;
+                                const precoNovo = doc.data().precoNovo;
+                                const precoAntigo = doc.data().precoAntigo;
+                                var porcentagem = parseFloat(precoNovo.replace(",", ".")) / parseFloat(precoAntigo.replace(",", "."));
+                                totalEconomizado += parseFloat(precoAntigo.replace(",", ".")) - parseFloat(precoNovo.replace(",", "."));
+                                porcentagem *= 100;
+                                porcentagem = porcentagem.toFixed(2);
+                                porcentagem -= 100 // Arredonda para duas casas decimais
+                                porcentagem = porcentagem.toFixed(2);
+                                porcentagem = Math.abs(porcentagem);
+                                porcentagem = porcentagem + "%";
+                                const storageRef = storage.ref().child(`produtos/${produto}/${imagem}`);
+                                storageRef.getDownloadURL().then( function(url) {
+                                    carrinho.innerHTML += `
+                                        <div class="produto">
+                                            <div class="porcentagem">
+                                                <ion-icon name="arrow-down"></ion-icon>
+                                                <a>${porcentagem}</a>    
+                                            </div>
+                                            <img src="${url}">
+                                            <div class="produtoMobile">
+                                                <h1>${produto}</h1>
+                                                <h2>R$${precoNovo} <span>R$${precoAntigo}</span></h2>
+                                                <button class="btn-comprar" onclick="removerCarrinho('${produto}')">Remover do carrinho</button>
+                                            </div>
+                                            
                                         </div>
-                                        <img src="${url}">
-                                        <div class="produtoMobile">
-                                            <h1>${nome}</h1>
-                                            <h2>R$${precoNovo} <span>R$${precoAntigo}</span></h2>
-                                            <button class="btn-comprar" onclick="removerCarrinho('${nome}')">Remover do carrinho</button>
-                                        </div>
-                                        
-                                    </div>
-                                `;
+                                    `;
+                                });
+                                totalEconomizado = totalEconomizado.toFixed(2);
+                                h1economizado.innerHTML = `Total economizado: ${totalEconomizado} Reais`;
                             });
-                        });    
-                        totalEconomizado = totalEconomizado.toFixed(2);
-                        h1economizado.innerHTML = `Total economizado: ${totalEconomizado} Reais`;                
+                        });
+                    } else {
+                        container.innerHTML = `
+                            <h1>Carrinho de ${email}</h1>
+                            <ion-icon class="cart" name="cart-outline"></ion-icon>
+                            <h4>Seu carrinho esta vazio</h4>
+                            <button onclick="abrirURL('produtos')" class="btn-comprar">Ver nossos produtos</button>
+                        `;
                     }
-                }
-            } else {
-                if (email && senha) {
-                    container.innerHTML = `
-                        <h1>Carrinho de ${email}</h1>
-                        <ion-icon class="cart" name="cart-outline"></ion-icon>
-                        <h4>Seu carrinho esta vazio</h4>
-                        <button onclick="abrirURL('produtos')" class="btn-comprar">Ver nossos produtos</button>
-                    `;
-                } else {
-                    container.innerHTML = `
-                        <ion-icon class="cart" name="cart-outline"></ion-icon>
-                        <h4>Seu carrinho esta vazio</h4>
-                        <button onclick="abrirURL('produtos')" class="btn-comprar">Ver nossos produtos</button>
-                    `;
-                }
+                });
                 
+            } else {
+                container.innerHTML = `
+                    <ion-icon class="cart" name="cart-outline"></ion-icon>
+                    <h4>Seu carrinho esta vazio</h4>
+                    <button onclick="abrirURL('produtos')" class="btn-comprar">Ver nossos produtos</button>
+                `;
             }
         }
         

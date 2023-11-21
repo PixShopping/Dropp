@@ -103,7 +103,7 @@
         <article>    
                         
             <section class="assine">
-                <h1>MVshop</h1>
+                <h1>MVoutlet</h1>
                 <p>Assine já nosso plano VIP para garantir recompensas e cupons para nossa loja.</p>
                 <input placeholder="Seu E-mail" type="text">
                 <button>Enviar</button>
@@ -112,7 +112,7 @@
             <section class="suporte">
                 <h1>Suporte ao Cliente</h1>
                 <li>
-                    <p><strong>Email</strong>: mvshop@mvshop.com.br</p>
+                    <p><strong>Email</strong>: MVoutlet@MVoutlet.com.br</p>
                 </li>
                 <li>
                     <p><strong>Whatsapp</strong>: +55 (16) 997569308</p>
@@ -121,10 +121,10 @@
                     <p><strong>Telefone</strong>: (16) 3324-1234</p>
                 </li>
                 <li>
-                    <p><strong>Instagram</strong>: @mvshop</p>
+                    <p><strong>Instagram</strong>: @mvoutlet.br</p>
                 </li>
                 <li>
-                    <p><strong>Facebook</strong>: mvshop_</p>
+                    <p><strong>Facebook</strong>: MVoutlet_</p>
                 </li>
             </section>
 
@@ -135,12 +135,12 @@
         <section class="direitos">
             
             <div class="flex">
-                <ion-icon onclick="abrirURL('https://instagram.com/mvshop')" name="logo-instagram"></ion-icon>
-                <ion-icon onclick="abrirURL('https://facebook.com/mvshop_')" name="logo-facebook"></ion-icon>
+                <ion-icon onclick="abrirURL('https://instagram.com/MVoutlet')" name="logo-instagram"></ion-icon>
+                <ion-icon onclick="abrirURL('https://facebook.com/MVoutlet_')" name="logo-facebook"></ion-icon>
                 <ion-icon onclick="abrirURL('https://wa.me/5516997569308')" name="logo-whatsapp"></ion-icon>
             </div>
 
-            <p>© Mvshop 2023</p>
+            <p>© MVoutlet 2023</p>
 
             <div class="flex">
                 <ion-icon name="logo-javascript"></ion-icon>
@@ -178,9 +178,7 @@
         const email = localStorage.getItem('email');
         const senha = localStorage.getItem('senha');
         if (email && senha) {
-            botoes.innerHTML += `
-            <ion-icon onclick="sairDaConta()" name="log-out-outline"></ion-icon>
-            `;
+            
         }
 
         // BOTAO DO MENU
@@ -195,11 +193,6 @@
             setTimeout(() => {
                 menu.style.opacity = 1;
             }, 200);
-        }
-
-        async function sairDaConta() {
-            await localStorage.clear();
-            await window.location.reload();
         }
 
         function fecharMenu() {

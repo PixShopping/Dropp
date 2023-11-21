@@ -441,6 +441,7 @@ body {
     letter-spacing: 0.2px;
     align-self: center;
     margin: 0px 5vw;
+    text-align: center;
 }
 
 .container h3 {
@@ -581,6 +582,7 @@ body {
     letter-spacing: 0.2px;
     margin: 10px 0px 0px 0px;
     text-transform: capitalize;
+    text-align: start;
 }
 
 .container .carrinho .produto h2 {

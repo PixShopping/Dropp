@@ -107,6 +107,12 @@
                     
                 </div>
             </div>
+            <div class="pagamentos">
+                <p>Pagamentos:</p>
+                <div class="pagamentosInputs">
+                    
+                </div>
+            </div>
             <div class="preco">
                 
             </div>
@@ -127,7 +133,7 @@
         <article>    
                         
             <section class="assine">
-                <h1>MVshop</h1>
+                <h1>MVoutlet</h1>
                 <p>Assine já nosso plano VIP para garantir recompensas e cupons para nossa loja.</p>
                 <input placeholder="Seu E-mail" type="text">
                 <button>Enviar</button>
@@ -136,7 +142,7 @@
             <section class="suporte">
                 <h1>Suporte ao Cliente</h1>
                 <li>
-                    <p><strong>Email</strong>: mvshop@mvshop.com.br</p>
+                    <p><strong>Email</strong>: MVoutlet@MVoutlet.com.br</p>
                 </li>
                 <li>
                     <p><strong>Whatsapp</strong>: +55 (16) 997569308</p>
@@ -145,10 +151,10 @@
                     <p><strong>Telefone</strong>: (16) 3324-1234</p>
                 </li>
                 <li>
-                    <p><strong>Instagram</strong>: @mvshop</p>
+                    <p><strong>Instagram</strong>: @mvoutlet.br</p>
                 </li>
                 <li>
-                    <p><strong>Facebook</strong>: mvshop_</p>
+                    <p><strong>Facebook</strong>: MVoutlet_</p>
                 </li>
             </section>
 
@@ -159,12 +165,12 @@
         <section class="direitos">
             
             <div class="flex">
-                <ion-icon onclick="abrirURL('https://instagram.com/mvshop')" name="logo-instagram"></ion-icon>
-                <ion-icon onclick="abrirURL('https://facebook.com/mvshop_')" name="logo-facebook"></ion-icon>
+                <ion-icon onclick="abrirURL('https://instagram.com/MVoutlet')" name="logo-instagram"></ion-icon>
+                <ion-icon onclick="abrirURL('https://facebook.com/MVoutlet_')" name="logo-facebook"></ion-icon>
                 <ion-icon onclick="abrirURL('https://wa.me/5516997569308')" name="logo-whatsapp"></ion-icon>
             </div>
 
-            <p>© Mvshop 2023</p>
+            <p>© MVoutlet 2023</p>
 
             <div class="flex">
                 <ion-icon name="logo-javascript"></ion-icon>
@@ -202,9 +208,7 @@
         const email = localStorage.getItem('email');
         const senha = localStorage.getItem('senha');
         if (email && senha) {
-            botoes.innerHTML += `
-            <ion-icon onclick="sairDaConta()" name="log-out-outline"></ion-icon>
-            `;
+            
         }
 
         // BOTAO DO MENU
@@ -245,11 +249,17 @@
             const email = localStorage.getItem('email');
             const senha = localStorage.getItem('senha');
             if (email && senha) {
-                await localStorage.setItem(nome, dados);
-                window.location.href = await "../carrinho/";
+                await db.collection('usuarios')
+                .doc(email)
+                .collection('carrinho')
+                .doc(nome).set({
+                    dados: dados,
+                }).then((response) => {
+                    window.location.href = "../carrinho/";
+                })
             } else {
                 window.location.href = await "../carrinho/";
-            }   
+            } 
         }
 
         carregarLoja();
@@ -370,6 +380,18 @@
                 pesquisar(id);
             }
         }
+
+        /* METODO DE PAGAMENTO */
+
+        async function metodoPagamento(metodo, url) {
+            const comprar = await document.getElementById('comprar');
+            comprar.style.display = "block";
+            comprar.innerHTML = await `Comprar com ${metodo}`;
+            await comprar.addEventListener('click', () => {
+                window.location.href = url;
+            });
+        }
+
         
         const termProduto = getParameterByName('produto');
         const container = document.querySelector('.container');
@@ -380,6 +402,7 @@
         const divNome = document.querySelector('.nome');
         const divTamanho = document.querySelector('.tamanhosInputs');
         const divCores = document.querySelector('.coresInputs');
+        const divPagamentos = document.querySelector('.pagamentosInputs');
         const divPreco = document.querySelector('.preco');
         const divBotoes = document.querySelector('.botoes');
         
@@ -393,6 +416,11 @@
         function selecionarImagem(url) {
             const imagemSelecionada = document.getElementById('imagemSelecionada');
             imagemSelecionada.src = url;
+        }
+
+
+        function pagamento(url) {
+            window.location.href = url;
         }
 
 
@@ -499,6 +527,28 @@
                 });
             });
 
+            // PAGAMENTOS
+            await db.collection('produtos')
+            .doc(produto)
+            .collection('pagamentos')
+            .orderBy('id', 'asc')
+            .onSnapshot((data) => {
+                data.docs.map((val) => {
+                    const metodo = val.id;
+                    const icon = val.data().icon;
+                    const url = val.data().url;
+                    divPagamentos.innerHTML += `
+                        <div class="bloco">    
+                            <input onchange="metodoPagamento('${metodo}','${url}')" id="${metodo}" type="radio" name="pagamentos">
+                            <div class="flex">
+                                <ion-icon name="${icon}"></ion-icon>
+                                <p>${metodo}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+
             // PREÇO
             await db.collection('produtos')
             .doc(produto)
@@ -533,21 +583,13 @@
             .doc(produto).get().then((doc) => {
                 const urlPagamento = doc.data().url;
                 divBotoes.innerHTML = `
-                    <button onclick="pagamento('${urlPagamento}')" class="btn-comprar">Comprar</button>
+                    <button id="comprar" class="btn-comprar">Comprar</button>
                     <button onclick="adicionarCarrinho('${produto}', '${produto}')" class="btn-addCarrinho">Adicionar ao carrinho</button>
                 `;
             });
 
         }
 
-        function pagamento(url) {
-            window.location.href = url;
-        }
-
-        async function sairDaConta() {
-            await localStorage.clear();
-            await window.location.reload();
-        }
 
     </script>
 
