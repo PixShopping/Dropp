@@ -113,8 +113,11 @@
 
     <main class="container">
 
-        <h1 id="logado">Meu carrinho</h1>
-
+        <div class="flex">
+            <h1 id="logado">Meu carrinho</h1>
+            <button onclick="sairDaConta()" class="botaoSair">Sair da Conta</button>
+        </div>
+        
         <section class="carrinho">
 
 
@@ -210,6 +213,7 @@
         // VERIFICAR SE ESTA LOGADO
         const logado = document.getElementById('logado');
         const botoes = document.querySelector('.buttons');
+        const botaoSair = document.querySelector('.botaoSair');
         const email = localStorage.getItem('email');
         const senha = localStorage.getItem('senha');
         const popupCadastro = document.querySelector('.cadastro');
@@ -222,6 +226,7 @@
             }, 500);
         } else {
             logado.innerHTML = `Carrinho de ${email}`;
+            botaoSair.style.display = "flex";
         }
 
         // BOTAO DO MENU
@@ -291,6 +296,12 @@
             })
         }
 
+        async function sairDaConta() {
+            await localStorage.clear();
+            await window.location.reload();
+        }
+
+
         
         carregarLoja();
         async function carregarLoja() {
@@ -347,7 +358,10 @@
                         });
                     } else {
                         container.innerHTML = `
-                            <h1>Carrinho de ${email}</h1>
+                            <div class="flex">
+                                <h1>Carrinho de ${email}</h1>
+                                <button class="botaoSair" onclick="sairDaConta()">Sair da Conta</button>
+                            </div>
                             <ion-icon class="cart" name="cart-outline"></ion-icon>
                             <h4>Seu carrinho esta vazio</h4>
                             <button onclick="abrirURL('produtos')" class="btn-comprar">Ver nossos produtos</button>

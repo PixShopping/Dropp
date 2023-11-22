@@ -225,6 +225,36 @@ body {
     color: var(--background);
 }
 
+.container .flex {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.container .flex .botaoSair {
+    width: 150px;
+    height: 42px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background: var(--background);
+    color: var(--text);
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0px 30px;
+    border: 2px solid var(--background);
+    cursor: pointer;
+} .container .flex .botaoSair:hover {
+    background: transparent;
+    box-shadow: 0px 5px 15px var(--background);
+    color: var(--background);
+    transition: all .3s ease-in-out;
+}
+
 .container .grande {
     width: 95%;
     max-width: 600px;
@@ -440,7 +470,7 @@ body {
     font-weight: 400;
     letter-spacing: 0.2px;
     align-self: center;
-    margin: 0px 5vw;
+    margin: 0px;
     text-align: center;
 }
 
@@ -916,8 +946,21 @@ body {
         padding: 30px 0px 110px 0px;
     }
 
+    .container .flex {
+        width: 92.5%;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .container .flex .botaoSair {
+        margin: 20px 0px 0px 0px;
+    }
+
     .cadastro {
         top: 100px;
         margin: 0px 0px 160px 0px;
     }
+
+
 }
