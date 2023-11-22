@@ -63,10 +63,10 @@
     </nav>
 
     <!-- POPUP DE CADASTRO -->
-    <article class="cadastro">
+    <article id="popupContent" class="cadastro">
 
         <div class="navbar">
-            <h1>Se escreva em nossa loja</h1>
+            <h1>Logar</h1>
             <ion-icon onclick="fecharPopup('cadastro')" name="close"></ion-icon>
         </div>
         
@@ -74,20 +74,15 @@
 
             <section class="left">
 
-                <img src="../src/img/cadastro.gif">
+                <img src="../src/img/logar.png">
     
             </section>
     
             <section class="right">
     
-                <h1>Olá!</h1>
-                <p>Escreva-se em nossa loja para ter acesso ao seu próprio carrinho, realizar compras e ser o primeiro a saber das nossas novidades, eventos e ofertas especiais em nosso site.</p>
+                <h1>Fazer login</h1>
+                <p>Faça o login agora para acessar conteúdo exclusivo e personalizado. Sua jornada está apenas a um clique de distância. Vamos lá, sua experiência está esperando por você!</p>
     
-                <div class="column">
-                    <label id="alertaNome" for="nome">Nome <strong>*</strong></label>
-                    <input placeholder="ex: Murilo Nepomuceno" id="nome" type="text">
-                </div>
-
                 <div class="column">
                     <label id="alertaEmail" for="email">Email <strong>*</strong></label>
                     <input placeholder="ex: Murilo123@gmail.com" id="email" type="text">
@@ -100,14 +95,12 @@
                     <ion-icon id="mostrar" onclick="esconderSenha()" name="eye"></ion-icon>
                 </div>
 
-                <button onclick="cadastrar()" class="btn-comprar">Escrever-se</button>
-                <p class="a-logar">Ja possui conta? <a onclick="">Logar</a></p>
+                <button onclick="logar()" class="btn-comprar">Escrever-se</button>
+                <p class="a-logar">Não possui cadastro? <a onclick="mudarPopupCadastro()">Cadastrar</a></p>
 
             </section>
 
         </div>
-        
-
         
     </article>
 
@@ -227,6 +220,96 @@
         } else {
             logado.innerHTML = `Carrinho de ${email}`;
             botaoSair.style.display = "flex";
+        }
+
+
+        function mudarPopupLogar() {
+            const popup = document.getElementById('popupContent');
+            popup.innerHTML = `
+                <div class="navbar">
+                <h1>Logar</h1>
+                <ion-icon onclick="fecharPopup('cadastro')" name="close"></ion-icon>
+            </div>
+            
+            <div class="flex">
+
+                <section class="left">
+
+                    <img src="../src/img/logar.png">
+        
+                </section>
+        
+                <section class="right">
+        
+                    <h1>Fazer login</h1>
+                    <p>Faça o login agora para acessar conteúdo exclusivo e personalizado. Sua jornada está apenas a um clique de distância. Vamos lá, sua experiência está esperando por você!</p>
+        
+                    <div class="column">
+                        <label id="alertaEmail" for="email">Email <strong>*</strong></label>
+                        <input placeholder="ex: Murilo123@gmail.com" id="email" type="text">
+                    </div>
+                    
+                    <div class="column">
+                        <label id="alertaSenha" for="senha">Senha <strong>*</strong></label>
+                        <input placeholder="ex: Senha123#" id="senha" type="text">
+                        <ion-icon style="display: none;" id="esconder" onclick="mostrarSenha()" name="eye-off"></ion-icon>
+                        <ion-icon id="mostrar" onclick="esconderSenha()" name="eye"></ion-icon>
+                    </div>
+
+                    <button onclick="logar()" class="btn-comprar">Escrever-se</button>
+                    <p class="a-logar">Não possui cadastro? <a onclick="mudarPopupCadastro()">Cadastrar</a></p>
+
+                </section>
+
+            </div>
+            `;
+        }
+
+        function mudarPopupCadastro() {
+            const popup = document.getElementById('popupContent');
+            popup.innerHTML = `
+                <div class="navbar">
+                <h1>Cadastre-se</h1>
+                <ion-icon onclick="fecharPopup('cadastro')" name="close"></ion-icon>
+            </div>
+            
+            <div id="popupContent" class="flex">
+
+                <section class="left">
+
+                    <img src="../src/img/cadastro.gif">
+        
+                </section>
+        
+                <section class="right">
+        
+                    <h1>Fazer cadastro</h1>
+                    <p>Escreva-se em nossa loja para ter acesso ao seu próprio carrinho, realizar compras e ser o primeiro a saber das nossas novidades, eventos e ofertas especiais em nosso site.</p>
+        
+                    <div class="column">
+                        <label id="alertaNome" for="nome">Nome <strong>*</strong></label>
+                        <input placeholder="ex: Murilo Nepomuceno" id="nome" type="text">
+                    </div>
+
+                    <div class="column">
+                        <label id="alertaEmail" for="email">Email <strong>*</strong></label>
+                        <input placeholder="ex: Murilo123@gmail.com" id="email" type="text">
+                    </div>
+                    
+                    <div class="column">
+                        <label id="alertaSenha" for="senha">Senha <strong>*</strong></label>
+                        <input placeholder="ex: Senha123#" id="senha" type="text">
+                        <ion-icon style="display: none;" id="esconder" onclick="mostrarSenha()" name="eye-off"></ion-icon>
+                        <ion-icon id="mostrar" onclick="esconderSenha()" name="eye"></ion-icon>
+                    </div>
+
+                    <button onclick="cadastrar()" class="btn-comprar">Escrever-se</button>
+                    <p class="a-logar">Ja possui conta? <a onclick="mudarPopupLogar()">Logar</a></p>
+
+                </section>
+
+            </div>
+            `;
         }
 
         // BOTAO DO MENU
@@ -377,7 +460,64 @@
                 `;
             }
         }
+
+
+        function tirarEspaco(val) {
+            var resultado = val;
+            resultado = resultado.replace(/\s+/g, ' ');
+            resultado = resultado.trim();
+            return resultado;
+        }
         
+        // LOGAR
+        async function logar() {
+            const emailValue = document.getElementById('email').value;
+            const email = tirarEspaco(emailValue);
+            const alertaEmail = document.getElementById('alertaEmail');
+            const senha = document.getElementById('senha').value;
+            const alertaSenha = document.getElementById('alertaSenha');
+            const cadastro = document.querySelector('.cadastro .flex');
+            const h1 = document.querySelector('.cadastro .navbar h1');
+            if (email) {
+                alertaEmail.innerHTML = `Email`;
+                if (senha) {
+                    alertaSenha.innerHTML = `Senha`;
+                    await db.collection('usuarios')
+                    .doc(email).get().then((doc) => {
+                        const usuario = doc.data();
+                        if (usuario) {
+                            const senhaBancoDeDados = doc.data().senha;
+                            if (senha == senhaBancoDeDados) {
+                                localStorage.setItem('email', email);
+                                localStorage.setItem('senha', senha);
+                                window.location.href = "#"
+                                cadastro.style.flexDirection = "column";
+                                cadastro.style.alignItems = "center";
+                                cadastro.innerHTML = `
+                                    <img style="margin: 0px 0px 0px -60px;" src="../src/img/cartao.gif" type="image/gif">
+                                    <h1 class="obrigado">Agora você esta pronto para comprar os melhores produtos do Brasil</h1>
+                                `;
+                                h1.innerHTML = "Login feito com sucesso";
+                                setTimeout(() => {
+                                    window.location.href = "../carrinho/";
+                                }, 2500);
+                            } else {
+                                alertaSenha.innerHTML = `Senha: <strong>Senha incorreta</strong>`;
+                            }
+                        } else {
+                            alertaEmail.innerHTML = `Email: <strong>Usuario não existe</strong>`;
+                        }
+                    })
+                } else {
+                    alertaSenha.innerHTML = `Senha: <strong>Digite uma senha</strong>`;
+                }
+            } else {
+                alertaEmail.innerHTML = `Email: <strong>Email invalido</strong>`;
+            }
+        }
+
+
+
         // CADASTRAR
         async function cadastrar() {
             const nome = document.getElementById('nome').value;
@@ -392,35 +532,44 @@
                 alertaNome.innerHTML = `Nome`;
                 if (validarEmail(email)) {
                     alertaEmail.innerHTML = `Email`;
-                    if (senha) {
-                        alertaSenha.innerHTML = `Senha`;
-                        await db.collection('usuarios')
-                        .doc(email).set({
-                            nome: nome,
-                            email: email,
-                            senha: senha
-                        }).then((response) => {
-                            localStorage.setItem('email', email);
-                            localStorage.setItem('senha', senha);
-                            cadastro.style.flexDirection = "column";
-                            cadastro.style.alignItems = "center";
-                            cadastro.innerHTML = `
-                                <img style="margin: 0px 0px 0px -60px;" src="../src/img/cartao.gif" type="image/gif">
-                                <h1 class="obrigado">Agora você esta pronto para comprar os melhores produtos do Brasil</h1>
-                            `;
-                            h1.innerHTML = "Obrigado pelo seu cadastro!";
-                            setTimeout(() => {
-                                window.location.href = "../carrinho/";
-                            }, 2500);
-                        });
-                    } else {
-                        alertaSenha.innerHTML = `Senha: <strong>Digite uma senha!</strong>`;
-                    }
+                    await db.collection('usuarios')
+                    .doc(email).get().then((doc) => {
+                        const usuario = doc.data();
+                        if (!usuario) {
+                            if (senha) {
+                                alertaSenha.innerHTML = `Senha`;
+                                db.collection('usuarios')
+                                .doc(email).set({
+                                    nome: nome,
+                                    email: email,
+                                    senha: senha
+                                }).then((response) => {
+                                    localStorage.setItem('email', email);
+                                    localStorage.setItem('senha', senha);
+                                    window.location.href = "#"
+                                    cadastro.style.flexDirection = "column";
+                                    cadastro.style.alignItems = "center";
+                                    cadastro.innerHTML = `
+                                        <img style="margin: 0px 0px 0px -60px;" src="../src/img/cartao.gif" type="image/gif">
+                                        <h1 class="obrigado">Agora você esta pronto para comprar os melhores produtos do Brasil</h1>
+                                    `;
+                                    h1.innerHTML = "Cadastro feito com sucesso";
+                                    setTimeout(() => {
+                                        window.location.href = "../carrinho/";
+                                    }, 2500);
+                                });
+                            } else {
+                                alertaSenha.innerHTML = `Senha: <strong>Digite uma senha</strong>`;
+                            }
+                        } else {
+                            alertaEmail.innerHTML = `Email: <strong>Email já existente</strong>`;
+                        }
+                    });
                 } else {
-                    alertaEmail.innerHTML = `Email: <strong>Email invalido!</strong>`;
+                    alertaEmail.innerHTML = `Email: <strong>Email invalido</strong>`;
                 }    
             } else {
-                alertaNome.innerHTML = `Nome: <strong>Digite um nome!</strong>`;
+                alertaNome.innerHTML = `Nome: <strong>Digite um nome</strong>`;
             }
         }
 

@@ -833,6 +833,42 @@ body {
 }
 
 
+/* CARREGANDO */
+
+.carregando {
+    position: relative;
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: center;
+    color: var(--background);
+}
+
+.carregando span {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 20px solid var(--background);
+    border-top: 21px solid transparent;
+    animation: loading 1.5s linear infinite;
+}
+
+.carregando h2 {
+    margin: 0px 0px 0px 20px;
+}
+
+@keyframes loading {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+
+
 
 
 
