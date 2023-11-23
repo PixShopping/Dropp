@@ -175,8 +175,23 @@ body {
     align-self: center;
     padding: 30px 0px;
     position: relative;
-    user-select: none;  
+    user-select: none;
+    scrollbar-width: 15px;
+    scrollbar-color: var(--principal) #f1f1f1;
 }
+
+.container .categorias::-webkit-scrollbar {
+    width: 15px; /* largura da barra de rolagem */
+}
+
+.container .categorias::-webkit-scrollbar-thumb {
+    background-color: var(--principal); /* cor da alça (thumb) da barra de rolagem */
+}
+
+.container .categorias::-webkit-scrollbar-track {
+    background-color: #f1f1f1; /* cor do fundo da barra de rolagem */
+}
+
 
 .container .categorias .categoria {
     width: 130px;
@@ -690,17 +705,19 @@ body {
         margin: 10px 0px;
     }
 
-    .sobre {
+    .container .sobre {
         flex-direction: column;
-        padding: 0px 0px 120px 0px;
+        justify-content: center;
+        padding: 45px 0px;
+        margin: 0px;
     }
 
-    .sobre img {
+    .container .sobre img {
         width: 60%;
         height: auto;
     }
 
-    .sobre .column {
+    .container .sobre .column {
         width: 85%;
         height: auto;
         margin: -10px 0px 0px 0px;
