@@ -63,7 +63,7 @@
     <main class="container">
 
         <div class="flex">
-            <h1 id="nomePesquisa">Resultados</h1>
+            <h1 id="nomePesquisa">Categorias</h1>
             <h2><a id="resultadoPesquisa">0</a> Resultados</h2>
 
         </div>
@@ -274,30 +274,33 @@
             
             // PRODUTOS
             const searchTerm = getParameterByName('search');
+            const searchCategoria = getParameterByName('categoria')
             var count = 0;
             const nomePesquisa = document.getElementById('nomePesquisa');
             const resultadoPesquisa = document.getElementById('resultadoPesquisa');
-            await db.collection('produtos')
-            .onSnapshot((data) => {
-                data.docs.map((val) => {
-                    //const porcentagem = val.data().porcentagem;
-                    const nome = val.id;
-                    const nomeBusca = nome.toLowerCase();
-                    const precoNovo = val.data().precoNovo;
-                    const precoAntigo = val.data().precoAntigo;
-                    var porcentagem = parseFloat(precoNovo.replace(",", ".")) / parseFloat(precoAntigo.replace(",", "."));
-                    porcentagem *= 100;
-                    porcentagem = porcentagem.toFixed(2);
-                    porcentagem -= 100 // Arredonda para duas casas decimais
-                    porcentagem = porcentagem.toFixed(2);
-                    porcentagem = Math.abs(porcentagem);
-                    porcentagem = porcentagem + "%";
-                    const imagem = val.data().imagem;
-                    const storageRef = storage.ref().child(`produtos/${nome}/${imagem}`);
-                    storageRef.getDownloadURL().then( function(url) {
-                        if (searchTerm) {
-                            nomePesquisa.innerHTML = `Resultados com "${searchTerm}"`;
-                            if (nomeBusca.includes(searchTerm)) {
+            
+            if (searchCategoria) {
+                await db.collection('produtos')
+                .onSnapshot((data) => {
+                    data.docs.map((val) => {
+                        //const porcentagem = val.data().porcentagem;
+                        const nome = val.id;
+                        const nomeBusca = nome.toLowerCase();
+                        const precoNovo = val.data().precoNovo;
+                        const precoAntigo = val.data().precoAntigo;
+                        const categoria = val.data().categoria;
+                        var porcentagem = parseFloat(precoNovo.replace(",", ".")) / parseFloat(precoAntigo.replace(",", "."));
+                        porcentagem *= 100;
+                        porcentagem = porcentagem.toFixed(2);
+                        porcentagem -= 100 // Arredonda para duas casas decimais
+                        porcentagem = porcentagem.toFixed(2);
+                        porcentagem = Math.abs(porcentagem);
+                        porcentagem = porcentagem + "%";
+                        const imagem = val.data().imagem;
+                        const storageRef = storage.ref().child(`produtos/${nome}/${imagem}`);
+                        storageRef.getDownloadURL().then( function(url) {
+                            if (categoria === searchCategoria) {
+                                nomePesquisa.innerHTML = `Categoria ${searchCategoria}`;
                                 produtos.innerHTML += `
                                     <div class="produto">
                                         <div class="porcentagem">
@@ -317,41 +320,22 @@
                                     </div>
                                 `;  
                                 count++;
+    }                           resultadoPesquisa.innerHTML = count; 
+                            if (count === 0) {
+                                container.innerHTML = `
+                                    <h3>Nenhuma categoria com "${searchCategoria}" encontrada</h1>
+                                    <img src="../src/img/notfind.png">
+                                    <button onclick="abrirURL('index.html')" class="btn-comprar voltar">Voltar para o início</button>
+                                `;
                             }
-                        } else {
-                            nomePesquisa.innerHTML = `Resultados`;
-                            produtos.innerHTML += `
-                                <div class="produto">
-                                    <div class="porcentagem">
-                                        <ion-icon name="arrow-down"></ion-icon>
-                                        <a>${porcentagem}</a>    
-                                    </div>
-                                    <img src="${url}">
-                                    <div class="produtoMobile">
-                                        <h1>${nome}</h1>
-                                        <h2>R$${precoNovo} <span>R$${precoAntigo}</span></h2>
-                                        <button onclick="abrirProduto('${nome}')" class="btn-comprar">Comprar</button>
-                                        <button onclick="adicionarCarrinho('${nome}','${nome}')" class="btn-addCarrinho">Adicionar ao carrinho</button>
-                                    </div>
-                                    <div class="produtoDesktop">
-                                        <button onclick="abrirProduto('${nome}')" class="btn-comprar">Comprar</button>
-                                    </div>
-                                </div>
-                            `;
-                            count++;
-                        }
-                        resultadoPesquisa.innerHTML = count; 
-                        if (count === 0) {
-                            container.innerHTML = `
-                                <h3>Nenhum resultado com "${searchTerm}" encontrado</h1>
-                                <img src="../src/img/notfind.png">
-                                <button onclick="abrirURL('index.html')" class="btn-comprar voltar">Voltar para o início</button>
-                            `;
-                        }
- 
+    
+                        });
                     });
                 });
-            });
+            } else {
+                produtos.innerHTML = '';    
+            }
+            
         }  
         
         function getParameterByName(name, url) {
