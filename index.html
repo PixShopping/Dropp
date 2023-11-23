@@ -77,17 +77,17 @@
             <div class="botoes">
                 
                 <div class="inputs">
-                    <input checked onclick="carrosselIMG('img1')" name="imagens" type="radio">
+                    <input id="img1" checked onclick="carrosselIMG('img1')" name="imagens" type="radio">
                     <div></div>
                 </div>
                 
                 <div class="inputs">
-                    <input onclick="carrosselIMG('img2')" name="imagens" type="radio">
+                    <input id="img2" onclick="carrosselIMG('img2')" name="imagens" type="radio">
                     <div></div>
                 </div>
                 
                 <div class="inputs">
-                    <input onclick="carrosselIMG('img3')" name="imagens" type="radio">
+                    <input id="img3" onclick="carrosselIMG('img3')" name="imagens" type="radio">
                     <div></div>
                 </div>
 
@@ -97,18 +97,55 @@
 
         <div class="flex">
             <div class="detalhe">
+                <h1>Categorias</h1>
+                <div></div>
+            </div>
+
+            <div class="right">
+                <a href="./categorias">Ver todas</a>
+            </div>
+            
+        </div>
+
+        <section class="categorias">
+            
+            <div class="categoria">
+                <img src="./src/img/favicon.png">
+                <h1>Air Jordan</h1>
+            </div>
+
+            <div class="categoria">
+                <img src="./src/img/favicon.png">
+                <h1>Masculinos</h1>
+            </div>
+
+            <div class="categoria">
+                <img src="./src/img/favicon.png">
+                <h1>Femininos</h1>
+            </div>
+
+            <div class="categoria">
+                <img src="./src/img/favicon.png">
+                <h1>Todos</h1>
+            </div>
+
+        </section>
+
+        <div class="flex">
+            <div class="detalhe">
                 <h1>Produtos</h1>
                 <div></div>
             </div>
 
             <div class="right">
-                <a href="./produtos/">Ver todos</a>
+                <a href="./produtos">Ver todos</a>
             </div>
             
         </div>
 
         <section class="produtos">
             
+
 
         </section>
 
@@ -186,6 +223,29 @@
     <!-- JAVASCRIPT -->
     <script>
         
+
+        // GIRAR CARROSSEL A CADA 7 SEGUNDOS
+        var index = 1;
+        girarCarrossel(index);
+        function girarCarrossel(index) {
+            setTimeout(() => {
+                const imagemDefinida = document.querySelector(`.img${index}`);
+                const input = document.getElementById(`img${index}`);
+                const imagens = document.querySelectorAll('.imagem');
+                imagens.forEach((imagem) => {
+                    imagem.classList.add('none');
+                });
+                imagemDefinida.classList.remove('none');
+                imagemDefinida.classList.add('flex');    
+                input.checked = true;
+                if (index !== 3) {
+                    index++;
+                } else {
+                    index = 1;
+                }
+                girarCarrossel(index);
+            }, 7000);
+        }
 
         async function carrosselIMG(classe) {
             const imagemDefinida = document.querySelector(`.${classe}`);
