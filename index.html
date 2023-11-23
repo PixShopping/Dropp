@@ -64,7 +64,35 @@
     <main class="container">
 
         <section class="carrossel">
-            <div class="banner"></div>
+            <div class="imagem img1 flex">
+                <img src="./src/img/carrossel/jordam.gif">
+            </div>
+            <div class="imagem img2 none">
+                <img src="./src/img/carrossel/pedidos.gif">
+            </div>
+            <div class="imagem img3 none">
+                <img src="./src/img/carrossel/qualidade.gif">
+            </div>
+
+            <div class="botoes">
+                
+                <div class="inputs">
+                    <input checked onclick="carrosselIMG('img1')" name="imagens" type="radio">
+                    <div></div>
+                </div>
+                
+                <div class="inputs">
+                    <input onclick="carrosselIMG('img2')" name="imagens" type="radio">
+                    <div></div>
+                </div>
+                
+                <div class="inputs">
+                    <input onclick="carrosselIMG('img3')" name="imagens" type="radio">
+                    <div></div>
+                </div>
+
+            </div>
+            
         </section>
 
         <div class="flex">
@@ -158,6 +186,18 @@
     <!-- JAVASCRIPT -->
     <script>
         
+
+        async function carrosselIMG(classe) {
+            const imagemDefinida = document.querySelector(`.${classe}`);
+            const imagens = document.querySelectorAll('.imagem');
+            imagens.forEach((imagem) => {
+                imagem.classList.add('none');
+            });
+            imagemDefinida.classList.remove('none');
+            imagemDefinida.classList.add('flex');
+        }
+
+
         // BANCO DE DADOS
         const firebaseConfig = {
             apiKey: "AIzaSyBqbDhvZYwoJng6u2AF-YHTBBCPWiYAnuY",

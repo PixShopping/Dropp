@@ -449,7 +449,7 @@ body {
 
 /* PRODUTOS */
 
-.container .carrinho {
+.container .carrinho, .container .compras {
     width: 98.5vw;
     max-width: 98.5vw;
     height: auto;
@@ -483,15 +483,18 @@ body {
     color: var(--background);
 }
 
-.container button {
-    width: 85%;
-    max-width: 400px;
-    font-size: 16px;
-}
-
 /* se o carrinho estive vazio */
 
-.container h4 {
+.container .carrinho .column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: -110px auto;
+    padding: 0px 0px 50px 0px;
+}
+
+.container .carrinho h4 {
     font-size: 26px;
     font-weight: 400;
     letter-spacing: 0.2px;
@@ -500,12 +503,18 @@ body {
     margin: 5px 0px;
 }
 
-.container .cart {
+.container .carrinho .cart {
     font-size: 95px;
     margin: 30px 0px 0px 0px;
 }
 
-.container .carrinho .produto .porcentagem {
+.container .carrinho button {
+    width: 85%;
+    max-width: 400px;
+    font-size: 16px;
+}
+
+.container .carrinho .produto .porcentagem, .container .compras .produto .porcentagem {
     width: auto;
     height: auto;
     padding: 4px 7px;
@@ -559,7 +568,7 @@ body {
     transition: all .3s linear;
 }
 
-.container .carrinho .produto {
+.container .carrinho .produto, .container .compras .produto {
     width: 100%;
     max-width: 400px;
     height: auto;
@@ -571,12 +580,12 @@ body {
     margin: 15px;
     border-radius: 10px;
     position: relative;
-} .container .carrinho .produto:hover {
+} .container .carrinho .produto:hover, .container .compras .produto:hover {
     margin: 12px;
     transition: all .3s linear;
 }
 
-.container .carrinho .produto .produtoMobile {
+.container .carrinho .produto .produtoMobile, .container .compras .produto .produtoMobile {
     width: 70%;
     height: 100%;
     display: flex;
@@ -586,7 +595,7 @@ body {
     padding: 0px 20px;
 }
 
-.container .carrinho .produto img {
+.container .carrinho .produto img, .container .compras .produto img {
     width: 30%;
     max-width: 200px;
     height: auto;
@@ -594,19 +603,19 @@ body {
     margin: 10px 0px 0px 0px;
 }
 
-.container .carrinho .produto button { 
+.container .carrinho .produto button, .container .compras .produto button { 
     display: block;
     width: 100%;
     height: 40px;
     margin: 10px 0px 5px 0px;
 }
 
-.container .carrinho .produto .porcentagem {
+.container .carrinho .produto .porcentagem, .container .compras .produto .porcentagem {
     font-size: 14px;
     font-weight: 600;
 }
 
-.container .carrinho .produto h1 {
+.container .carrinho .produto h1, .container .compras .produto h1 {
     font-size: 21px;
     font-weight: 500;
     letter-spacing: 0.2px;
@@ -615,7 +624,7 @@ body {
     text-align: start;
 }
 
-.container .carrinho .produto h2 {
+.container .carrinho .produto h2, .container .compras .produto h2 {
     font-size: 20px;
     font-weight: 800;
     letter-spacing: -0.5px;
@@ -624,13 +633,30 @@ body {
     font-family: var(--preco);
 }
 
-.container .carrinho .produto h2 span{
+.container .carrinho .produto h2 span, .container .compras .produto h2 span {
     font-size: 18px;
     font-weight: 400;
     letter-spacing: 0.3px;
     color: var(--vermelho);
     text-decoration: line-through;
     margin: 0px 0px 0px 8px;
+}
+
+/* STATUS */
+.container .compras .produto .status {
+    font-size: 16px;
+    width: 100%;
+    height: auto;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin: 10px 0px 0px 0px;
+    color: var(--background);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 9px 0px;
 }
 
 /* CADASTRO */

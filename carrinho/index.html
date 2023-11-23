@@ -111,18 +111,20 @@
             <button onclick="sairDaConta()" class="botaoSair">Sair da Conta</button>
         </div>
         
+        <section class="compras">
+
+
+
+        </section>
+
         <section class="carrinho">
 
 
 
         </section>
-        
+
         <h3 id="totalEconomizado"></h3>
 
-        <button class="btn-comprar">Comprar</button>
-        <button onclick="abrirURL('produtos')" class="btn-addCarrinho">Continuar comprando</button>
-
-        
 
     </main>
 
@@ -390,6 +392,7 @@
         async function carregarLoja() {
             const root = document.documentElement;
             const carrinho = document.querySelector('.carrinho');
+            const compras = document.querySelector('.compras');
             const container = document.querySelector('.container');
 
             const h1economizado = document.getElementById('totalEconomizado');
@@ -440,15 +443,46 @@
                             });
                         });
                     } else {
-                        container.innerHTML = `
-                            <div class="flex">
-                                <h1>Carrinho de ${email}</h1>
-                                <button class="botaoSair" onclick="sairDaConta()">Sair da Conta</button>
+                        carrinho.innerHTML = `
+                            <div class="column">
+                                <ion-icon class="cart" name="cart-outline"></ion-icon>
+                                <h4>Seu carrinho esta vazio</h4>
+                                <button onclick="abrirURL('produtos')" class="btn-comprar">Ver nossos produtos</button>
                             </div>
-                            <ion-icon class="cart" name="cart-outline"></ion-icon>
-                            <h4>Seu carrinho esta vazio</h4>
-                            <button onclick="abrirURL('produtos')" class="btn-comprar">Ver nossos produtos</button>
                         `;
+                    }
+                });
+
+                await db.collection('usuarios')
+                .doc(email)
+                .collection('compras')
+                .onSnapshot((data) => {
+                    const existe = data;
+                    if (existe) {
+                        data.docs.map((val) => {
+                            const produto = val.id;
+                            const status = val.data().status;
+                            const cor = val.data().cor;
+                            db.collection('produtos')
+                            .doc(produto)
+                            .get().then((doc) => {
+                                const imagem = doc.data().imagem;
+                                const preco = doc.data().precoNovo;
+                                const storageRef = storage.ref().child(`produtos/${produto}/${imagem}`);
+                                storageRef.getDownloadURL().then( function(url) {
+                                    compras.innerHTML += `
+                                        <div class="produto">
+                                            <img src="${url}">
+                                            <div class="produtoMobile">
+                                                <h1>${produto}</h1>
+                                                <h2>R$${preco}</h2>
+                                                <h3 style="background: ${cor};" class="status">${status}</h3>
+                                            </div>
+                                        </div>
+                                    `;
+                                });
+                            });
+                        });
                     }
                 });
                 
@@ -459,6 +493,9 @@
                     <button onclick="abrirURL('produtos')" class="btn-comprar">Ver nossos produtos</button>
                 `;
             }
+
+            
+            
         }
 
 
