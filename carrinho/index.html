@@ -106,17 +106,19 @@
 
     <main class="container">
 
-        <div class="flex">
+        <div class="flex logadoFlex">
             <h1 id="logado">Meu carrinho</h1>
             <button onclick="sairDaConta()" class="botaoSair">Sair da Conta</button>
         </div>
         
+        <h2 id="comprash1">Compras</h2>
         <section class="compras">
 
 
 
         </section>
 
+        <h2 id="carrinhoh1">Carrinho:</h2>
         <section class="carrinho">
 
 
@@ -394,6 +396,9 @@
             const carrinho = document.querySelector('.carrinho');
             const compras = document.querySelector('.compras');
             const container = document.querySelector('.container');
+            const comprash1 = document.getElementById('comprash1');
+            const carrinhoh1 = document.getElementById('carrinhoh1');
+            
 
             const h1economizado = document.getElementById('totalEconomizado');
             var totalEconomizado = 0;
@@ -428,13 +433,15 @@
                                                 <ion-icon name="arrow-down"></ion-icon>
                                                 <a>${porcentagem}</a>    
                                             </div>
-                                            <img src="${url}">
-                                            <div class="produtoMobile">
-                                                <h1>${produto}</h1>
-                                                <h2>R$${precoNovo} <span>R$${precoAntigo}</span></h2>
-                                                <button class="btn-comprar" onclick="removerCarrinho('${produto}')">Remover do carrinho</button>
+                                            <div class="flex">
+                                                <img src="${url}">
+                                                <div class="produtoMobile">
+                                                    <h1>${produto}</h1>
+                                                    <h2>R$${precoNovo} <span>R$${precoAntigo}</span></h2>
+                                                    <button class="btn-addCarrinho" onclick="abrirURL('produtos/?produto=${produto}')">Comprar</button>
+                                                    <button class="btn-comprar" onclick="removerCarrinho('${produto}')">Remover do carrinho</button>
+                                                </div>
                                             </div>
-                                            
                                         </div>
                                     `;
                                 });
@@ -443,6 +450,7 @@
                             });
                         });
                     } else {
+                        carrinhoh1.style.display = "none";
                         carrinho.innerHTML = `
                             <div class="column">
                                 <ion-icon class="cart" name="cart-outline"></ion-icon>
@@ -457,11 +465,13 @@
                 .doc(email)
                 .collection('compras')
                 .onSnapshot((data) => {
-                    const existe = data;
-                    if (existe) {
+                    const tamanho = data.size;
+                    if (tamanho > 0) {
+                        compras.innerHTML = '';
                         data.docs.map((val) => {
                             const produto = val.id;
                             const status = val.data().status;
+                            const rastreamento = val.data().rastreamento;
                             const cor = val.data().cor;
                             db.collection('produtos')
                             .doc(produto)
@@ -470,19 +480,40 @@
                                 const preco = doc.data().precoNovo;
                                 const storageRef = storage.ref().child(`produtos/${produto}/${imagem}`);
                                 storageRef.getDownloadURL().then( function(url) {
-                                    compras.innerHTML += `
-                                        <div class="produto">
-                                            <img src="${url}">
-                                            <div class="produtoMobile">
-                                                <h1>${produto}</h1>
-                                                <h2>R$${preco}</h2>
-                                                <h3 style="background: ${cor};" class="status">${status}</h3>
+                                    if (rastreamento) {
+                                        compras.innerHTML += `
+                                            <div class="produto">
+                                                <div class="flex">
+                                                    <img src="${url}">
+                                                    <div class="produtoMobile">
+                                                        <h1>${produto}</h1>
+                                                        <h2>R$${preco}</h2>
+                                                        <h3 style="background: ${cor};" class="status">${status}</h3>
+                                                    </div>
+                                                </div>
+                                                <h4 class="rastreamento">Id de rastreamento: <br> ${rastreamento}</h4>
+                                                <a id="btnCopiar" onclick="copiarCodigo('${rastreamento}')">Copiar Id</a>
                                             </div>
-                                        </div>
-                                    `;
+                                        `;
+                                    } else {
+                                        compras.innerHTML += `
+                                        <div class="produto">
+                                                <div class="flex">
+                                                    <img src="${url}">
+                                                    <div class="produtoMobile">
+                                                        <h1>${produto}</h1>
+                                                        <h2>R$${preco}</h2>
+                                                        <h3 style="background: ${cor};" class="status">${status}</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `;
+                                    }
                                 });
                             });
                         });
+                    } else {
+                        comprash1.style.display = "none";
                     }
                 });
                 
@@ -493,11 +524,29 @@
                     <button onclick="abrirURL('produtos')" class="btn-comprar">Ver nossos produtos</button>
                 `;
             }
-
-            
-            
         }
 
+        // COPIAR ID DE RASTREAMENTO
+        function copiarCodigo(id) {
+            const btnCopiar = document.getElementById('btnCopiar');
+
+            // Cria uma área de transferência temporária
+            var areaTransferencia = document.createElement("textarea");
+
+            // Define o valor da área de transferência como o texto do elemento
+            areaTransferencia.value = id;
+            
+            // Adiciona a área de transferência ao corpo do documento
+            document.body.appendChild(areaTransferencia);
+
+            // Seleciona e copia o texto da área de transferência
+            areaTransferencia.select();
+            document.execCommand("copy");
+
+            // Remove a área de transferência temporária
+            document.body.removeChild(areaTransferencia);
+            btnCopiar.innerHTML = 'Copiado com sucesso';
+        }
 
         function tirarEspaco(val) {
             var resultado = val;

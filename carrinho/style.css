@@ -223,6 +223,7 @@ body {
     position: relative;
     top: 0px;
     color: var(--background);
+    padding: 30px 0px 70px 0px;
 }
 
 .container .flex {
@@ -447,6 +448,37 @@ body {
     letter-spacing: 0.3px;
 }
 
+/* se o carrinho estive vazio */
+
+.container .carrinho .column,  .container .column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: -110px auto;
+    padding: 0px 0px 80px 0px;
+}
+
+.container .carrinho h4, .container h4 {
+    font-size: 26px;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+    text-transform: capitalize;
+    align-self: center;
+    margin: 5px 0px;
+}
+
+.container .carrinho .cart, .container .cart {
+    font-size: 95px;
+    margin: 30px 0px 0px 0px;
+}
+
+.container button {
+    width: 80%;
+    max-width: 400px;
+    margin: 10px 0px;
+}
+
 /* PRODUTOS */
 
 .container .carrinho, .container .compras {
@@ -460,7 +492,7 @@ body {
     justify-content: center;
     margin: 0px;
     align-self: center;
-    padding: 50px 0px 70px;
+    padding: 40px 0px 60px 0px;
     position: relative;
     user-select: none;
 }
@@ -474,44 +506,27 @@ body {
     text-align: center;
 }
 
+.container h2 {
+    font-size: 24px;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+    align-self: center;
+    margin: 0px;
+    text-align: center;
+    margin: 40px 0px -40px 0px;
+}
+
 .container h3 {
     font-size: 22px;
     font-weight: 500;
     letter-spacing: 0.2px;
-    margin: 0px 0px 5px 0px;
+    margin: -35px 0px 0px 0px;
     text-transform: capitalize;
     color: var(--background);
 }
 
-/* se o carrinho estive vazio */
-
-.container .carrinho .column {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    margin: -110px auto;
-    padding: 0px 0px 50px 0px;
-}
-
-.container .carrinho h4 {
-    font-size: 26px;
-    font-weight: 400;
-    letter-spacing: 0.2px;
-    text-transform: capitalize;
-    align-self: center;
-    margin: 5px 0px;
-}
-
-.container .carrinho .cart {
-    font-size: 95px;
-    margin: 30px 0px 0px 0px;
-}
-
-.container .carrinho button {
-    width: 85%;
-    max-width: 400px;
-    font-size: 16px;
+.container #carrinhoh1 {
+    margin: -50px 0px -30px 0px;
 }
 
 .container .carrinho .produto .porcentagem, .container .compras .produto .porcentagem {
@@ -568,22 +583,21 @@ body {
     transition: all .3s linear;
 }
 
+/* PRODUTO */
+
 .container .carrinho .produto, .container .compras .produto {
     width: 100%;
     max-width: 400px;
     height: auto;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     background: #fff;
     padding: 15px;
     cursor: pointer;
-    margin: 15px;
+    margin: 15px 15px 50px 15px;
     border-radius: 10px;
     position: relative;
-} .container .carrinho .produto:hover, .container .compras .produto:hover {
-    margin: 12px;
-    transition: all .3s linear;
-}
+} 
 
 .container .carrinho .produto .produtoMobile, .container .compras .produto .produtoMobile {
     width: 70%;
@@ -596,18 +610,19 @@ body {
 }
 
 .container .carrinho .produto img, .container .compras .produto img {
-    width: 30%;
-    max-width: 200px;
-    height: auto;
+    min-width: 125px;
+    min-height: 125px;
+    width: 40%;
+    height: 40%;
     border-radius: 8px;
     margin: 10px 0px 0px 0px;
 }
 
 .container .carrinho .produto button, .container .compras .produto button { 
     display: block;
-    width: 100%;
-    height: 40px;
-    margin: 10px 0px 5px 0px;
+    width: 98%;
+    height: 38px;
+    margin: 12.5px 0px 0px 0px;
 }
 
 .container .carrinho .produto .porcentagem, .container .compras .produto .porcentagem {
@@ -628,7 +643,7 @@ body {
     font-size: 20px;
     font-weight: 800;
     letter-spacing: -0.5px;
-    margin: 10px 0px 0px 0px;
+    margin: 10px auto 0px 0px;
     color: var(--verde);
     font-family: var(--preco);
 }
@@ -658,6 +673,58 @@ body {
     text-align: center;
     padding: 9px 0px;
 }
+
+.container .compras .produto .flex {
+    display: flex;
+}
+
+
+/* RASTREIAMENTO */
+.container .compras .produto .rastreamento {
+    font-size: 16px;
+    width: 98.5%;
+    max-width: 98.5%;
+    height: auto;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    background: var(--text);
+    color: var(--background);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    white-space: normal; 
+    word-break: break-all;
+    margin: 20px 0px 12px 0px;
+    line-height: 22px;
+    user-select: text;
+}
+
+.container .compras .produto a {
+    align-self: center;
+    background: var(--background);
+    color: var(--text);
+    width: 60%;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    font-size: 15.5px;
+    font-weight: 500;
+    margin: 0px 0px 5px 0px;
+    border: 2px solid var(--background);
+} .container .compras .produto a:hover {
+    background: transparent;    
+    color: var(--background);
+    transition: all .3s ease-in-out;
+} .container .compras .produto a:focus {
+    background: transparent;    
+    color: var(--background);
+    transition: all .3s ease-in-out;
+}
+
+
 
 /* CADASTRO */
 
@@ -1008,7 +1075,7 @@ body {
         padding: 30px 0px 110px 0px;
     }
 
-    .container .flex {
+    .container .logadoFlex {
         width: 92.5%;
         flex-direction: column;
         align-items: center;
