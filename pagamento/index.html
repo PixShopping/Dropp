@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Mvshop | Pagamento </title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="shortcut icon" href="../src/img/favicon.png" type="image/x-icon">
+</head>
+
+<body>
+    
+    <header class="navgation">
+
+        <img src="../src/img/logoPagamento.png">
+
+        <div class="seguro">
+            <div class="flex">
+                <p>Compra 100% Segura <ion-icon name="lock-closed-outline"></ion-icon></p>
+            </div>
+            <div class="flex">
+                <p>Garantia de 30 Dias direto em <strong>Nossa Loja</strong></p>
+            </div>    
+        </div>
+
+    </header>
+
+    <main class="container">
+
+        <article class="produto">
+
+
+
+        </article>
+
+
+        <!-- IDENTIFICAÇÃO -->
+        <section class="formulario identificacao">
+
+            <div class="progresso">
+                <div class="column">
+                    <a class="selecionadoFundo">1</a>
+                    <p class="selecionadoCor">Informações <br> pessoais</p>
+                </div>
+                <div class="column">
+                    <a>2</a>
+                    <p>Entrega</p>
+                </div>
+                <div class="column">
+                    <a>3</a>
+                    <p>Pagamento</p>
+                </div>
+            </div>
+
+
+        </section>
+
+
+        <!-- ENTREGA -->
+        <section class="formulario entrega">
+
+            <div class="progresso">
+                <div class="column">
+                    <a>1</a>
+                    <p>Informações <br> pessoais</p>
+                </div>
+                <div class="column">
+                    <a class="selecionadoFundo">2</a>
+                    <p class="selecionadoCor">Entrega</p>
+                </div>
+                <div class="column">
+                    <a>3</a>
+                    <p>Pagamento</p>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- PAGAMENTO -->
+        <section class="formulario pagamento">
+
+            <div class="progresso">
+                <div class="column">
+                    <a>1</a>
+                    <p>Informações <br> pessoais</p>
+                </div>
+                <div class="column">
+                    <a>2</a>
+                    <p>Entrega</p>
+                </div>
+                <div class="column">
+                    <a class="selecionadoFundo">3</a>
+                    <p class="selecionadoCor">Pagamento</p>
+                </div>
+            </div>
+
+        </section>
+
+
+        <footer class="creditos">
+
+            <p>Mv Outlet: mvoutlet.netlift.app</p>
+            <p>© MVoutlet - CNPJ: 42.334.245/0001-24</p>
+
+        </footer>
+
+    </main>
+
+
+
+</body>
+
+    <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-storage-compat.js"></script>
+    <!-- JAVASCRIPT -->
+    <script>
+        
+        // BANCO DE DADOS
+        const firebaseConfig = {
+            apiKey: "AIzaSyBqbDhvZYwoJng6u2AF-YHTBBCPWiYAnuY",
+            authDomain: "dropp-71540.firebaseapp.com",
+            projectId: "dropp-71540",
+            storageBucket: "dropp-71540.appspot.com",
+            messagingSenderId: "226605796065",
+            appId: "1:226605796065:web:7b6a8652ed1e93d78f45a0"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+
+
+
+    </script>
+
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+</html>
