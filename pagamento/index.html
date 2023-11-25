@@ -52,6 +52,26 @@
                 </div>
             </div>
 
+            <!-- Fomulario de identificação -->
+            <article class="form">
+
+                <h1><span>1</span>Identifique-se</h1>
+
+                <label for="nome">Nome Completo</label>
+                <input id="nome" placeholder="ex: Vitor Custodio da Silva" type="text">
+
+                <label for="email">E-mail</label>
+                <input id="email" placeholder="ex: vitor@gmail.com" type="text">
+
+                <label for="cpf">CPF</label>
+                <input oninput="validarCpf()" type="tel" id="cpf" placeholder="000.000.000-00">
+
+                <label for="telefone">Celular / WhatsApp</label>
+                <input oninput="validarTelefone()" type="tel" id="telefone" placeholder="(00) 00000-0000">
+
+                <button onclick="salvarIdentidade()">Continuar</button>
+
+            </article>
 
         </section>
 
@@ -73,6 +93,37 @@
                     <p>Pagamento</p>
                 </div>
             </div>
+
+            <!-- Fomulario de Entrega -->
+            <article class="form">
+
+                <h1><span>2</span>Identifique-se</h1>
+
+                <label for="cep">CEP</label>
+                <input oninput="validarCEP()" id="cep" placeholder="00000-000" type="text">
+
+                <div class="column" id="mostrarCep">
+
+                    <label for="rua">Rua</label>
+                    <input id="rua" type="text" disabled>
+
+                    <label for="cidade">Cidade</label>
+                    <input id="cidade" type="text" disabled>
+
+                    <label for="estado">Estado</label>
+                    <input id="estado" type="text" disabled>
+
+                    <label for="descricao">Descrição</label>
+                    <textarea id="descricao"></textarea>
+
+                </div>
+                
+                <h1 class="none" id="erroCEP"></h1>
+
+                <button onclick="salvarEntrega()">Continuar</button>
+                <a onclick="abrirForm('identificacao')">Voltar</a>
+                
+            </article>
 
         </section>
 
@@ -97,16 +148,16 @@
 
         </section>
 
-
-        <footer class="creditos">
-
-            <p>Mv Outlet: mvoutlet.netlift.app</p>
-            <p>© MVoutlet - CNPJ: 42.334.245/0001-24</p>
-
-        </footer>
+        
 
     </main>
 
+    <footer class="creditos">
+
+        <p>Mv Outlet: mvoutlet.netlift.app</p>
+        <p>© MVoutlet - CNPJ: 42.334.245/0001-24</p>
+
+    </footer>
 
 
 </body>
@@ -116,7 +167,70 @@
     <script src="https://www.gstatic.com/firebasejs/10.3.0/firebase-storage-compat.js"></script>
     <!-- JAVASCRIPT -->
     <script>
-        
+
+
+        // TELEFONE
+        function validarTelefone() {
+            const inputNumero = document.getElementById("telefone");
+            const numero = inputNumero.value.replace(/\D/g, '');
+            const formatoTELEFONE = '($1) $2-$3';
+
+            if (!/^\d+$/.test(numero)) {
+                inputNumero.value = inputNumero.value.slice(0, inputNumero.value.length - 1);
+                return;
+            }
+
+            // Adiciona parênteses e hífen após 11 dígitos
+            if (numero.length === 11) {
+                inputNumero.value = numero.replace(/^(\d{2})(\d{5})(\d{4})$/, formatoTELEFONE);
+            } else if (numero.length > 11) {
+                inputNumero.value = inputNumero.value.slice(0, 15);
+            }
+        }
+
+        // CPF
+        function validarCpf() {
+            const inputNumero = document.getElementById("cpf");
+            const numero = inputNumero.value.replace(/\D/g, ''); // Remove não dígitos
+            const formatoCPF = '$1.$2.$3-$4';
+
+            const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
+
+            if (!/^\d+$/.test(inputNumero.value)) {
+                inputNumero.value = inputNumero.value.slice(0, inputNumero.value.length - 1);
+                return;
+            }
+
+            // Adiciona parênteses e hífen após 11 dígitos
+            if (numero.length === 11) {
+                inputNumero.value = numero.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, formatoCPF)
+            } else if (numero.length > 11) {
+                inputNumero.value = inputNumero.value.slice(0, 15);
+            }
+
+        }
+
+        async function validarCEP() {
+            const inputCep = document.getElementById('cep');
+            const cep = document.getElementById('cep').value.replace(/\D/g, '');
+            
+            if (!/^\d+$/.test(cep)) {
+                inputCep.value = inputCep.value.slice(0, inputCep.value.length - 1);
+                return;
+            }
+
+            if (cep.length === 8) {
+                await consultarCEP(cep);
+                inputCep.value = cep.replace(/^(\d{5})(\d{3})$/, "$1-$2");
+            } else if (cep.length > 8) {
+                inputCep.value = inputCep.value.slice(0, 8);
+            }
+
+        }
+
+
+
+
         // BANCO DE DADOS
         const firebaseConfig = {
             apiKey: "AIzaSyBqbDhvZYwoJng6u2AF-YHTBBCPWiYAnuY",
@@ -132,6 +246,59 @@
         const db = firebase.firestore();
         const storage = firebase.storage();
 
+        function abrirForm(classe) {
+            const identidade = document.querySelector('.identificacao');
+            const entrega = document.querySelector('.entrega');
+            const pagamento = document.querySelector('.pagamento');
+            identidade.style.display = "none";
+            entrega.style.display = "none";
+            pagamento.style.display = "none";
+            document.querySelector(`.${classe}`).style.display = "flex";
+        }
+
+        function salvarIdentidade() {
+
+            const cep = document.getElementById('cep').value.replace(/\D/g, '');
+            consultarCEP(cep);
+            abrirForm('entrega');
+        }
+
+        function salvarEntrega() {
+            abrirForm('pagamento');
+        }
+
+
+        function consultarCEP(cep) {
+            const mostrarCep = document.getElementById('mostrarCep');
+            const rua = document.getElementById('rua');
+            const cidade = document.getElementById('cidade');
+            const estado = document.getElementById('estado');
+            const erroCEP = document.getElementById('erroCEP');
+
+            // URL da API do ViaCEP
+            const apiUrl = `https://viacep.com.br/ws/${cep}/json/`;
+
+            // Fazendo requisição GET usando fetch
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    // Verifica se a resposta da API contém informações válidas
+                    if (!data.erro) {
+                        mostrarCep.style.display = "flex";
+                        rua.value = data.logradouro;
+                        cidade.value = data.localidade;
+                        estado.value = data.uf;
+                        erroCEP.style.display = "none";
+                    } else {
+                        erroCEP.style.display = "flex";
+                        erroCEP.innerHTML = 'CEP não encontrado';
+                        console.error('CEP não encontrado');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro na consulta de CEP:', error);
+                });
+        }
 
 
     </script>
