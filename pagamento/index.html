@@ -195,8 +195,6 @@
                     <input id="codigoPix" type="text" disabled>
                     <button id="btnCopiar" class="btn-copiar">Copiar</button>
                 </div>
-
-                <a onclick="abrirForm('entrega')">Voltar</a>
                 
             </article>
 
@@ -354,47 +352,61 @@
         const storage = firebase.storage();
 
         const conta = localStorage.getItem('email')
+        
         const produto = getParameterByName('produto')
-        if (produto) {
-            const inputValor = document.getElementById('valor');
-            const codigoPix = document.getElementById('codigoPix');
-            const qrcode = document.getElementById('qrcode');
-            const btnCopiar = document.getElementById('btnCopiar');
-            db.collection('produtos')
-            .doc(produto)
-            .collection('pagamentos')
-            .doc('pix')
-            .get().then((doc) => {
-                const documento = doc.data();
-                if (!documento) {
-                    window.location.href = "../";
+        if (conta) {
+            db.collection('usuarios')
+            .doc(conta).get().then((doc) => {
+                if (doc.data()) {
+                    if (produto) {
+                        const inputValor = document.getElementById('valor');
+                        const codigoPix = document.getElementById('codigoPix');
+                        const qrcode = document.getElementById('qrcode');
+                        const btnCopiar = document.getElementById('btnCopiar');
+                        db.collection('produtos')
+                        .doc(produto)
+                        .collection('pagamentos')
+                        .doc('pix')
+                        .get().then((doc) => {
+                            const documento = doc.data();
+                            if (!documento) {
+                                window.location.href = "../";
+                            } else {
+                                const preco = doc.data().valor;
+                                const codigo = doc.data().codigoPix;
+                                const imagemPix = doc.data().qrcode;
+                                inputValor.value = preco;
+                                codigoPix.value = codigo;
+                                btnCopiar.addEventListener('click', () => {
+                                    copiarCodigo(codigo);
+                                });
+                                const storageRef = storage.ref().child(`produtos/${produto}/${imagemPix}`); 
+                                storageRef.getDownloadURL().then( function(url) {
+                                    qrcode.src = url;
+                                });
+                                db.collection('usuarios')
+                                .doc(conta)
+                                .collection('compras')
+                                .doc(produto).get().then((doc) => {
+                                    const documento = doc.data();
+                                    if (documento) {
+                                        abrirForm('pagamento');
+                                    }
+                                })
+                            }
+                        });
+                    } else {
+                        window.location.href = "../";
+                    }
                 } else {
-                    const preco = doc.data().valor;
-                    const codigo = doc.data().codigoPix;
-                    const imagemPix = doc.data().qrcode;
-                    inputValor.value = preco;
-                    codigoPix.value = codigo;
-                    btnCopiar.addEventListener('click', () => {
-                        copiarCodigo(codigo);
-                    });
-                    const storageRef = storage.ref().child(`produtos/${produto}/${imagemPix}`); 
-                    storageRef.getDownloadURL().then( function(url) {
-                        qrcode.src = url;
-                    });
-                    db.collection('usuarios')
-                    .doc(conta)
-                    .collection('compras')
-                    .doc(produto).get().then((doc) => {
-                        const documento = doc.data();
-                        if (documento) {
-                            abrirForm('pagamento');
-                        }
-                    })
+                    window.location.href = "../carrinho";
                 }
             });
         } else {
-            window.location.href = "../";
+            window.location.href = "../carrinho";
         }
+        
+        
 
         // TIRAR ESPACO
         function tirarEspaco(val) {
@@ -531,7 +543,14 @@
                 db.collection('usuarios')
                 .doc(conta)
                 .collection('carrinho')
-                .doc(produto).delete();
+                .doc(produto).get().then((doc) => {
+                    if (doc.data()) {
+                        db.collection('usuarios')
+                        .doc(conta)
+                        .collection('carrinho')
+                        .doc(produto).delete();
+                    }
+                });
             });
         }
 
