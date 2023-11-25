@@ -16,7 +16,7 @@
 
         <div class="seguro">
             <div class="flex">
-                <p>Compra 100% Segura <ion-icon name="lock-closed-outline"></ion-icon></p>
+                <p>Compra 100% Segura 🔒</p>
             </div>
             <div class="flex">
                 <p>Garantia de 30 Dias direto em <strong>Nossa Loja</strong></p>
@@ -57,17 +57,17 @@
 
                 <h1><span>1</span>Identifique-se</h1>
 
-                <label for="nome">Nome Completo</label>
-                <input id="nome" placeholder="ex: Vitor Custodio da Silva" type="text">
+                <label for="nome">Nome Completo <strong for="nome">*</strong></label>
+                <input onblur="validarInput('nome')" id="nome" placeholder="ex: Vitor Custodio da Silva" type="text">
 
-                <label for="email">E-mail</label>
-                <input id="email" placeholder="ex: vitor@gmail.com" type="text">
+                <label for="email">E-mail <strong for="email">*</strong></label>
+                <input onblur="validarInput('email')" id="email" placeholder="ex: vitor@gmail.com" type="text">
 
-                <label for="cpf">CPF</label>
-                <input oninput="validarCpf()" type="tel" id="cpf" placeholder="000.000.000-00">
+                <label for="cpf">CPF <strong for="cpf">*</strong></label>
+                <input onblur="validarInput('cpf')" oninput="validarCpf()" type="tel" id="cpf" placeholder="000.000.000-00">
 
-                <label for="telefone">Celular / WhatsApp</label>
-                <input oninput="validarTelefone()" type="tel" id="telefone" placeholder="(00) 00000-0000">
+                <label for="telefone">Celular / WhatsApp <strong for="telefone">*</strong></label>
+                <input onblur="validarInput('telefone')" oninput="validarTelefone()" type="tel" id="telefone" placeholder="(00) 00000-0000">
 
                 <button onclick="salvarIdentidade()">Continuar</button>
 
@@ -97,30 +97,39 @@
             <!-- Fomulario de Entrega -->
             <article class="form">
 
-                <h1><span>2</span>Identifique-se</h1>
+                <h1><span>2</span>Entrega</h1>
 
-                <label for="cep">CEP</label>
-                <input oninput="validarCEP()" id="cep" placeholder="00000-000" type="text">
+                <label for="cep">CEP <strong for="cep">*</strong></label>
+                <input onblur="validarInput('cep')" oninput="validarCEP()" id="cep" placeholder="00000-000" type="text">
 
                 <div class="column" id="mostrarCep">
-
-                    <label for="rua">Rua</label>
-                    <input id="rua" type="text" disabled>
-
-                    <label for="cidade">Cidade</label>
-                    <input id="cidade" type="text" disabled>
 
                     <label for="estado">Estado</label>
                     <input id="estado" type="text" disabled>
 
-                    <label for="descricao">Descrição</label>
-                    <textarea id="descricao"></textarea>
+                    <label for="cidade">Cidade</label>
+                    <input id="cidade" type="text" disabled>
+
+                    <label for="bairro">Bairro</label>
+                    <input id="bairro" type="text" disabled>
+
+                    <label for="rua">Rua</label>
+                    <input id="rua" type="text" disabled>
+
+                    <label for="numero">Numero <strong for="numero">*</strong></label>
+                    <input onblur="validarInput('numero')" oninput="validarNumero()" id="numero" placeholder="ex: 123" type="text">
+
+                    <label for="destinatario">Destinatário <strong for="destinatario">*</strong></label>
+                    <input onblur="validarInput('destinatario')" oninput="validarNumero()" id="destinatario" placeholder="ex: Vitor" type="text">
+
+                    <label for="complemento">Complemento</label>
+                    <textarea placeholder="Opcional" id="complemento"></textarea>
 
                 </div>
                 
                 <h1 class="none" id="erroCEP"></h1>
 
-                <button onclick="salvarEntrega()">Continuar</button>
+                <button onclick="salvarEntrega()">Salvar</button>
                 <a onclick="abrirForm('identificacao')">Voltar</a>
                 
             </article>
@@ -146,15 +155,60 @@
                 </div>
             </div>
 
+            <!-- Fomulario de Entrega -->
+            <article class="form">
+
+                <h1><span>3</span>Pagamento</h1>
+
+                <div class="titulo">
+                    
+                    <!-- PAGAMENTO COM PIX -->
+                    <ion-icon name="cash-outline"></ion-icon>
+                    <h1>Pague agora com o <strong>Pix</strong></h1>
+                    <p>A confirmação de pagamento é realizada em poucos minutos. Utilize o aplicativo do seu banco para pagar. </p>
+
+
+                </div>
+                
+                <!-- VALOR DO PRODUTO -->
+                <label>Valor do produto</label>
+                <input id="valor" type="text" disabled>
+
+                <!-- BOTÃO DO WHATSAPP -->
+                <button class="btn-whatsapp"><ion-icon class="icon-whatsapp" name="logo-whatsapp"></ion-icon> Enviar Comprovante via Whatsapp</button>
+                
+                <!-- QRCODE -->
+                <div class="titulo">
+
+                    <p>Leia o <strong>QR CODE</strong> abaixo com o aplicativo do seu banco e realize o pagamento do Pix</p>
+                    <img id="qrcode" src="">
+
+                </div>
+                
+                <div class="ou">
+                    <p>OU</p>
+                </div>
+
+                <div class="titulo">
+
+                    <p>Copie o <strong>Código Pix</strong> abaixo e insira na opção <strong>Pix Copia e Cola</strong> no aplicativo do seu banco para realizar o pagamento do Pix.</p>
+                    <input id="codigoPix" type="text" disabled>
+                    <button id="btnCopiar" class="btn-copiar">Copiar</button>
+                </div>
+
+                <a onclick="abrirForm('entrega')">Voltar</a>
+                
+            </article>
+
         </section>
 
-        
+
 
     </main>
 
     <footer class="creditos">
 
-        <p>Mv Outlet: mvoutlet.netlift.app</p>
+        <p>Mv Outlet: mvoutlet.netlify.app</p>
         <p>© MVoutlet - CNPJ: 42.334.245/0001-24</p>
 
     </footer>
@@ -168,6 +222,25 @@
     <!-- JAVASCRIPT -->
     <script>
 
+        // VALIDAR INPUT
+        function validarInput(id) {
+            const input = document.getElementById(id);
+            const alerta = document.querySelector(`strong[for="${id}"]`);
+            const dado = alerta.textContent;
+            if (!input.value) {
+                input.style.background = "var(--rosa)";
+                input.style.boxShadow = "0px 0px 15px var(--rosa)";
+                input.style.border = "2px solid var(--rosa)";
+                alerta.style.fontSize = "15.5px";
+                alerta.style.margin = "0px 0px 0px 3px";
+                alerta.innerHTML = `Campo obrigatório`;
+            } else {
+                input.style.background = "#f1f1f1";
+                input.style.boxShadow = "none";
+                input.style.border = "2px solid #f1f1f1";
+                alerta.innerHTML = ``;
+            }
+        }
 
         // TELEFONE
         function validarTelefone() {
@@ -210,6 +283,18 @@
 
         }
 
+        function validarNumero() {
+            const inputNumero = document.getElementById("numero");
+            const numero = inputNumero.value.replace(/\D/g, ''); // Remove não dígitos
+
+            if (!/^\d+$/.test(inputNumero.value)) {
+                inputNumero.value = inputNumero.value.slice(0, inputNumero.value.length - 1);
+                return;
+            }
+
+
+        }
+
         async function validarCEP() {
             const inputCep = document.getElementById('cep');
             const cep = document.getElementById('cep').value.replace(/\D/g, '');
@@ -226,6 +311,28 @@
                 inputCep.value = inputCep.value.slice(0, 8);
             }
 
+        }
+
+        // COPIAR ID DE RASTREAMENTO
+        function copiarCodigo(id) {
+            const btnCopiar = document.getElementById('btnCopiar');
+
+            // Cria uma área de transferência temporária
+            var areaTransferencia = document.createElement("textarea");
+
+            // Define o valor da área de transferência como o texto do elemento
+            areaTransferencia.value = id;
+            
+            // Adiciona a área de transferência ao corpo do documento
+            document.body.appendChild(areaTransferencia);
+
+            // Seleciona e copia o texto da área de transferência
+            areaTransferencia.select();
+            document.execCommand("copy");
+
+            // Remove a área de transferência temporária
+            document.body.removeChild(areaTransferencia);
+            btnCopiar.innerHTML = 'Copiado com sucesso';
         }
 
 
@@ -246,6 +353,68 @@
         const db = firebase.firestore();
         const storage = firebase.storage();
 
+        const conta = localStorage.getItem('email')
+        const produto = getParameterByName('produto')
+        if (produto) {
+            const inputValor = document.getElementById('valor');
+            const codigoPix = document.getElementById('codigoPix');
+            const qrcode = document.getElementById('qrcode');
+            const btnCopiar = document.getElementById('btnCopiar');
+            db.collection('produtos')
+            .doc(produto)
+            .collection('pagamentos')
+            .doc('pix')
+            .get().then((doc) => {
+                const documento = doc.data();
+                if (!documento) {
+                    window.location.href = "../";
+                } else {
+                    const preco = doc.data().valor;
+                    const codigo = doc.data().codigoPix;
+                    const imagemPix = doc.data().qrcode;
+                    inputValor.value = preco;
+                    codigoPix.value = codigo;
+                    btnCopiar.addEventListener('click', () => {
+                        copiarCodigo(codigo);
+                    });
+                    const storageRef = storage.ref().child(`produtos/${produto}/${imagemPix}`); 
+                    storageRef.getDownloadURL().then( function(url) {
+                        qrcode.src = url;
+                    });
+                    db.collection('usuarios')
+                    .doc(conta)
+                    .collection('compras')
+                    .doc(produto).get().then((doc) => {
+                        const documento = doc.data();
+                        if (documento) {
+                            abrirForm('pagamento');
+                        }
+                    })
+                }
+            });
+        } else {
+            window.location.href = "../";
+        }
+
+        // TIRAR ESPACO
+        function tirarEspaco(val) {
+            var resultado = val;
+            resultado = resultado.replace(/\s+/g, ' ');
+            resultado = resultado.trim();
+            return resultado;
+        }
+
+        // PEGA O PARÂMETRO NA URL
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "))
+        }
+
         function abrirForm(classe) {
             const identidade = document.querySelector('.identificacao');
             const entrega = document.querySelector('.entrega');
@@ -257,42 +426,149 @@
         }
 
         function salvarIdentidade() {
+            const nome = tirarEspaco(document.getElementById('nome').value);
+            const email = tirarEspaco(document.getElementById('email').value);
+            const cpf = document.getElementById('cpf').value;
+            const telefone = document.getElementById('telefone').value;
+            const alertaNome = document.querySelector('strong[for="nome"]');
+            const alertaEmail = document.querySelector('strong[for="email"]');
+            const alertaCpf = document.querySelector('strong[for="cpf"]');
+            const alertaTelefone = document.querySelector('strong[for="telefone"]');
+            if (nome) {
+                alertaNome.innerHTML = '';
+                if (email) {
+                    alertaNome.innerHTML = '';
+                    if (cpf) {
+                        alertaNome.innerHTML = '';
+                        if (telefone) {
+                            const cep = document.getElementById('cep').value.replace(/\D/g, '');
+                            consultarCEP(cep);
+                            abrirForm('entrega');
+                        } else {
+                            alertaTelefone.innerHTML = 'Campo obrigatório';
+                            validarInput('telefone');
+                        }
+                    } else {
+                        alertaCpf.innerHTML = 'Campo obrigatório';
+                        validarInput('cpf');
+                    }
+                } else {
+                    alertaEmail.innerHTML = 'Campo obrigatório';
+                    validarInput('email');
+                }
+            } else {
+                alertaNome.innerHTML = 'Campo obrigatório';
+                validarInput('nome');
+            }
 
-            const cep = document.getElementById('cep').value.replace(/\D/g, '');
-            consultarCEP(cep);
-            abrirForm('entrega');
+            
         }
 
-        function salvarEntrega() {
-            abrirForm('pagamento');
+        async function salvarEntrega() {
+            const cep = document.getElementById('cep').value;
+            const numero = document.getElementById('numero').value;
+            const destinatario = document.getElementById('destinatario').value;
+            const complemento = document.getElementById('complemento').value;
+            const alertaCep = document.querySelector('strong[for="cep"]');
+            const alertaNumero = document.querySelector('strong[for="numero"]');
+            const alertaDestinatario = document.querySelector('strong[for="destinatario"]');
+            if (cep) {
+                alertaCep.innerHTML = '';
+                if (validarCEP(cep)) {
+                    alertaCep.innerHTML = '';
+                    if (numero) {
+                        alertaNumero.innerHTML = 'Campo obrigatório';
+                        if (destinatario) {
+                            alertaDestinatario.innerHTML = 'Campo obrigatório';
+                            await salvarDados();
+                            abrirForm('pagamento');
+                        } else {
+                            alertaDestinatario.innerHTML = 'Campo obrigatório';                
+                            validarInput('destinatario');
+                        }
+                    } else {
+                        alertaNumero.innerHTML = 'Campo obrigatório';                
+                       validarInput('numero');
+                    }
+                } else {
+                    alertaCep.innerHTML = 'Cep invalido';
+                    validarInput('cep');
+                }
+            } else {
+                alertaCep.innerHTML = 'Campo obrigatório';
+                validarInput('cep');
+            }
         }
 
 
-        function consultarCEP(cep) {
+        // SALVAR DADOS
+        function salvarDados() {
+            const produto = getParameterByName('produto');
+            const conta = localStorage.getItem('email')
+            const nome = tirarEspaco(document.getElementById('nome').value);
+            const email = tirarEspaco(document.getElementById('email').value);
+            const cpf = document.getElementById('cpf').value;
+            const telefone = document.getElementById('telefone').value;
+            const cep = document.getElementById('cep').value;
+            const numero = document.getElementById('numero').value;
+            const destinatario = document.getElementById('destinatario').value;
+            const complemento = document.getElementById('complemento').value;
+            db.collection('usuarios')
+            .doc(conta)
+            .collection('compras')
+            .doc(produto).set({
+                nome: nome,
+                email: email,
+                cpf: cpf,
+                telefone: telefone,
+                cep: cep,
+                numero: numero,
+                destinatario: destinatario,
+                complemento: complemento,
+                status: 'Pagamento em Andamento',
+                cor: 'var(--andamento)',
+            }).then((response) => {
+                db.collection('usuarios')
+                .doc(conta)
+                .collection('carrinho')
+                .doc(produto).delete();
+            });
+        }
+
+
+
+        async function consultarCEP(cep) {
             const mostrarCep = document.getElementById('mostrarCep');
+            const bairro = document.getElementById('bairro');
             const rua = document.getElementById('rua');
             const cidade = document.getElementById('cidade');
             const estado = document.getElementById('estado');
+            const complemento = document.getElementById('complemento');
             const erroCEP = document.getElementById('erroCEP');
 
             // URL da API do ViaCEP
             const apiUrl = `https://viacep.com.br/ws/${cep}/json/`;
 
             // Fazendo requisição GET usando fetch
-            fetch(apiUrl)
+            await fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
                     // Verifica se a resposta da API contém informações válidas
                     if (!data.erro) {
+                        validarInput('cep');
                         mostrarCep.style.display = "flex";
+                        bairro.value = data.bairro;
                         rua.value = data.logradouro;
                         cidade.value = data.localidade;
                         estado.value = data.uf;
                         erroCEP.style.display = "none";
+                        return true;
                     } else {
                         erroCEP.style.display = "flex";
                         erroCEP.innerHTML = 'CEP não encontrado';
+                        mostrarCep.style.display = "none";
                         console.error('CEP não encontrado');
+                        return false;
                     }
                 })
                 .catch(error => {
