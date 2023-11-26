@@ -84,7 +84,7 @@
                 <div class="imagemSecundaria"></div>
             </div>
             
-            <div class="descricao">
+            <div class="descricaoDesktop descricao">
 
             </div>
 
@@ -124,9 +124,95 @@
 
         </section>
         
-        
-        
+        <div class="descricaoMobile descricao">
+
+        </div>
+
     </article>
+
+    <div class="avaliacoes">
+
+        <h1>Avaliações dos Clientes</h1>
+
+        <section class="quantidade">
+            
+            <div class="flex">
+
+                <h2>5 / 5</h2>
+                <div class="flex">
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                    <ion-icon name="star"></ion-icon>
+                </div>
+                
+            </div>
+
+            <button onclick="">Avaliar Produto</button>
+            
+        </section>
+        
+        <div class="formulario">
+                
+            <label for="nome">Nome</label>
+            <input id="nome" type="text">
+
+            <label for="estrelas">Avaliação</label>
+            <div class="flex">
+
+                <div class="flex">
+                    <h1>0</h1>
+                    <ion-icon name="star"></ion-icon>
+                    <input name="estrelas" type="radio">
+                </div>
+                <div class="flex">
+                    <h1>1</h1>
+                    <ion-icon name="star"></ion-icon>
+                    <input name="estrelas" type="radio">
+                </div>
+                <div class="flex">
+                    <h1>2</h1>
+                    <ion-icon name="star"></ion-icon>
+                    <input name="estrelas" type="radio">
+                </div>
+                <div class="flex">
+                    <h1>3</h1>
+                    <ion-icon name="star"></ion-icon>
+                    <input name="estrelas" type="radio">
+                </div>
+                <div class="flex">
+                    <h1>4</h1>
+                    <ion-icon name="star"></ion-icon>
+                    <input name="estrelas" type="radio">
+                </div>
+                <div class="flex">
+                    <h1>5</h1>
+                    <ion-icon name="star"></ion-icon>
+                    <input name="estrelas" type="radio">
+                </div>
+
+            </div>
+            
+            <label for="iamgem">Imagem</label>
+            <input id="imagem" type="file">
+
+            <label for="comentario">Comentario</label>
+            <textarea id="comentario"></textarea>
+
+            <button>Enviar Avaliação</button>
+
+        </div>
+
+        <section class="comentarios">
+
+            
+
+        </section>
+
+    </div>
+
+
 
     <!-- CONTATO -->
     <footer class="contato">
@@ -398,14 +484,15 @@
         const content = document.querySelector('.content-produto');
         const divImagemPrincipal = document.querySelector('.imagemPrincipal');
         const divImagemSecundaria = document.querySelector('.imagemSecundaria');
-        const divDescricao = document.querySelector('.descricao');
+        const divDescricao = document.querySelectorAll('.descricao');
         const divNome = document.querySelector('.nome');
         const divTamanho = document.querySelector('.tamanhosInputs');
         const divCores = document.querySelector('.coresInputs');
         const divPagamentos = document.querySelector('.pagamentosInputs');
         const divPreco = document.querySelector('.preco');
         const divBotoes = document.querySelector('.botoes');
-        
+        const avaliacoes = document.querySelector('.avaliacoes');
+        const comentarios = document.querySelector('.comentarios');
         
         if (termProduto) {
             container.style.display = "none";
@@ -453,10 +540,12 @@
             .doc(produto)
             .get().then((val) => {
                 const descricao = val.data().descricao;
-                divDescricao.innerHTML += `
-                    <h1>Descrição</h1> 
-                    <p>${descricao}</p>
-                `;
+                divDescricao.forEach((div) => {
+                    div.innerHTML += `
+                        <h1>Descrição</h1> 
+                        <p>${descricao}</p>
+                    `; 
+                });
             });
             
             // NOME E AVALIAÇÕES
@@ -586,6 +675,113 @@
                     <button id="comprar" class="btn-comprar">Comprar</button>
                     <button onclick="adicionarCarrinho('${produto}', '${produto}')" class="btn-addCarrinho">Adicionar ao carrinho</button>
                 `;
+            });
+
+            avaliacoes.style.display = "flex";
+            await db.collection('produtos')
+            .doc(produto)
+            .collection('avaliacoes')
+            .onSnapshot((data) => {
+                data.docs.map((val) => {
+                    const nome = val.id;
+                    const estrelas = val.data().estrelas;
+                    const comentario = val.data().comentario;
+                    const imagem = val.data().imagem;
+                    const storageRef = storage.ref().child(`produtos/${produto}/avaliacoes/${imagem}`)
+                    storageRef.getDownloadURL().then( function(url) {
+                        if (estrelas === '0') {
+                            comentarios.innerHTML += `
+                                <div class="comentario">
+                                    <h1>${nome} <ion-icon name="checkmark-circle"></ion-icon></h1>
+                                    <div class="flex">
+                                        <ion-icon class="preta" name="star"></ion-icon>
+                                        <ion-icon class="preta" name="star"></ion-icon>
+                                        <ion-icon class="preta" name="star"></ion-icon>
+                                        <ion-icon class="preta" name="star"></ion-icon>
+                                        <ion-icon class="preta" name="star"></ion-icon>
+                                    </div>
+                                    <p>${comentario}</p>
+                                    <img src="${url}">
+                                </div>
+                            `;        
+                        } else if (estrelas === '1') {
+                            comentarios.innerHTML += `
+                                <div class="comentario">
+                                    <h1>${nome} <ion-icon name="checkmark-circle"></ion-icon></h1>
+                                    <div class="flex">
+                                        <ion-icon class="amarela" name="star"></ion-icon>
+                                        <ion-icon class="preta" name="star"></ion-icon>
+                                        <ion-icon class="preta" name="star"></ion-icon>
+                                        <ion-icon class="preta" name="star"></ion-icon>
+                                        <ion-icon class="preta" name="star"></ion-icon>
+                                    </div>
+                                    <p>${comentario}</p>
+                                    <img src="${url}">
+                                </div>
+                            `;        
+                        } else if (estrelas === '2') {
+                            comentarios.innerHTML += `
+                                <div class="comentario">
+                                    <h1>${nome} <ion-icon name="checkmark-circle"></ion-icon></h1>
+                                    <div class="flex">
+                                        <ion-icon class="amarela" name="star"></ion-icon>
+                                        <ion-icon class="amarela" name="star"></ion-icon>
+                                        <ion-icon class="preta" name="star"></ion-icon>
+                                        <ion-icon class="preta" name="star"></ion-icon>
+                                        <ion-icon class="preta" name="star"></ion-icon>
+                                    </div>
+                                    <p>${comentario}</p>
+                                    <img src="${url}">
+                                </div>
+                            `;        
+                        } else if (estrelas === '3') {
+                            comentarios.innerHTML += `
+                                <div class="comentario">
+                                    <h1>${nome} <ion-icon name="checkmark-circle"></ion-icon></h1>
+                                    <div class="flex">
+                                        <ion-icon class="amarela" name="star"></ion-icon>
+                                        <ion-icon class="amarela" name="star"></ion-icon>
+                                        <ion-icon class="amarela" name="star"></ion-icon>
+                                        <ion-icon class="preta" name="star"></ion-icon>
+                                        <ion-icon class="preta" name="star"></ion-icon>
+                                    </div>
+                                    <p>${comentario}</p>
+                                    <img src="${url}">
+                                </div>
+                            `;        
+                        } else if (estrelas === '4') {
+                            comentarios.innerHTML += `
+                                <div class="comentario">
+                                    <h1>${nome} <ion-icon name="checkmark-circle"></ion-icon></h1>
+                                    <div class="flex">
+                                        <ion-icon class="amarela" name="star"></ion-icon>
+                                        <ion-icon class="amarela" name="star"></ion-icon>
+                                        <ion-icon class="amarela" name="star"></ion-icon>
+                                        <ion-icon class="amarela" name="star"></ion-icon>
+                                        <ion-icon class="preta" name="star"></ion-icon>
+                                    </div>
+                                    <p>${comentario}</p>
+                                    <img src="${url}">
+                                </div>
+                            `;        
+                        } else if (estrelas === '5') {
+                            comentarios.innerHTML += `
+                                <div class="comentario">
+                                    <h1>${nome} <ion-icon name="checkmark-circle"></ion-icon></h1>
+                                    <div class="flex">
+                                        <ion-icon class="amarela" name="star"></ion-icon>
+                                        <ion-icon class="amarela" name="star"></ion-icon>
+                                        <ion-icon class="amarela" name="star"></ion-icon>
+                                        <ion-icon class="amarela" name="star"></ion-icon>
+                                        <ion-icon class="amarela" name="star"></ion-icon>
+                                    </div>
+                                    <p>${comentario}</p>
+                                    <img src="${url}">
+                                </div>
+                            `;        
+                        }
+                    });
+                });
             });
 
         }

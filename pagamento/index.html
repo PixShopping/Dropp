@@ -19,7 +19,7 @@
                 <p>Compra 100% Segura 🔒</p>
             </div>
             <div class="flex">
-                <p>Garantia de 30 Dias direto em <strong>Nossa Loja</strong></p>
+                <p>Garantia de 30 Dias direto em <strong onclick="abrirURL('index.html')">Nossa Loja</strong></p>
             </div>    
         </div>
 
@@ -175,7 +175,7 @@
                 <input id="valor" type="text" disabled>
 
                 <!-- BOTÃO DO WHATSAPP -->
-                <button class="btn-whatsapp"><ion-icon class="icon-whatsapp" name="logo-whatsapp"></ion-icon> Enviar Comprovante via Whatsapp</button>
+                <button class="btn-whatsapp" onclick="whatsapp()"><ion-icon class="icon-whatsapp" name="logo-whatsapp"></ion-icon> Enviar Comprovante via Whatsapp</button>
                 
                 <!-- QRCODE -->
                 <div class="titulo">
@@ -595,6 +595,13 @@
                 });
         }
 
+        function whatsapp() {
+            window.location.href = "https://wa.me/5516997569308";
+        }
+
+        function abrirURL(url) {
+            window.location.href = `../${url}`;
+        }
 
     </script>
 

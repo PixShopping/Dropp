@@ -598,6 +598,7 @@ body {
     margin: 15px 15px 50px 15px;
     border-radius: 10px;
     position: relative;
+    box-shadow: 0px 0px 10px #ccc;
 } 
 
 .container .carrinho .produto .produtoMobile, .container .compras .produto .produtoMobile {
@@ -726,6 +727,24 @@ body {
 }
 
 
+/* BOTÃO DE FINALIZAR A COMPRAR */
+.container .compras .produto .btn-finalizarCompra {
+    width: 80%;
+    height: 45px;
+    border-radius: 7px;
+    background: var(--background);
+    margin: 25px auto 5px auto;
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 500;
+    border: 2px solid var(--background);
+    cursor: pointer;
+} .container .compras .produto .btn-finalizarCompra:hover {
+    background: transparent;
+    color: var(--background);
+    box-shadow: 0px 0px 15px var(--background);
+    transition: all .3s linear;
+}
 
 /* CADASTRO */
 
