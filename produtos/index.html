@@ -138,7 +138,7 @@
             
             <div class="flex">
 
-                <h2 class="notaFinal">5 / 5</h2>
+                <h2 id="notaFinal">5 / 5</h2>
                 <section id="notadoprodutodois" class="flex">
                     <ion-icon name="star"></ion-icon>
                     <ion-icon name="star"></ion-icon>
@@ -604,7 +604,7 @@
                             <ion-icon class="verificado" name="checkmark-circle"></ion-icon>
                         </div>
                         <div class="flex">
-                            <section class="notadoproduto">
+                            <section id="notadoproduto">
                                 <ion-icon class="estrela" name="star"></ion-icon>
                                 <ion-icon class="estrela" name="star"></ion-icon>
                                 <ion-icon class="estrela" name="star"></ion-icon>
@@ -614,10 +614,10 @@
                             <h2 id="pessoasFinal">0 Avaliações</h2>
                         </div>
                     `;
+                    carregarAvaliacoes(produto);
                 });
             });
 
-            await carregarAvaliacoes(produto);
 
             // TAMANHO
             await db.collection('produtos')
@@ -717,7 +717,7 @@
 
         // AVALIACOES
         async function carregarAvaliacoes(produto) {
-                const notaFinal = document.querySelector('h2[class="notaFinal"]');
+                const notaFinal = document.querySelector('h2[id="notaFinal"]');
                 const pessoasFinal = document.querySelector('h2[id="pessoasFinal"]');
                 avaliacoes.style.display = "flex";
                 await db.collection('produtos')
@@ -836,21 +836,26 @@
                             } else {
                                 pessoasFinal.innerHTML = `${tamanho} Avaliações`;
                             }
-                            if (tamanho === pessoas) {
-                                notaProduto(notas);    
-                            }
+                            notaProduto(notas);
                         });
                     });
                 });
             }
 
         async function notaProduto(notas) {
-            const notadoproduto = document.querySelector('section[class="notadoproduto"]');
+            const notadoproduto = document.querySelector('section[id="notadoproduto"]');
             const notadoprodutoDois = document.querySelector('section[id="notadoprodutodois"]');
             var nota = notas.toFixed(0);
             nota = Number(nota)
             if (nota === 0) {
                 notadoproduto.innerHTML = await `
+                    <ion-icon class="preta" name="star"></ion-icon>
+                    <ion-icon class="preta" name="star"></ion-icon>
+                    <ion-icon class="preta" name="star"></ion-icon>
+                    <ion-icon class="preta" name="star"></ion-icon>
+                    <ion-icon class="preta" name="star"></ion-icon>
+                `;
+                notadoprodutoDois.innerHTML = await `
                     <ion-icon class="preta" name="star"></ion-icon>
                     <ion-icon class="preta" name="star"></ion-icon>
                     <ion-icon class="preta" name="star"></ion-icon>
@@ -865,6 +870,13 @@
                     <ion-icon class="preta" name="star"></ion-icon>
                     <ion-icon class="preta" name="star"></ion-icon>
                 `;
+                notadoprodutoDois.innerHTML = await `
+                    <ion-icon class="amarela" name="star"></ion-icon>
+                    <ion-icon class="preta" name="star"></ion-icon>
+                    <ion-icon class="preta" name="star"></ion-icon>
+                    <ion-icon class="preta" name="star"></ion-icon>
+                    <ion-icon class="preta" name="star"></ion-icon>
+                `;
             } else if (nota === 2) {
                 notadoproduto.innerHTML = await `
                     <ion-icon class="amarela" name="star"></ion-icon>
@@ -873,8 +885,22 @@
                     <ion-icon class="preta" name="star"></ion-icon>
                     <ion-icon class="preta" name="star"></ion-icon>
                 `;
+                notadoprodutoDois.innerHTML = await `
+                    <ion-icon class="amarela" name="star"></ion-icon>
+                    <ion-icon class="amarela" name="star"></ion-icon>
+                    <ion-icon class="preta" name="star"></ion-icon>
+                    <ion-icon class="preta" name="star"></ion-icon>
+                    <ion-icon class="preta" name="star"></ion-icon>
+                `;
             } else if (nota === 3) {
                 notadoproduto.innerHTML = await `
+                    <ion-icon class="amarela" name="star"></ion-icon>
+                    <ion-icon class="amarela" name="star"></ion-icon>
+                    <ion-icon class="amarela" name="star"></ion-icon>
+                    <ion-icon class="preta" name="star"></ion-icon>
+                    <ion-icon class="preta" name="star"></ion-icon>
+                `;
+                notadoprodutoDois.innerHTML = await `
                     <ion-icon class="amarela" name="star"></ion-icon>
                     <ion-icon class="amarela" name="star"></ion-icon>
                     <ion-icon class="amarela" name="star"></ion-icon>
@@ -898,6 +924,13 @@
                 `;
             } else if (nota === 5) {
                 notadoproduto.innerHTML = await `
+                    <ion-icon class="amarela" name="star"></ion-icon>
+                    <ion-icon class="amarela" name="star"></ion-icon>
+                    <ion-icon class="amarela" name="star"></ion-icon>
+                    <ion-icon class="amarela" name="star"></ion-icon>
+                    <ion-icon class="amarela" name="star"></ion-icon>
+                `;
+                notadoprodutoDois.innerHTML = await `
                     <ion-icon class="amarela" name="star"></ion-icon>
                     <ion-icon class="amarela" name="star"></ion-icon>
                     <ion-icon class="amarela" name="star"></ion-icon>
