@@ -3,9 +3,7 @@
 /* variaveis */
 
 :root {
-    --principal: #e1c6b5;
     --text: #ffffff;
-    --background: #2e3548;
     --verde: #15ba35;
     --vermelho: #ee0000;
     --rosa: #feecef;
@@ -63,6 +61,13 @@ body {
     background: var(--background);
     position: relative;
     margin: 0px 0px 60px 0px;
+}
+
+.navgation img {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    margin: 0px auto;
 }
 
 .navgation .seguro {
