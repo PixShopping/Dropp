@@ -1,9 +1,15 @@
 /* variaveis */
 
 :root {
-    --principal: #e1c6b5;
-    --text: #ffffff;
+    /*--principal: #e1c6b5;
     --background: #2e3548;
+    */
+    --principal: #15ba35;
+    --secundaria: #29a742;
+    --terciaria: #2e8b41;
+    --background: black;
+
+    --text: #ffffff;
     --verde: #15ba35;
     --vermelho: #ee0000;
     --estrela: #daa520;
@@ -225,6 +231,7 @@ body {
     position: relative;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
 .contato article {
@@ -443,6 +450,8 @@ body {
     transition: all .3s ease-in-out;
     
 }
+
+
 
 
 @media (min-width: 632px) {
